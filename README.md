@@ -4,6 +4,8 @@ This mod supports installation by both UMM and through Owlcat Modifications Mana
 This mod has no dependencies on other mods; it does support ModMenu, but does not require it. 
 This mod creates save dependency.
 
+## This will not work on beta-branch!
+
 ## Highlights
 
 -   Use your Heavy or Light shield actively in combat to get sizable bonus to AC by taking Two-Weapon Fighting penalties;
