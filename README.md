@@ -18,3 +18,7 @@ This mod creates save dependency.
 -   The comeback of the mechanic from Call of the Wild allowing to use two-handed weapons while equipped with shields. As well as Shield Brace feat and ability to use -   two-handed spears with shields while mounted;
 -   It's now possible to equip shields, armor and weapon without the proficiency as per tabletop rules at the expense of attack bonus;
 -   New Paladin Archetype from tabletop - Sacred Shield;
+
+## Known bugs
+-   Shield Focus feat applies its bonus twice. I may fix it at some point, but for now consider it a feature.
+-   It's possible to bash with a buckler while handing a weapon two-handedly if you have both Unhindering Shield and Upsetting Shield. Will likely fix it out soon, but leave a setting to turn it back for people who'd like it.
