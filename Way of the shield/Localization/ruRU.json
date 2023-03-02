@@ -1,0 +1,90 @@
+﻿{
+
+    "strings": [
+
+		{
+            "Key": "test15edb451-dc5b", 
+            "Value": "test"
+        },
+		{
+            "Key": "BonusType_NonProficient_name",
+            "Value": "Нет умения обращаться с этим оружием"
+        },
+		{
+            "Key": "BonusType_Backstab_name",
+            "Value": "Удар со спины"
+        },
+		{
+            "Key": "Flanking_can_not_be_flanked",
+            "Value": "не может быть отвлечён атаками с другого фланга."
+        },
+		{
+            "Key": "Flanking_distracts",
+            "Value": "отвлекает"
+        },
+		{
+            "Key": "Flanking_With_a_masterful_feat_of_teamwork",
+            "Value": "с мастерским проявлением командной работы"
+        },
+		{
+            "Key": "Flanking_while",
+            "Value": "в то время как"
+        },
+		{
+            "Key": "Flanking_from_another_flank",
+            "Value": "атакует с другого фланга. Угол атаки составляет"
+        },
+		{
+            "Key": "Flanking_angle_of_attacks",
+            "Value": "Угол атаки между"
+        },
+		{
+            "Key": "Flanking_and",
+            "Value": "и"
+        },
+		{
+            "Key": "Flanking_is_only",
+            "Value": "составляет всего лишь"
+        },
+		{
+            "Key": "Flanking_less_than",
+            "Value": "Это меньше, чем "
+        },
+		{
+            "Key": "Flanking_not_enough_to_distract",
+            "Value": ", и недостаточно для отвлечения противника."
+        },
+		{
+            "Key": "Flanking_not_flanking_attack",
+            "Value": "Эта атака не считается обходом с фланга"
+        },
+		{
+            "Key": "BucklerParry_DisplayName",
+            "Value": "Buckler Parry"
+        },
+		{
+            "Key": "BucklerParry_Description",
+            "Value": "You may decide to parry incoming attacks with your Buckler or Light Shield. To parry the attack, make an attack roll as if you were performing a Shield Bash with corresponding attack bonuses. If this attack roll is greater than the roll of attacking creature, its attack automatically misses. You can perform as many parries per turn as the amount of attacks you would be able to perform with the hand equipped with the shield. \nYou must take the decision to use your shield for parries at the start of the turn. You can not Use Shield Defensively on this turn. If you are performing attacks with your other hand at this turn, you take penalties for Two-Weapon Fighting."
+        },
+		{
+            "Key": "BucklerParry_ShortDescription",
+            "Value": "Try parrying incoming attacks with your Buckler Shield. You can perform as many parries per turn as the amount of attacks you would be able to perform with the hand equipped with the shield."
+        },
+		{
+            "Key": "TowerShieldEnchantment_Description",
+            "Value": "In most situations, a tower shield provides the indicated shield bonus to your Armor Class. As a standard action, however, you can use a tower shield to grant you total cover until the beginning of your next turn. When using a tower shield in this way, for the purpose of attacks targeting specifically you the shield is treated as a solid wall. You gain total cover for attacks that pass through this side and no cover for attacks coming from other sides. The shield does not, however, provide cover against targeted spells; a spellcaster can cast a spell on you by targeting the shield you are holding. You cannot bash with a tower shield, nor can you use your shield hand for anything else.\nWhen employing a tower shield in combat, you take a –2 penalty on attack rolls because of the shield’s encumbrance."
+        },
+		{
+            "Key": "TowerShieldDefense_DisplayName",
+            "Value": "Tower shield defensive stance."
+        },
+		{
+            "Key": "TowerShieldDefense_Description",
+            "Value": "As a standard action you may hide behind your tower shield. For the purpose of attacks targeting specifically you the shield is treated as a solid wall. You gain total cover for attacks that pass through this side and no cover for attacks coming from other sides. The shield does not, however, provide cover against targeted spells; a spellcaster can cast a spell on you by targeting the shield you are holding. You cannot bash with a tower shield, nor can you use your shield hand for anything else."
+        },		
+		{
+            "Key": "TowerShieldDefense_ShortDescription",
+            "Value": "Hide behind the tower shield to gain total cover against attacks coming from that direction and targeting specifically you. The shield does not, however, provide cover against targeted spells; a spellcaster can cast a spell on you by targeting the shield you are holding."
+        }
+	]	
+}

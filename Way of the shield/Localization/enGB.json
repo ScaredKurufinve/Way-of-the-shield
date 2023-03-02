@@ -1,0 +1,1003 @@
+{
+
+    "strings": [
+
+		{
+            "Key": "Empty", 
+            "Value": ""
+        },
+		{
+            "Key": "ModifierDescriptor_SoftCover",
+            "Value": "Soft Cover"
+        },
+		{
+            "Key": "BonusType_NonProficient_name",
+            "Value": "Not proficient with this weapon"
+        },
+		{
+            "Key": "BonusType_Backstab_name",
+            "Value": "Backstab"
+        },
+		{
+            "Key": "Flanking_can_not_be_flanked",
+            "Value": "cannot be flanked"
+        },
+		{
+            "Key": "Flanking_distracts",
+            "Value": "{trueFlanker} distracts {target}"
+        },
+		{
+            "Key": "Flanking_With_a_masterful_feat_of_teamwork",
+            "Value": "with an impressive feat of teamwork"
+        },
+		{
+            "Key": "Flanking_improvedOutflank",
+            "Value": "with an unbelievable feat of teamwork"
+        },
+		{
+            "Key": "Flanking_from_another_flank",
+            "Value": "while {source} attacks from another flank. The angle between them is {angle}."
+        },
+		{
+            "Key": "Flanking_angle_of_attacks",
+            "Value": "The angle of attack between {source} and {flanker} is only {angle}. That is less than {requirement} and not enough to distract {target}"
+        },
+		{
+            "Key": "Flanking_and",
+            "Value": "and"
+        },
+		{
+            "Key": "Flanking_is_only",
+            "Value": "is only"
+        },
+		{
+            "Key": "Flanking_less_than",
+            "Value": "That is less than"
+        },
+		{
+            "Key": "Flanking_not_enough_to_distract",
+            "Value": "The angle of attack between {source} and {flanker} is only {angle}. That is less than {requirement} and not enough to distract {target}"
+        },
+		{
+            "Key": "Flanking_not_flanking_attack",
+            "Value": "This is not a flanking attack."
+        },
+		{
+            "Key": "Flanking_soloTactics",
+            "Value": "{outflanker} demonstrates their mastery of <b>Solo Tactics</b> and outflanks the target <b>alone.</b>"
+        },
+		{
+            "Key": "Flanking_but",
+            "Value": "\nBut "
+        },
+		{
+            "Key": "Flanking_outsandingTeamwork",
+            "Value": "Even with their outstanding teamwork."
+        },
+		{
+            "Key": "BucklerParry_DisplayName",
+            "Value": "Buckler Parry"
+        },
+		{
+            "Key": "BucklerParry_Description",
+            "Value": "You may decide to parry incoming attacks with your Buckler or Light Shield. To parry the attack, make an attack roll as if you were performing a Shield Bash, including applicable attack bonuses. If your result is greater than the attacking creature's result, its attack automatically misses. You can parry as many attacks per turn as the number of attacks you would be able to make with your shield hand. \nYou must make the decision to use your shield for parries at the start of the turn. You can not Use Shield Defensively on this turn. If you make any attacks with your other hand this turn, you take penalties for Two-Weapon Fighting until the start of your next turn."
+        },
+		{
+            "Key": "BucklerParry_DynamicDescription",
+            "Value": "Remaining parries"
+        },
+		{
+            "Key": "BucklerParry_ShortDescription",
+            "Value": "Try parrying incoming attacks with your Buckler Shield. You can parry as many attacks per turn as the number of attacks you would be able to make with your shield hand."
+        },
+		{
+            "Key": "TowerShieldEnchantment_Description",
+            "Value": "In most situations, a tower shield provides the indicated shield bonus to your Armor Class. As a standard action you can use a tower shield to grant you total cover until the beginning of your next turn. When using a tower shield in this way it is treated as a solid wall for the purpose of attacks targeting you. You gain total cover for attacks from the direction of your shield and no cover for attacks from other directions. The shield does not, however, provide cover against targeted spells; a spellcaster can cast a spell on you by targeting the shield you are holding. You cannot bash with a tower shield, nor can you use your shield hand for anything else.\nWhen employing a tower shield in combat, you take a –2 penalty on attack rolls because of the shield’s encumbrance."
+        },
+		{
+            "Key": "TowerShieldDefense_DisplayName",
+            "Value": "Tower shield defensive stance."
+        },
+		{
+            "Key": "TowerShieldDefense_Description",
+            "Value": "As a standard action you may hide behind your tower shield. When using a tower shield in this way it is treated as a solid wall for the purpose of attacks targeting you. You gain total cover for attacks from the direction of your shield and no cover for attacks from other directions. The shield does not, however, provide cover against targeted spells; a spellcaster can cast a spell on you by targeting the shield you are holding. You cannot bash with a tower shield, nor can you use your shield hand for anything else."
+        },		
+		{
+            "Key": "TowerShieldDefense_ShortDescription",
+            "Value": "Hide behind the tower shield to gain total cover against attacks coming from that direction and targeting you. The shield does not, however, provide cover against targeted spells; a spellcaster can cast a spell on you by targeting the shield you are holding."
+        },
+		{
+            "Key": "OneHandedBuff_DisplayName",
+            "Value": "Use Weapon One-Handed"
+        },
+		{
+            "Key": "OneHandedBuff_Description",
+            "Value": ""
+        },
+		{
+            "Key": "OneHandedBuff_ShortDescription",
+            "Value": ""
+        },
+		{
+            "Key": "OneHandedAbility_DisplayName",
+            "Value": "Use Weapon One-Handed"
+        },
+		{
+            "Key": "OneHandedAbility_Description",
+            "Value": "You can choose to wield your weapon in one hand instead of two, if possible."
+        },
+		{
+            "Key": "OneHandedAbility_ShortDescription",
+            "Value": ""
+        },
+		{
+            "Key": "OneHandedFeature_DisplayName",
+            "Value": "OneHanded Toggle Feature"
+        },
+		{
+            "Key": "OneHandedFeature_Description",
+            "Value": "You can choose to wield your weapon in one hand instead of two, if possible."
+        },
+		{
+            "Key": "OneHandedFeature_ShortDescription",
+            "Value": ""
+        },
+		{
+            "Key": "Buckler1h_Name",
+            "Value": "Buckler"
+        },
+		{
+            "Key": "Buckler_Description",
+            "Value": "This small metal shield is worn strapped to your forearm. You can use a bow or crossbow without penalty while carrying it. You can also use your shield arm while wielding a two-handed melee weapon, but you take a –1 penalty on attack rolls while doing so. If you actively use your shield hand for any purpose other than shielding, you lose the buckler’s Armor Class bonus until your next turn. You can’t make a shield bash with a buckler."
+        },
+		{
+            "Key": "ShieldBraceFeature_DisplayName",
+            "Value": "Shield Brace"
+        },
+		{
+            "Key": "ShieldBraceFeature_Description",
+            "Value": "<i>You’ve mastered the art of balancing a polearm’s weight against a shield’s stability.</i>\nBenefit(s): You can use a two-handed weapon sized appropriately for you from the polearm or spears weapon group while also using a light, heavy, or tower shield with which you are proficient. The shield’s armor check penalty (if any) applies to attacks made with the weapon."
+        },
+		{
+            "Key": "ShieldBraceFeature_ShortDescription",
+            "Value": "You’ve mastered the art of balancing a polearm’s weight against a shield’s stability. You can use a two-handed weapon sized appropriately for you from the polearm or spears weapon group while also using a light, heavy, or tower shield with which you are proficient. The shield’s armor check penalty (if any) applies to attacks made with the weapon."
+        },
+		{
+            "Key": "ShieldWallRenewed_Description",
+            "Value": "<i>You form a unified defense with those around you.</i>\nWhenever you are wielding a shield and are adjacent to an ally wielding a shield who also has this {g|Encyclopedia:Feat}feat{/g} while looking the same direction as you, the {g|Encyclopedia:Armor_Class}AC{/g} {g|Encyclopedia:Bonus}bonus{/g} from your shield increases, depending on the shield wielded by your ally.\nIf your ally is wielding a buckler or a light shield, your shield bonus increases by +1.\nIf your ally is wielding a heavy shield your shield bonus increases by +2.\nIf your ally is wielding a tower shield your shield bonus increases by +3.\n\n<b>Note:</b> Effects from this ability stack twice - you can recieve a bonus from the ally standing to your right and to your left at the same time."
+        },
+		{
+            "Key": "ShieldWallRenewed_ShortDescription",
+            "Value": "Whenever you are wielding a shield and are adjacent to an ally wielding a shield who also has this {g|Encyclopedia:Feat}feat{/g} while looking the same direction as you, the {g|Encyclopedia:Armor_Class}AC{/g} {g|Encyclopedia:Bonus}bonus{/g} from your shield increases, depending on the shield wielded by your ally. The bonus is +1 if the ally is wearing a buckler or a light shield, +2 if the ally is wearing a heavy shield and +3 if they wear a tower shield. You can recieve this bonus from allies standing to the right and to the left of you at the same time."
+        },
+		{
+            "Key": "UnhinderingShieldFeature_DisplayName",
+            "Value": "Unhindering Shield"
+        },
+		{
+            "Key": "NewBucklerProficiencyFeature_DisplayName",
+            "Value": "Buckler Proficiency"
+        },
+		{
+            "Key": "NewBucklerProficiencyFeature_Description",
+            "Value": "You become proficient with Bucklers."
+        },
+		{
+            "Key": "LightShieldParryFeature_DisplayName",
+            "Value": "Light shield parry"
+        },
+		{
+            "Key": "LightShieldParryFeature_Description",
+            "Value": "You learned how to parry incoming attacks with your light shield."
+        },
+		{
+            "Key": "UnhinderingShieldFeature_Description",
+            "Value": "<i>You are accustomed to fighting with your shield.</i>\n<b>Benefit(s)</b>: You still gain a buckler’s bonus to AC even if you use your shield hand for some other purpose. When you wield a buckler, your shield hand is considered free for the purposes of casting spells, wielding weapons, and using any other abilities that require you to have a free hand or interact with your shield, such as the swashbuckler’s precise strike deed or the Weapon Finesse feat.\n<b>Special</b>: A monk with this feat is not considered to be using a shield for the purposes of his AC bonus, fast movement, or flurry of blows."
+        },
+		{
+            "Key": "UnhinderingShieldFeature_ShortDescription",
+            "Value": "You are accustomed to fighting with your shield. You still gain a buckler’s bonus to AC even if you use your shield hand for some other purpose."
+        },
+		{
+            "Key": "UpsettingShieldStyle_DisplayName",
+            "Value": "Upsetting Shield Style"
+        },
+		{
+            "Key": "UpsettingShieldStyle_Description",
+            "Value": "<i>You can strike at weapons to upset enemy attacks.</i>\n<b>Benefit(s)</b>: You can shield bash with a buckler as if it were a light shield, and you can use the buckler in conjunction with any feats or abilities that normally apply to light shields. While using this style, whenever you successfully deal damage to an opponent with a shield bash using your buckler, that opponent takes a –2 penalty on all attack rolls made against you until the start of your next turn."
+        },
+		{
+            "Key": "UpsettingShieldStyle_ShortDescription",
+            "Value": "You can shield bash with a buckler as if it were a light shield, and you can use the buckler in conjunction with any feats or abilities that normally apply to light shields. While using this style, whenever you successfully deal damage to an opponent with a shield bash using your buckler, that opponent takes a –2 penalty on all attack rolls made against you until the start of your next turn."
+        },
+		{
+            "Key": "UpsettingStrike_DisplayName",
+            "Value": "Upsetting Strike"
+        },
+		{
+            "Key": "UpsettingStrike_Description",
+            "Value": "<i>You can turn the tables on disoriented opponents.</i>\n<b>Benefit(s)</b>: While you are using Upsetting Shield Style, if a foe makes a melee attack roll against you that misses your AC by 5 or more, and they have a penalty on attack rolls against you caused by this style, that foe provokes an attack of opportunity from you.\nYou can only make one attack of opportunity against an opponent in this manner each round."
+        },
+		{
+            "Key": "UpsettingStrike_ShortDescription",
+            "Value": "While you are using Upsetting Shield Style, if a foe makes a melee attack roll against you that misses your AC by 5 or more, and they have a penalty on attack rolls against you caused by this style, that foe provokes an attack of opportunity from you.\nYou can only make one attack of opportunity against an opponent in this manner each round."
+        },
+		{
+            "Key": "UpsettingVengeance_DisplayName",
+            "Value": "Upsetting Vengeance"
+        },
+		{
+            "Key": "UpsettingVengeance_Description",
+            "Value": "<i>You punish those who fail to press their attack.</i>\n<b>Benefit(s)</b>: While using Upsetting Shield Style, the penalty on attack rolls foes take for being hit by your shield bash attack applies to their attacks against any target. If an adjacent foe taking this penalty makes an attack roll against any target and misses the target’s AC by 5 or more, that foe provokes an attack of opportunity from you. You can only make one attack of opportunity against an opponent as a result of this feat or Upsetting Strike each round."
+        },
+		{
+            "Key": "UpsettingVengeance_ShortDescription",
+            "Value": "While using Upsetting Shield Style, the penalty on attack rolls foes take for being hit by your shield bash attack applies to their attacks against any target. If an adjacent foe taking this penalty makes an attack roll against any target and misses the target’s AC by 5 or more, that foe provokes an attack of opportunity from you. You can only make one attack of opportunity against an opponent as a result of this feat or Upsetting Strike each round."
+        },
+		{
+            "Key": "UpsettingShieldEffect_DisplayName",
+            "Value": "Upsetting Shield"
+        },
+		{
+            "Key": "UpsettingShieldEffect_Description",
+            "Value": "You've become disoriented by a shield bash inflicted with Upsetting Style. Until the start of your next turn you take a -2 penalty on all attacks against the opponent who inflicted this effect."
+        },
+		{
+            "Key": "UpsettingShieldEffect_ShortDescription",
+            "Value": "Until the start of your next turn you take a -2 penalty on all attacks against the opponent who inflicted this effect."
+        },
+		{
+            "Key": "UpsettingStrikeEffect_DisplayName",
+            "Value": "Upsetting Strike"
+        },
+		{
+            "Key": "UpsettingStrikeEffect_Description",
+            "Value": "You've been disoriented by a shield bash and now the tables have turned. Until the start of your next turn you take a -2 penalty on all attacks against the opponent who inflicted this effect. Additionally, if you attack this opponent and miss their AC by 5 or more, you provoke an Attack of Opportunity from them."
+        },
+		{
+            "Key": "UpsettingStrikeEffectt_ShortDescription",
+            "Value": "Until the start of your next turn you take a -2 penalty on all attacks against the opponent who inflicted this effect. Additionally, if you attack this opponent and miss their AC by 5 or more, you provoke an Attack of Opportunity from them."
+        },
+		{
+            "Key": "UpsettingVengeanceEffect_DisplayName",
+            "Value": "Upsetting Vengeance"
+        },
+		{
+            "Key": "UpsettingVengeaceEffect_Description",
+            "Value": "You've been disoriented by a shield bash and now the tables have turned. Until the start of your next turn you take a -2 penalty on all attacks against the opponent who inflicted this effect. Additionally, if you attack this opponent and miss their AC by 5 or more, you provoke an Attack of Opportunity from them."
+        },
+		{
+            "Key": "UpsettingVengeanceEffect_ShortDescription",
+            "Value": "You've been disoriented by a shield bash and any further mistake shall be punished. Until the start of your next turn you take a -2 penalty on all attacks against any target. Additionally, if you make an attack against any target and miss their AC by 5 or more, you provoke an Attack of Opportunity from the opponent who inflicted this effect on you."
+        },
+		{
+            "Key": "ImmediateRepositioningFeature_DisplayName",
+            "Value": "Immediate Repositioning"
+        },
+		{
+            "Key": "ImmediateRepositioningFeature_Description",
+            "Value": "At 13th level, as an swift action, a tower shield specialist can reposition his tower shield to another facing, but he cannot use this ability to interrupt an attack.\nThis ability replaces weapon training 3."
+        },
+		{
+            "Key": "ImmediateRepositioningFeature_ShortDescription",
+            "Value": "As a swift action, a tower shield specialist can reposition his tower shield to another facing, but he cannot use this ability to interrupt an attack."
+        },
+		{
+            "Key": "PhalanxFormationFeature_DisplayName",
+            "Value": "Phalanx Formation"
+        },
+		{
+            "Key": "PhalanxFormationFeature_Description",
+            "Value": "<b>Benefit:</b> When you wield a reach weapon with which you are proficient, allies don’t provide soft cover to opponents you attack with reach.\n<b>Normal:</b> Attacking a target that is beyond another creature, even an ally, can result in the target having soft cover from you."
+        },
+		{
+            "Key": "PhalanxFormationFeature_ShortDescription",
+            "Value": "When you wield a reach weapon with which you are proficient, allies don’t provide soft cover to opponents you attack with reach."
+        },
+		{
+            "Key": "ImprovedPreciseShot_Description",
+            "Value": "<i>Your ranged attacks ignore anything but total concealment and cover.</i>\n<b>Benefit:</b> Your ranged attacks ignore the AC bonus granted to targets by anything less than total cover, and the miss chance granted to targets by anything less than total concealment. Total cover and total concealment provide their normal benefits against your ranged attacks."
+        },
+		{
+            "Key": "ImprovedOutflankFeature_DisplayName",
+            "Value": "Improved Outflank"
+        },
+		{
+            "Key": "ImprovedOutflankFeature_Description",
+            "Value": "<i>You can easily find openings in your enemies’ defenses.</i>\n<b>Benefit(s):</b> Whenever you and an ally who also has this feat are threatening the same foe, you are considered to be flanking that foe if The angle between you is at least 60 degrees.\n<b>Normal:</b> You must be positioned at an angle of at least 110 degrees relative to an ally to flank an opponent."
+        },
+		{
+            "Key": "ImprovedOutflankFeature_ShortDescription",
+            "Value": "Whenever you and an ally who also has this feat are threatening the same foe, you are considered to be flanking that foe if the angle between you is at least 60 degrees."
+        },
+		{
+            "Key": "FriendlyFireManeuversFeature_DisplayName",
+            "Value": "Friendly Fire Maneuvers"
+        },
+		{
+            "Key": "FriendlyFireManeuversFeature_Description",
+            "Value": "<i>You and your teammates can anticipate one another’s ranged attacks and stay out of each other’s way.</i>\n<b>Benefit(s):</b> Allies who also have this feat cannot provide soft cover to enemies, allowing you to make attacks of opportunity against an enemy even if those allies would normally grant soft cover against your attacks. If an ally who also has this feat casts a spell that targets the area you are in which allows a Reflex saving throw to avoid the effect (such as fireball), you gain a +4 dodge bonus on that saving throw."
+        },
+		{
+            "Key": "FriendlyFireManeuversFeature_ShortDescription",
+            "Value": "Allies who also have this feat cannot provide soft cover to enemies, allowing you to make attacks of opportunity against an enemy even if those allies would normally grant soft cover against your attacks. If an ally who also has this feat casts a spell that targets the area you are in which allows a Reflex saving throw to avoid the effect (such as fireball), you gain a +4 dodge bonus on that saving throw."
+        },
+		{
+            "Key": "ShieldedDefenseActivatableAbility_DisplayName",
+            "Value": "Shielded Defense"
+        },
+		{
+            "Key": "ShieldedDefenseActivatableAbility_Description",
+            "Value": "You may decide to actively defend yourself with the shield instead of having it just hang on your hand as a dead weight. By doing though until the end of turn your Shield bonus to AC will be increased by +1, but you will take penalties on all attacks as if you were fighting with two weapons. If you are using a light shield, this bonus will be additionally increased by 1 when your Base Attack Bonus reaches 6 and every 6 points afterwards; if you are using a heavy or tower shield, the bonus will instead be increased when your Base Attack Bonus reaches 4 and eevry 4 points afterwards.\nHowever, this bonus will be decreased by 1 after each time you are attacked, even if the attack misses. You also can't benefit from this ability if you are flat-footed or can't use Dexterity for defense for any reason."
+        },
+		{
+            "Key": "ShieldedDefenseActivatableAbility_ShortDescription",
+            "Value": "Until the end of turn you are treated as if you were fighting with two weapons, but your Shield bonus to AC is increased by 1 + 1 for every 6 points of Base Attack Bonus (if you are using Light Shield) or by 1 + 1 for every 4 points of Base Attack Bonus (if you are using heavy or tower shield). This bonus is lost if you are flat-footed or can't use Dexterity to defend against the attack. This bonus is also decreased by 1 after each time you've been attacked. even if the attack missed."
+        },
+		{
+            "Key": "ShieldedDefenseEffectBuff_DynamicDecription",
+            "Value": "Currently provided bonus to AC"
+        },
+		{
+            "Key": "SacredShieldArchetype_DisplayName",
+            "Value": "Sacred Shield"
+        },
+		{
+            "Key": "SacredShieldArchetype_Description",
+            "Value": "When faced by evil, the Sacred Shield reaches first not for a weapon, but for her trusty shield. With her faith, she can ward others from harm."
+        },
+		{
+            "Key": "HolyShield4Feature_DisplayName", 
+            "Value": "Holy Shield"
+        },
+		{
+            "Key": "HolyShield4Feature_Description", 
+            "Value": "At 4th level, a Sacred Shield can channel her faith into her shield, protecting any nearby allies. All allies adjacent to the paladin gain a shield {g|Encyclopedia:Bonus}bonus{/g} equal to the Sacred Shield’s own shield {g|Encyclopedia:Bonus}bonus{/g}, including any increase from the shield’s enhancement {g|Encyclopedia:Bonus}bonus{/g}. This bonus does not stack with any existing shield bonuses. The paladin herself radiates light as a light spell while the shielding is active.\nAt 11th level, this protection expands to cover any allies within 10 feet and the radiance increases to the effects of a daylight spell.\nAt 20th level, any allies within 20 feet are protected.\nUsing this ability consumes two uses of the sacred shield’s lay on hands ability, and the effects last for 3 rounds plus a number of rounds equal to her {g|Encyclopedia:Charisma}Charisma{/g} {g|Encyclopedia:Bonus}bonus{/g} (if any).\nThis ability replaces channel positive energy."
+        },
+		{
+            "Key": "HolyShield4Feature_ShortDescription", 
+            "Value": "All allies adjacent to the paladin gain a shield bonus equal to the sacred shield’s own shield bonus, including any increase from the shield’s enhancement bonus. This bonus does not stack with any existing shield bonuses. The paladin herself radiates light as a light spell while the shielding is active.\nAt 11th level, this protection expands to cover any allies within 10 feet and the radiance increases to the effects of a daylight spell.\nAt 20th level, any allies within 20 feet are protected.\nUsing this ability consumes two uses of the sacred shield’s lay on hands ability, and the effects last for 3 rounds plus a number of rounds equal to her Charisma bonus (if any)."
+        },
+		{
+            "Key": "HolyShield11Feature_Description", 
+            "Value": "At 11th level, the protection granted by the Hole Shield ability expands to cover any allies within 10 feet and the radiance increases to the effects of a daylight spell."
+        },
+		{
+            "Key": "HolyShield11Feature_ShortDescription", 
+            "Value": "The protection granted by the Hole Shield ability expands to cover any allies within 10 feet and the radiance increases to the effects of a daylight spell."
+        },
+		{
+            "Key": "HolyShield20Feature_Description", 
+            "Value": "At 20th level, the protection granted by the Hole Shield ability expands to cover any allies within 20 feet."
+        },
+		{
+            "Key": "HolyShield20Feature_ShortDescription", 
+            "Value": "The protection granted by the Hole Shield ability expands to cover any allies within 20 feet."
+        },
+		{
+            "Key": "HolyShieldEnchantment_Description", 
+            "Value": "Sacred Shield paladin channels his faith into this shield. All nearby allies gain a shield bonus equal to the shield bonus granted by this shield, including any increase from the shield enhancement bonus. This bonus does not stack with any existing shield bonus (unless stated otherwise). The radius of protective aura depends on the level of Sacred Shield paladin. The effect will disappear if the shield is unequipped."
+        },
+		{
+            "Key": "HolyShieldBuff5_Description", 
+            "Value": "Sacred Shield paladin has channeled his faith into the shield. It now radiates a protective aura which grants all adjacent allies a shield bonus to {g|Encyclopedia_AC}AC{/g} equal to the Sacred Shield’s own shield {g|Encyclopedia:Bonus}bonus{/g}, including any increase from the shield’s enhancement {g|Encyclopedia:Bonus}bonus{/g}. This {g|Encyclopedia:Bonus}bonus{/g} does not stack with any existing shield bonuses. The paladin herself radiates light as a Light spell."
+        },
+		{
+            "Key": "HolyShieldBuff5_ShortDescription", 
+            "Value": "Protective aura grants all adjacent allies a shield bonus to AC equal to the Sacred Shield’s own shield bonus, including any increase from the shield’s enhancement bonus. This bonus does not stack with any existing shield bonuses. The paladin herself radiates light as a Light spell."
+        },
+		{
+            "Key": "HolyShieldBuff10_Description", 
+            "Value": "Sacred Shield paladin has channeled his faith into the shield. It now radiates a protective aura which grants all allies in 10 feet radius a shield bonus to {g|Encyclopedia_AC}AC{/g} equal to the Sacred Shield’s own shield {g|Encyclopedia:Bonus}bonus{/g}, including any increase from the shield’s enhancement {g|Encyclopedia:Bonus}bonus{/g}. This {g|Encyclopedia:Bonus}bonus{/g} does not stack with any existing shield bonuses. The paladin herself radiates light as a Daylight spell."
+        },
+		{
+            "Key": "HolyShieldBuff10_ShortDescription", 
+            "Value": "Protective aura grants all allies in 10 feet a shield bonus to AC equal to the Sacred Shield’s own shield bonus, including any increase from the shield’s enhancement bonus. This bonus does not stack with any existing shield bonuses. The paladin herself radiates light as a Dayight spell."
+        },
+		{
+            "Key": "HolyShieldBuff20_Description", 
+            "Value": "Sacred Shield paladin has channeled his faith into the shield. It now radiates a protective aura which grants all allies in 20 feet radius a shield bonus to {g|Encyclopedia_AC}AC{/g} equal to the Sacred Shield’s own shield {g|Encyclopedia:Bonus}bonus{/g}, including any increase from the shield’s enhancement {g|Encyclopedia:Bonus}bonus{/g}. This {g|Encyclopedia:Bonus}bonus{/g} does not stack with any existing shield bonuses. The paladin herself radiates light as a Daylight spell."
+        },
+		{
+            "Key": "HolyShieldBuff20_ShortDescription", 
+            "Value": "Protective aura grants all allies in 20 feet a shield bonus to AC equal to the Sacred Shield’s own shield bonus, including any increase from the shield’s enhancement bonus. This bonus does not stack with any existing shield bonuses. The paladin herself radiates light as a Dayight spell."
+        },
+		{
+            "Key": "HolyShieldEffectBuff_Description", 
+            "Value": "You are inside the protective aura created by a Sacred Shield paladin by channeling faith into her shield. This aura grants you Shield {g|Encyclopedia:Bonus}bonus{/g} to {g|Encyclopedia_AC}AC{/g} equal to the shield {g|Encyclopedia:Bonus}bonus{/g} of the shield itself, including the enhancement {g|Encyclopedia:Bonus}bonus{/g} (if any). This {g|Encyclopedia:Bonus}bonus{/g} does not with any other Shield bonuses to {g|Encyclopedia_AC}AC{/g} (unless stated otherwise)."
+        },
+		{
+            "Key": "HolyShieldEffectBuff_ShortDescription", 
+            "Value": "Protective aura of a Holy Shield grants you Shield bonus to AC equal to the shield bonus of the shield itself, including the enhancement bonus (if any). This bonus does not with any other Shield bonuses to AC (unless stated otherwise)."
+        },
+		{
+            "Key": "ShieldSmiteAllyBuff_Displayname",
+            "Value": "Bastion of Good"
+        },
+		{
+            "Key": "ShieldSmiteAllyBuff_Description",
+            "Value": "When the target of Bastion of Good makes an attack that deals health damage, that damage is halved."
+        },
+		{
+            "Key": "ShieldSmiteAllyBuffPerfect_Displayname",
+            "Value": "Bastion of Good - Perfect"
+        },
+		{
+            "Key": "ShieldSmiteAllyBuffPerfect_Description",
+            "Value": "When the target of Bastion of Good makes an attack that deals health damage, that damage is halved. Additionally, you get Regeneration 10 against the target of Bastion of Good (essentially regeneration that is overcome by any damage not caused by the target)."
+        },
+		{
+            "Key": "ShieldSmiteBuff_DisplayName",
+            "Value": "Smite Evil (Bastion of Good)"
+        },
+		{
+            "Key": "BastionOfGoodFeature_DisplayName",
+            "Value": "Bastion of Good"
+        },
+		{
+            "Key": "BastionOfGoodFeature_Description",
+            "Value": "At 1st level, a sacred shield can call upon the powers of good to defend her and her allies against evil. This ability functions as smite evil, except that the paladin gains no benefit on attack or damage rolls against her target. Instead, any attacks the target makes against allies within 10 feet of the paladin deal half damage. Attacks against the paladin deal full damage, but the paladin gains a deflection bonus to her AC equal to her Charisma bonus (if any) against attacks made by the target. This bonus increases by +1 for every four paladin levels (to a maximum of +6 at 20th level). As with smite evil, if the paladin targets a creature that is not evil, her bastion of good ability is wasted with no effect. Feats, abilities, and effects that increase a paladin’s number of uses of smite evil per day increase a sacred shield’s uses of bastion of good per day.\nThis ability replaces smite evil."
+        },
+		{
+            "Key": "BastionOfGoodFeature_ShortDescription",
+            "Value": "This ability functions as smite evil, except that the paladin gains no benefit on attack or damage rolls against her target. Instead, any attacks the target makes against allies near the paladin deal half damage. Attacks against the paladin deal full damage, but the paladin gains a deflection bonus to her AC equal to her Charisma bonus (if any) against attacks made by the target. This bonus increases by +1 for every four paladin levels (to a maximum of +6 at 20th level). As with smite evil, if the paladin targets a creature that is not evil, her bastion of good ability is wasted with no effect."
+        },
+		{
+            "Key": "BastionOfGoodImprovedFeature_DisplayName",
+            "Value": "Improved Bastion of Good"
+        },
+		{
+            "Key": "BastionOfGoodImprovedFeature_Description",
+            "Value": "At 11th level, the radius of a Sacred Shield’s bastion of good ability increases to 20 feet.\nThis ability replaces the paladin’s aura of justice."
+        },
+		{
+            "Key": "BastionOfGoodImprovedFeature_ShortDescription",
+            "Value": "The radius of a Sacred Shield’s bastion of good ability increases to 20 feet."
+        },
+		{
+            "Key": "PerfectBastionFeature_Displayname",
+            "Value": "Perfect Bastion of Good"
+        },
+		{
+            "Key": "PerfectBastionFeature_Description",
+            "Value": "At 20th level, a sacred shield and her allies within 20 feet gain regeneration 10 against the target of her bastion of good ability (essentially regeneration that is overcome by any damage not caused by the target).\nThis ability replaces the sacred shield’s holy champion ability."
+        },
+		{
+            "Key": "PerfectBastionFeature_ShortDescription",
+            "Value": "A sacred shield and her allies within 20 feet gain regeneration 10 against the target of her bastion of good ability (essentially regeneration that is overcome by any damage not caused by the target)."
+        },
+		{
+            "Key": "ShieldSmite10Buff_Description",
+            "Value": "Allies within 10 feet of you take only half health damage from the target of your Bastion of Good ability. You take the full damage, but get a deflection bonus to AC equal to your Charisma bonus (if any) against attacks made by the target. This bonuses increases by +1 for every 4 Paladin levels (up to +6 at lvl 20)."
+        },
+		{
+            "Key": "ShieldSmite20Buff_Description",
+            "Value": "Alies within 20 feet of you take only half health damage from the target of your Bastion of Good ability. You take the full damage, but get a deflection bonus to AC equal to your Charisma bonus (if any) against attacks made by the target. This bonuses increases by +1 for every 4 Paladin levels (up to +6 at lvl 20)."
+        },
+		{
+            "Key": "ShieldSmitePerfectBuff_Description",
+            "Value": "Alies within 10 feet of you take only half health damage from the target of your Bastion of Good ability. You take the full damage, but get a deflection bonus to AC equal to your Charisma bonus (if any) against attacks made by the target. This bonuses increases by +1 for every 4 Paladin levels (up to +6 at lvl 20). Additionally Sacred Shield and affected allies gain regeneration 10 against the target (essentially regeneration that is overcome by any damage not caused by the target)."
+        },
+		{
+            "Key": "ArrowCatching_SourceAttacks",
+            "Value": "{source} attacks "
+        },
+		{
+            "Key": "ArrowCatching_ShieldOfTarget",
+            "Value": " with {text}, but the projectile veers towards the enchanted shield of {target}."
+        },
+		{
+            "Key": "ShieldSacredBondFeature_DisplayName", 
+            "Value": "Divine Bond (Shield)"
+        },
+		{
+            "Key": "ShieldSacredBondFeature_Description", 
+            "Value": "At 5th level, instead of forming a divine bond with her weapon or a mount, a Sacred Shield forms a bond with her shield. As a standard action, a Sacred Shield can enhance her shield by calling on the aid of a celestial spirit. This bond lasts for 1 minute per paladin level. When called, the spirit causes the shield to shed light like a torch.\nAt 5th level, the spirit grants the shield a +1 enhancement bonus. For every three levels beyond 5th, the shield gains another +1 enhancement bonus, to a maximum of +6 at 20th level. These bonuses can be added to the shield, stacking with existing enhancement bonuses to a maximum of +5.\nAlternatively they can be used to add any of the following armor special abilities: arrow deflection, arrow catching, bashing, rallying, determination, fortification (any), reflecting, and spell resistance (any). The reflecting enhancement may be used once each time the sacred shield makes use of her divine bond. Adding these armor special abilities consumes an amount of bonus equal to the property’s cost. These bonuses are added to any properties the shield already has, but duplicate special abilities do not grant any extra benefit. If the shield is not magical, at least a +1 enhancement bonus must be added before any other special abilities can be added. These bonuses disappear if Sacred Shield unequips the shield.\nA Sacred Shield can use this ability once per day at 5th level, and one additional time per day for every four levels beyond 5th, to a maximum of four times per day at 17th level."
+        },
+		{
+            "Key": "ShieldSacredBondFeature_DescriptionModified", 
+            "Value": "At 5th level, instead of forming a divine bond with her weapon or a mount, a Sacred Shield forms a bond with her shield. As a standard action, a Sacred Shield can enhance her shield by calling on the aid of a celestial spirit. This bond lasts for 1 minute per paladin level. When called, the spirit causes the shield to shed light like a torch.\nAt 5th level, the spirit grants the shield a +1 enhancement bonus. For every three levels beyond 5th, the shield gains another +1 enhancement bonus, to a maximum of +6 at 20th level. These bonuses can be added to the shield, stacking with existing enhancement bonuses to a maximum of +6.\nAlternatively they can be used to add any of the following armor special abilities: arrow deflection, arrow catching, bashing, rallying, determination, fortification (any), reflecting, and spell resistance (any). The reflecting enhancement may be used once each time the sacred shield makes use of her divine bond. Adding these armor special abilities consumes an amount of bonus equal to the property’s cost. These bonuses are added to any properties the shield already has, but duplicate special abilities do not grant any extra benefit. If the shield is not magical, at least a +1 enhancement bonus must be added before any other special abilities can be added. These bonuses disappear if Sacred Shield unequips the shield.\nA Sacred Shield can use this ability once per day at 5th level, and one additional time per day for every four levels beyond 5th, to a maximum of four times per day at 17th level."
+        },
+		{
+            "Key": "ShieldSacredBondFeature_ShortDescription", 
+            "Value": "At 5th level, instead of forming a divine bond with her weapon or a mount, a Sacred Shield forms a bond with her shield. As a standard action, a Sacred Shield can enhance her shield by calling on the aid of a celestial spirit. This bond lasts for 1 minute per paladin level. When called, the spirit causes the shield to shed light like a torch.\nAt 5th level, the spirit grants the shield a +1 enhancement bonus. For every three levels beyond 5th, the shield gains another +1 enhancement bonus, to a maximum of +6 at 20th level. These bonuses can be added to the shield, stacking with existing enhancement bonuses.\nAlternatively they can be used to add any of the following armor special abilities: arrow deflection, arrow catching, bashing, rallying, determination, fortification (any), reflecting, and spell resistance (any). The reflecting enhancement may be used once each time the sacred shield makes use of her divine bond. Adding these armor special abilities consumes an amount of bonus equal to the property’s cost."
+        },
+		{
+            "Key": "TemporaryEnhancement6_EnchantName", 
+            "Value": "Temporary Enhancement +6"
+        },
+		{
+            "Key": "TemporaryEnhancement6_Description", 
+            "Value": "{g|Encyclopedia:Attack}Attacks{/g} with this weapon get an additional +6 enhancement {g|Encyclopedia:Bonus}bonus{/g} on both attack and {g|Encyclopedia:Damage}damage rolls{/g}."
+        },
+		{
+            "Key": "TemporaryArmorEnhancementBonus6_EnchantName", 
+            "Value": "Temporary Enhancement +6"
+        },
+		{
+            "Key": "TemporaryArmorEnhancementBonus6_Description", 
+            "Value": "This armor provides an additional +6 Enhancement bonus to AC."
+        },
+		{
+            "Key": "BashingEnchantment_EnchantName", 
+            "Value": "Bashing"
+        },
+		{
+            "Key": "BashingEnchantment_Description", 
+            "Value": "A shield with this special ability is designed to perform a shield bash. A bashing shield deals damage as if it were a bashing weapon of two size categories larger (a Medium light shield deals 1d6 points of damage and a Medium heavy shield deals 1d8 points of damage). The shield acts as a +1 weapon when used to bash. Only light and heavy shields can have this ability."
+        },
+		{
+            "Key": "BashingBondActivatableAbility_DisplayName", 
+            "Value": "Divine Shield - Bashing"
+        },
+		{
+            "Key": "BashingBondActivatableAbility_Description", 
+            "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add the Bashing property to the shield at the cost of 1 enhancement point.\nA shield with this special ability is designed to perform a shield bash. A bashing shield deals damage as if it were a bashing weapon of two size categories larger (a Medium light shield deals 1d6 points of damage and a Medium heavy shield deals 1d8 points of damage). The shield acts as a +1 weapon when used to bash. Only light and heavy shields can have this ability. "
+        },
+		{
+            "Key": "ArrowCatchingActivatableAbility_DisplayName", 
+            "Value": "Divine Shield - Arrow Catching"
+        },
+		{
+            "Key": "ArrowCatchingActivatableAbility_Description", 
+            "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add Arrow Catching property to the shield at the cost of 1 enhancement point.\nA shield with this ability attracts ranged weapon attacks to it. Its shield bonus to AC is increased by +2 against ranged weapons because projectiles and thrown weapons veer toward it. Additionally, any projectile or thrown weapon aimed at a target within 5 feet of the shield’s wielder diverts from its original target and targets the wielder instead. If the shield's wielder has total cover relative to the attacker, the projectile or thrown weapon is not diverted. Projectiles and thrown weapons that have an enhancement bonus higher than the shield’s base AC bonus are not diverted to the wielder (but the shield’s additional bonus to AC still applies against these weapons)."
+        },
+		{
+            "Key": "ArrowCatchingEffectBuff_DisplayName", 
+            "Value": "Arrow Catching (protected ally)"
+        },
+		{
+            "Key": "ArrowCatchingEffectBuff_Description", 
+            "Value": "An ally next to you is protecting you from projectiles and thrown weapons. If you are being attacked with a thrown weapon or projectile and its enhancement bonus is not higher than the enhancement bonus on the shield of your ally, the attack will be redirected to this ally."
+        },
+		{
+            "Key": "ArrowCatchingEffectBuff_DescriptionShort", 
+            "Value": "An ally next to you is protecting you from projectiles and thrown weapons."
+        },
+		{
+            "Key": "ArrowCatchingAoEBuff_DisplayName",
+            "Value": "Arrow Catching (protector)"
+        },
+		{
+            "Key": "ArrowCatchingAoEBuff_Description", 
+            "Value": "Your magical shield causes projectiles and thrown weapons targeting allies in 5 ft around you to veer towards you."
+        },
+		{
+            "Key": "ArrowCatchingEnchantment_EnchantName", 
+            "Value": "Arrow Catching"
+        },
+		{
+            "Key": "ArrowCatchingEnchantment_Description", 
+            "Value": "A shield with this ability attracts ranged weapon attacks to it. Shield bonus to AC is increased by +2 against ranged weapons because projectiles and thrown weapons veer toward it. Additionally, any projectile or thrown weapon aimed at a target within 5 feet of the shield’s wielder diverts from its original target and targets the wielder instead. If the shield's wielder has total cover relative to the attacker, the projectile or thrown weapon is not diverted. Projectiles and thrown weapons that have an enhancement bonus higher than the shield’s base AC bonus are not diverted to the wielder (but the shield’s additional bonus to AC still applies against these weapons)."
+        },
+		{
+            "Key": "Fortification25BondActivatableAbility_DisplayName", 
+            "Value": "Divine Shield - Fortification (Light)"
+        },
+		{
+            "Key": "Fortification25BondActivatableAbility_Description", 
+            "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add Fortification (Light) property to the shield at the cost of 1 enhancement point.\nThis shield produces a magical force that protects vital areas of the wearer more effectively. When an enemy confirms a {g|Encyclopedia:Critical}critical hit{/g} or lands a sneak {g|Encyclopedia:Attack}attack{/g} against the wearer, there is a chance that the critical hit or sneak attack is negated and {g|Encyclopedia:Damage}damage{/g} is instead {g|Encyclopedia:Dice}rolled{/g} normally. The chance is 25% for light fortification, 50% for moderate fortification, and 75% for heavy fortification."
+        },
+		{
+            "Key": "Fortification50BondActivatableAbility_DisplayName", 
+            "Value": "Divine Shield - Fortification (Medium)"
+        },
+		{
+            "Key": "Fortification50BondActivatableAbility_Description", 
+            "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add Fortification (Medium) property to the shield at the cost of 3 enhancement point.\nThis shield produces a magical force that protects vital areas of the wearer more effectively. When an enemy confirms a {g|Encyclopedia:Critical}critical hit{/g} or lands a sneak {g|Encyclopedia:Attack}attack{/g} against the wearer, there is a chance that the critical hit or sneak attack is negated and {g|Encyclopedia:Damage}damage{/g} is instead {g|Encyclopedia:Dice}rolled{/g} normally. The chance is 25% for light fortification, 50% for moderate fortification, and 75% for heavy fortification."
+        },
+		{
+            "Key": "Fortification75BondActivatableAbility_DisplayName", 
+            "Value": "Divine Shield - Fortification (Heavy)"
+        },
+		{
+            "Key": "Fortification75BondActivatableAbility_Description", 
+            "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add Fortification (Heavy) property to the shield at the cost of 5 enhancement point.\nThis shield produces a magical force that protects vital areas of the wearer more effectively. When an enemy confirms a {g|Encyclopedia:Critical}critical hit{/g} or lands a sneak {g|Encyclopedia:Attack}attack{/g} against the wearer, there is a chance that the critical hit or sneak attack is negated and {g|Encyclopedia:Damage}damage{/g} is instead {g|Encyclopedia:Dice}rolled{/g} normally. The chance is 25% for light fortification, 50% for moderate fortification, and 75% for heavy fortification."
+        },
+		{
+            "Key": "SpellResistance13BondActivatableAbility_DisplayName", 
+            "Value": "Divine Shield - Spell Resistance (13)"
+        },
+		{
+            "Key": "SpellResistance13BondActivatableAbility_Description", 
+            "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add Spell Resistance (13) property to the shield at the cost of 2 enhancement point.\nThis special ability grants the shield’s wearer spell resistance while the shield is worn."
+        },
+		{
+            "Key": "SpellResistance15BondActivatableAbility_DisplayName", 
+            "Value": "Divine Shield - Spell Resistance (15)"
+        },
+		{
+            "Key": "SpellResistance15BondActivatableAbility_Description", 
+            "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add Spell Resistance (15) property to the shield at the cost of 3 enhancement point.\nThis special ability grants the shield’s wearer spell resistance while the shield is worn."
+        },
+		{
+            "Key": "SpellResistance17BondActivatableAbility_DisplayName", 
+            "Value": "Divine Shield - Spell Resistance (17)"
+        },
+		{
+            "Key": "SpellResistance17BondActivatableAbility_Description", 
+            "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add Spell Resistance (17) property to the shield at the cost of 4 enhancement point.\nThis special ability grants the shield’s wearer spell resistance while the shield is worn."
+        },
+		{
+            "Key": "SpellResistance19BondActivatableAbility_DisplayName", 
+            "Value": "Divine Shield - Spell Resistance (19)"
+        },
+		{
+            "Key": "SpellResistance19BondActivatableAbility_Description", 
+            "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add Spell Resistance (19) property to the shield at the cost of 5 enhancement point.\nThis special ability grants the shield’s wearer spell resistance while the shield is worn."
+        },
+		{
+            "Key": "DeterminationBuff_DisplayName", 
+            "Value": "Determination"
+        },
+		{
+            "Key": "DeterminationBuff_Description", 
+            "Value": "You are protected from death. If you die under this effect, a Breath of Life brings you back to life with 50 HP, but this effect will be removed."
+        },
+		{
+            "Key": "DeterminationEnchantment_EnchantName", 
+            "Value": "Determination"
+        },
+		{
+            "Key": "DeterminationEnchantment_Description", 
+            "Value": "A shield with the determination special ability provides the ability to fight on even in the face of seemingly impossible odds. Once per day, when the owner reaches 0 or fewer hit points, the item automatically casts a breath of life spell."
+        },
+		{
+            "Key": "DeterminationBondActivatableAbility_DisplayName", 
+            "Value": "Divine Shield - Determination"
+        },
+		{
+            "Key": "DeterminationBondActivatableAbility_Description", 
+            "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add Determination property to the shield at the cost of 5 enhancement point.\nA shieldwith the determination special ability provides the ability to fight on even in the face of seemingly impossible odds. Once per day, when the owner reaches 0 or fewer hit points, the item automatically casts a breath of life spell."
+        },
+		{
+            "Key": "SacredBondPlus2Feature_DisplayName", 
+            "Value": "Divine Bond (Shield) +2"
+        },
+		{
+            "Key": "SacredBondPlus2Feature_Description", 
+            "Value": "Upon reaching level 8 Sacred Shield is able to enhance his shield up to +2 and add following magical properties: Spell Resistance (13), Arrow Deflection, Rallying."
+        },
+		{
+            "Key": "SacredBondPlus3Feature_DisplayName", 
+            "Value": "Divine Bond (Shield) +3"
+        },
+		{
+            "Key": "SacredBondPlus3Feature_Description", 
+            "Value": "Upon reaching level 11 Sacred Shield is able to enhance his shield up to +3 and add following magical properties: Spell Resistance (15), Fortification (Medium)."
+        },
+		{
+            "Key": "SacredBondPlus4Feature_DisplayName", 
+            "Value": "Divine Bond (Shield) +4"
+        },
+		{
+            "Key": "SacredBondPlus4Feature_Description", 
+            "Value": "Upon reaching level 14 Sacred Shield is able to enhance his shield up to +4 and add following magical properties: Spell Resistance (17)."
+        },
+		{
+            "Key": "SacredBondPlus5Feature_DisplayName", 
+            "Value": "Divine Bond (Shield) +5"
+        },
+		{
+            "Key": "SacredBondPlus5Feature_Description", 
+            "Value": "Upon reaching level 17 Sacred Shield is able to enhance his shield up to +5 and add following magical properties: Spell Resistance (19), Fortification (Heavy), Determination."
+        },
+		{
+            "Key": "SacredBondPlus6Feature_DisplayName", 
+            "Value": "Divine Bond (Shield) +6"
+        },
+		{
+            "Key": "SacredBondPlus6Feature_Description", 
+            "Value": "Upon reaching level 20 Sacred Shield is able to enhance his shield up to +6."
+        },
+		{
+            "Key": "RallyingBuff_DisplayName", 
+            "Value": "Rallying"
+        },
+		{
+            "Key": "RallyingBuff_Description", 
+            "Value": "You get +6 morale bonus against fear effects."
+        },
+		{
+            "Key": "RallyingEnchantment_EnchantName", 
+            "Value": "Rallying"
+        },
+		{
+            "Key": "RallyingEnchantment_Description", 
+            "Value": "This armor or shield is brightly polished, and its mirror-bright surface is magically endowed with the ability to bring comfort to the wearer’s companions. Allies within 30 feet of the wearer gain a +6 morale bonus on saving throws against fear effects."
+        },
+		{
+            "Key": "RallyingBondActivatableAbility_DisplayName",
+            "Value": "Rallying"
+        },
+		{
+            "Key": "RallyingBondActivatableAbility_Description", 
+            "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add Bashing property to the shield at the cost of 2 enhancement point.\nThis armor or shield is brightly polished, and its mirror-bright surface is magically endowed with the ability to bring comfort to the wearer’s companions. Allies within 30 feet of the wearer gain a +6 morale bonus on saving throws against fear effects."
+        },
+		{
+            "Key": "MageShield_description", 
+            "Value": "Shield creates an invisible shield of force that hovers in front of you. It negates magic missile {g|Encyclopedia:Attack}attacks{/g} directed at you. The disk also provides a +4 Untyped {g|Encyclopedia:Bonus}bonus{/g} to {g|Encyclopedia:Armor_Class}AC{/g}.[LONGSTART] This bonus applies against {g|Encyclopedia:Incorporeal_Touch_Attack}incorporeal{/g} {g|Encyclopedia:TouchAttack}touch attacks{/g}, since it is a force effect. The shield has no armor {g|Encyclopedia:Check}check{/g} {g|Encyclopedia:Penalty}penalty{/g} or {g|Encyclopedia:Spell_Fail_Chance}arcane spell failure chance{/g}.[LONGEND]"
+        },
+		{
+            "Key": "ShieldsProficiency_DescriptionWithoutBuckler", 
+            "Value": "You become proficient with light shields, heavy shields, and learn to better use them when fighting defensively."
+        },
+		{
+            "Key": "BucklerProficiency_DisplayName", 
+            "Value": "Buckler Proficiency"
+        },
+		{
+            "Key": "BucklerProficiencyWithParry_Description", 
+            "Value": "You become proficient with bucklers and learn to use them to parry incoming attacks."
+        },
+		{
+            "Key": "WayOfTheShield_BarbarianProficiencies_Shieldless", 
+            "Value": "A barbarian is proficient with all simple and {g|Encyclopedia:Weapon_Proficiency}martial weapons{/g}, light armor, medium armor, and shields (except tower shields and bucklers)."
+        },
+		{
+            "Key": "WayOfTheShield_CavalierProficiencies_Shieldless", 
+            "Value": "Cavaliers are proficient with all simple and {g|Encyclopedia:Weapon_Proficiency}martial weapons{/g}, with all types of armor (heavy, light, and medium) and with shields (except tower shields and bucklers)."
+        },
+		{
+            "Key": "WayOfTheShield_ClericProficiencies_Shieldless", 
+            "Value": "Clerics are proficient with all {g|Encyclopedia:Weapon_Proficiency}simple weapons{/g}, light armor, medium armor, and shields (except tower shields and bucklers). Clerics are also proficient with the favored weapon of their deities."
+        },
+		{
+            "Key": "WayOfTheShield_DruidProficiencies_Shieldless", 
+            "Value": "Druids are proficient with the following weapons: club, dagger, dart, quarterstaff, scimitar, scythe, sickle, shortspear, sling, and spear. They are also proficient with all {g|Encyclopedia:NaturalAttack}natural attacks{/g} (claw, bite, and so forth) of any form they assume with wild shape.
+Druids are proficient with light and medium armor but are prohibited from wearing metal armor; thus, they may wear only padded, leather, or hide armor. A druid may also wear wooden armor that has been altered by the ironwood {g|Encyclopedia:Spell}spell{/g} so that it functions as though it were steel. Druids are proficient with shields (except tower shields and bucklers) but must use only wooden ones."
+        },
+		{
+            "Key": "WayOfTheShield_OracleProficiency_Shieldless", 
+            "Value": "Oracles are proficient with all {g|Encyclopedia:Weapon_Proficiency}simple weapons{/g}, light armor, medium armor, and shields (except tower shields and bucklers)."
+        },
+		{
+            "Key": "WayOfTheShield_PaladinProficiencies_Shieldless", 
+            "Value": "Paladins are proficient with all simple and {g|Encyclopedia:Weapon_Proficiency}martial weapons{/g}, with all types of armor (heavy, medium, and light), and with shields (except tower shields and bucklers)."
+        },
+		{
+            "Key": "WayOfTheShield_SkaldProficiencies_Shieldless", 
+            "Value": "A skald is proficient with all simple and {g|Encyclopedia:Weapon_Proficiency}martial weapons{/g}, light and medium armor, and shields (except tower shields and bucklers). A skald can cast skald {g|Encyclopedia:Spell}spells{/g} while wearing light or medium armor and even using a shield without incurring the normal {g|Encyclopedia:Spell_Fail_Chance}arcane spell failure chance{/g}. This does not affect the arcane spell failure chance for arcane spells received from other classes. Like other arcane spellcasters, a skald wearing heavy armor incurs a chance of arcane spell failure if the spell in question has somatic components."
+        },
+		{
+            "Key": "WayOfTheShield_WarpriestProficiencies_Shieldless", 
+            "Value": "A warpriest is proficient with all simple and {g|Encyclopedia:Weapon_Proficiency}martial weapons{/g}, as well as the favored weapon of his deity, and with all armor (heavy, light, and medium) and shields (except tower shields and bucklers)."
+        },
+		{
+            "Key": "WayOfTheShield_StalwartDefenderProficiencies_Shieldless", 
+            "Value": "A stalwart defender is proficient with all simple and {g|Encyclopedia:Weapon_Proficiency}martial weapons{/g} and with all armor (heavy, light, and medium) and shields (including tower shields, but not bucklers)."
+        },
+		{
+            "Key": "WayOfTheShield_BeastRiderProficiencies_Shieldless", 
+            "Value": "A beast rider is proficient with light and medium armor, and with shields (with the exception of tower shields and bucklers)."
+        },
+		{
+            "Key": "WayOfTheShield_AngelfireApostleProficiencies_Shieldless", 
+            "Value": "Angelfire apostles are only proficient with light armor."
+        },
+		{
+            "Key": "WayOfTheShield_SettingsGroup_Title", 
+            "Value": "Way of the shield - settings"
+        },
+		{
+            "Key": "way-of-the-shield.SettingButton_Default", 
+            "Value": "Default"
+        },
+		{
+            "Key": "way-of-the-shield.SettingButton_Apply", 
+            "Value": "Apply"
+        },
+		{
+            "Key": "way-of-the-shield.SettingButton_Cancel", 
+            "Value": "Cancel"
+        },
+		{
+            "Key": "way-of-the-shield.debug_Description", 
+            "Value": "Debug"
+        },
+		{
+            "Key": "way-of-the-shield.debug_TooltipDescription", 
+            "Value": "Turn this on to have your game log spammed with debug info. You probably want this turned off."
+        },
+		{
+            "Key": "way-of-the-shield.allow-equip-non-profficient-items_Description", 
+            "Value": "Allow equipping items you aren't profficient with."
+        },
+		{
+            "Key": "way-of-the-shield.allow-equip-non-profficient-items_TooltipDescription", 
+            "Value": "As per tabletop rules you can equip armor and weapons even if you are not profficient with it, but recieve penalties to Attack Bonus."
+        },
+		{
+            "Key": "way-of-the-shield.forbid-close-flanking_Description", 
+            "Value": "Enable tabletop rules for flanking"
+        },
+		{
+            "Key": "way-of-the-shield.forbid-close-flanking_TooltipDescription", 
+            "Value": "In vanilla WotR a target of attack is considered flanked if there is any other unit attacking it disregarding the position of attackers. As per tabletop rules, the flanker must specifically threaten the target from the side opposit to the main attacker. Enable this option to make the game respect tabletop rules. (Minimal angle between attackers required for flanking is set to be 110 degrees. Improved Outflank teamwork feat reduces it to 60.)"
+        },
+		{
+            "Key": "way-of-the-shield.allow-close-flanking-to-enemies_Description", 
+            "Value": "Make enemies ignore tabletop flanking rules"
+        },
+		{
+            "Key": "way-of-the-shield.allow-close-flanking-to-enemies_TooltipDescription", 
+            "Value": "If you have enabled tabletop rules for flanking with the option above, you may find the game too easy, because monster's AI didn't get any corresponding changes. By enabling this option you can make the tabletop flanking rules apply only to the player."
+        },
+		{
+            "Key": "way-of-the-shield.concealment-attack-bonus-on-backstab_Description", 
+            "Value": "Enable Concealment bonus when attacking from behind"
+        },
+		{
+            "Key": "way-of-the-shield.concealment-attack-bonus-on-backstab_TooltipDescription", 
+            "Value": "Homebrew. When attacking a unit from behind, if this option is enabled and the target doesn't have Blindsight of any kind, the attacker recieves +2 Concealment bonus to Attack. This does not provide any additional benefits related to Concealment."
+        },
+		{
+            "Key": "way-of-the-shield.deny-shield-bonus-on-backstab_Description", 
+            "Value": "Enable shield denial when attacking from behind"
+        },
+		{
+            "Key": "way-of-the-shield.deny-shield-bonus-on-backstab_TooltipDescription", 
+            "Value": "Homebrew. When attacking a unit from behind, if this option is enabled, the target can't lose its shield to defend and therefore loses its Shield bonus to AC."
+        },
+		{
+            "Key": "way-of-the-shield.flat-footed-on-backstab_Description", 
+            "Value": "Enable concealment when attacking from behind"
+        },
+		{
+            "Key": "way-of-the-shield.flat-footed-on-backstab_TooltipDescription", 
+            "Value": "Homebrew. When attacking a unit from behind, if this option is enabled and the target doesn't have Blindsight of any kind, the attacker is treated as it had the total concealment. This can leave the target flat-footed."
+        },
+		{
+            "Key": "way-of-the-shield.add-buckler-parry_Description", 
+            "Value": "Add Buckler parry"
+        },
+		{
+            "Key": "way-of-the-shield.add-buckler-parry_TooltipDescription", 
+            "Value": "Homebrew. Adds new basic abilities to characters proficient with bucklers. This ability allows to use the buckler in order to parry incoming attacks at the expense of taking two-weapon fighting penalties."
+        },
+		{
+            "Key": "way-of-the-shield.fix-rapiers_Description", 
+            "Value": "Forbid wielding rapiers in two-hands"
+        },
+		{
+            "Key": "way-of-the-shield.fix-rapiers_TooltipDescription", 
+            "Value": "By tabletop rules one can not wield rapiers in two hands to add Str modifier *1.5 to damage and attack. Enable this setting to use this ruling."
+        },
+		{
+            "Key": "way-of-the-shield.allow-two-handed-spears-as-one-handed-when-mounted_Description", 
+            "Value": "Allow couching longspears when mounted"
+        },
+		{
+            "Key": "way-of-the-shield.allow-two-handed-spears-as-one-handed-when-mounted_TooltipDescription", 
+            "Value": "Homebrew. Enable this option to bring another benefit to Mounted Combat feat - it will allow the character to wield longspears one-handed when mounted (you may swap handedness through the \"Use weapons one-handedly\")."
+        },
+		{
+            "Key": "way-of-the-shield.allow-two-handed-as-one-handed-when-buckler_Description", 
+            "Value": "Allow equipping two-handed weapons with a buckler"
+        },
+		{
+            "Key": "way-of-the-shield.allow-two-handed-as-one-handed-when-buckler_TooltipDescription", 
+            "Value": "As per tabletop rules you can equip two-handed weapons with a buckler. However you lose your AC bonus from the buckler if you actually use your off-hand for attack. If you are equipping a melee weapon this way, you take -1 penalty to Attack, but not from bows or crossbows (or if you have the Unhindering Shield feat)."
+        },
+		{
+            "Key": "way-of-the-shield.give-immediate-repositioning-to-tss_Description", 
+            "Value": "Give Immediate Repositioning ability to Tower Shield Specialist archetype"
+        },
+		{
+            "Key": "way-of-the-shield.give-immediate-repositioning-to-tss_TooltipDescription", 
+            "Value": "As per tabletop rules, Fighter's archetype Tower Shield Specialist acquires the Immediate Repositioning ability at lvl 13, allowing her turn around with a Swift action without breaking the defensive stance of Tower Shield. Vanilla WotR doesn't have the defensive stance, so this ability was substituted with Total Cover feature. Enable this option to add the Immediate Reposition to the Tower Shield Specialist progression. (This will not affect characters who already have 13 levels in the archetype unless you respec.)"
+        },
+		{
+            "Key": "way-of-the-shield.remove-total-cover-feature-from-tss_Description", 
+            "Value": "Remove Total Cover Feature from Tower Shield Specialist archetype"
+        },
+		{
+            "Key": "way-of-the-shield.remove-total-cover-feature-from-tss_TooltipDescription", 
+            "Value": "As per tabletop rules, Fighter's archetype Tower Shield Specialist acquires the Immediate Repositioning ability at lvl 13, allowing her turn around with a Swift action without breaking the defensive stance of Tower Shield. Vanilla WotR doesn't have the defensive stance, so this ability was substituted with Total Cover feature. Enable this option to remove the Total Cover from the Tower Shield Specialist progression. (This will not affect charcters who already have 13 levels in the archetype unless you respec.)"
+        },
+		{
+            "Key": "way-of-the-shield.enable-soft-sover_Description", 
+            "Value": "Enable Soft Cover"
+        },
+		{
+            "Key": "way-of-the-shield.enable-soft-sover_TooltipDescription", 
+            "Value": "As per tabletop rules, if a character performs an attack while there's any other creature on the line of attack, the target recieves Cover bonus to AC depending on the obstacle size. Enable this option to add this rule to the game."
+        },
+		{
+            "Key": "way-of-the-shield.add-soft-cover-denial-to-improved-precise-shot_Description", 
+            "Value": "Make Improved Precise Shot feat ignore Soft Cover"
+        },
+		{
+            "Key": "way-of-the-shield.add-soft-cover-denial-to-improved-precise-shot_TooltipDescription", 
+            "Value": "As per tabletop rules, Improved Precise Shot allows the character to deny the target AC bonuses coming from any sort of cover. If you enabled Soft Cover rules with the option above, you may enable this option to make corresponding changes to the Improved Precise Shot feat."
+        },
+		{
+            "Key": "way-of-the-shield.change-shield-wall_Description", 
+            "Value": "Change the Shield Wall feat"
+        },
+		{
+            "Key": "way-of-the-shield.change-shield-wall_TooltipDescription", 
+            "Value": "Homebrew. Enable to change the Shield Wall teamwork feat. Trades harsher conditions for higher AC bonus."
+        },
+		{
+            "Key": "way-of-the-shield.buff-sacred-shield-enhacement-array_Description", 
+            "Value": "Buff Sacred Shield"
+        },
+		{
+            "Key": "way-of-the-shield.buff-sacred-shield-enhacement-array_TooltipDescription", 
+            "Value": "Homebrew. By vanilla rules abilities such as Sacred Shield can't raise the enhancement bonus on the item above +5 and rest of points must be spent on enchantments. Enable this setting to allow Sacred Shield ability to raise the enhancement bonus up to +6."
+        },
+		{
+            "Key": "way-of-the-shield.remove-buckler-proficiencies_Description", 
+            "Value": "Remove Buckler Proficiency from several classes"
+        },
+		{
+            "Key": "way-of-the-shield.remove-buckler-proficiencies_TooltipDescription", 
+            "Value": "Homebrew. Buckler Proficiency is removed from the Shield Proficiency feat and moved into a feat of its own. Several classes that thematically are not suited for using bucklers now are not proficient with it."
+        },
+		{
+            "Key": "way-of-the-shield.change-shield-spell_Description", 
+            "Value": "Change the Shield spell"
+        },
+		{
+            "Key": "way-of-the-shield.change-shield-spell_TooltipDescription", 
+            "Value": "Enable this option to change the type of Shield spell bonus to AC from \'Shield\' to \'Untyped\', but the spell will not be available to Alchemist class anymore."
+        },
+		{
+            "Key": "way-of-the-shield.allow-shield-bash-without-improved-feature_Description", 
+            "Value": "Allow to use Shield Bash without the Improved Shield Bash feat"
+        },
+		{
+            "Key": "way-of-the-shield.allow-shield-bash-without-improved-feature_TooltipDescription", 
+            "Value": "According to tabletop rules, any character equipped with a shield can perform a shield bash (losing shield's bonus to AC until the end of the turn) and may also learn Improved Shield Bash feat to not lose the shield's bonus AC. In the base game it's impossible to perform Shield Bash without the Improved Shield Bash feat. Enable this setting to use tabletop rulings."
+        },
+		{
+            "Key": "way-of-the-shield.change-back-to-back_Description", 
+            "Value": "Change the \"Back to Back\" teamwork feat"
+        },
+		{
+            "Key": "way-of-the-shield.change-back-to-back_TooltipDescription", 
+            "Value": "If you have this option enabled while also having Soft Cover rulings enabled, instead of providing +2 Circumstance bonus to AC against flanking attacks the Back to Back teamwork feature will increase the Soft Cover bonus to AC by 1.5 times when you are benefiting from it; additionally, if you have enabled the option for denying shield bonuses during backstabs, your allies will be able to provide you with their own Shield bonus to AC in such situations when you benefit from Back to Back. However, in order to benefit from it both you and the ally must stand back to back no further than 1 foot from each other. \n This setting also changes effects of the new teamwork feat Back to Back Improved. While this setting is disabled, Improved version of the feat will only increase the bonus from the basic version of the feat by 2. If this setting is enabled while you also have enabled options that grant the Concealment bonus while backstabbing and/or leave the backstabbed target flat-footed, Back to Back Improved will negate these disadvantages."
+        },
+		{
+            "Key": "MountedCombat_description", 
+            "Value": "Once per {g|Encyclopedia:Combat_Round}round{/g} when your mount is hit in combat, you attempt a {g|Encyclopedia:Mobility}Mobility{/g} skill check to negate the hit. The hit is negated if your Mobility {g|Encyclopedia:Check}check{/g} result is greater than the opponent's {g|Encyclopedia:Attack}attack roll{/g}.{shield_check_set_bool|allow-two-handed-spears-as-one-handed-when-mounted| \nAdditionally, when you are fighting mounted, you may couch your two-handed spear and wield it one-handed.| }"
+        },
+		{
+            "Key": "BackToBackNew_Description", 
+            "Value": "<i>Your allies' backs are trustier than any wall</i>
+<b>Benefit:</b> When you fight while standing back to back with another ally (the distance between your backs should be no more than 1 feet and two of you should be looking in opposite directions; the ally must also be able to act),  {shield_check_set_bool|enable-soft-sover|the Soft Cover provided by this ally is increased by 1.5 times|and you are Flanked, you recieve a +2 Circumstance bonusto AC}. {shield_check_set_bool|deny-shield-bonus-on-backstab|Additionally, if such an ally is equipped with a shield, you recieve its Shield and Shield Enhancement bonuses to AC when backstabbed (this does not give you any other benefits of the ally's shield item or any Shield bonuses from other sources).}"
+        },
+		{
+            "Key": "BackToBackImproved_DisplayName", 
+            "Value": "Improved Back to Back"
+        },
+		{
+            "Key": "BackToBackImproved_Description", 
+            "Value": "<i>Your ally's eyes are your own, and your are his</i>
+<b>Benefit:</b> When you benefit from the Back to Back feat{shield_check_set_bool|concealment-attack-bonus-on-backstab|, enemies attacking you from behind are not granted +2 Concealment bonus to attack}{shield_check_set_bool|concealment-attack-bonus-on-backstab|, you are not treated flat-footed when backstabbed}."
+        },
+		{
+            "Key": "BackToBackImproved_Unchanged_Description", 
+            "Value": "<i>Your ally's eyes are your own, and your are his</i>
+<b>Benefit:</b> The Circumstance bonus to AC from the Back to Back feat is additionally increased by 2 up to +4."
+        },
+		{
+            "Key": "Mythic_ShieldedDefense_m_DisplayName", 
+            "Value": "Shielded Defense (Mythic)"
+        },
+		{
+            "Key": "Mythic_ShieldedDefense_m_Description", 
+            "Value": "<i>Your shield hand is moving with lightning speed, able to deflect atacks coming from every direction.</i> \nWhen you fight while using Shielded Defense, only every second incoming attack reduces the AC bonus granted by the ability."
+        },
+		{
+            "Key": "Mythic_BucklerParryFeature_DisplayName", 
+            "Value": "Buckler Parry, Mythic"
+        },
+		{
+            "Key": "Mythic_BucklerParryFeature_Description", 
+            "Value": "You can perform one additional parry per turn with a buckler or a light shield at your full attack bonus. If you have Two Weapon Fighting Improved or Two Weapon Fighting Greater feats, the amount of granted additional parries is further increased by 1 for each of those feats."
+        },
+        
+	]	
+}

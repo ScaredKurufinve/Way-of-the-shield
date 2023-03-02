@@ -1,0 +1,10 @@
+{
+  "Id": "Shield",
+  "DisplayName": "Way Of The Shield",
+  "Author": "Kurufinve",
+  "Version": "0.9.9",
+  "ManagerVersion": "0.23.0",
+  "Requirements": [],
+  "AssemblyName": "Assemblies\\Way of the shield.dll",
+  "EntryMethod": "Way_of_the_shield.Main.Load"
+}

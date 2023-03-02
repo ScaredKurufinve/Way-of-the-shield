@@ -1,0 +1,107 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+	  <LangVersion>latest</LangVersion>
+    <RootNamespace>Way_of_the_shield</RootNamespace>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;Dynamic</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;Dynamic</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Icons\BastionOfGood.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AssemblyPublicizer" Version="1.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.0.1" />
+    <PackageReference Include="System.Dynamic.Runtime" Version="4.0.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(Wrath)\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(SolutionDir)lib\Assembly-CSharp_public.dll</HintPath>
+		<Private>False</Private>
+    </Reference>
+    <Reference Include="Owlcat.Runtime.Core">
+      <HintPath>$(Wrath)\Owlcat.Runtime.Core.dll</HintPath>
+    </Reference>
+	  <Reference Include="Owlcat.Runtime.Visual">
+		  <HintPath>$(Wrath)\Owlcat.Runtime.Visual.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Owlcat.Runtime.UI">
+		  <HintPath>$(Wrath)\Owlcat.Runtime.UI.dll</HintPath>
+	  </Reference>
+	  <Reference Include="System.Dynamic.Runtime" />
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>$(Wrath)\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(Wrath)\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(Wrath)\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+	  <Reference Include="UnityEngine.IMGUIModule">
+		  <HintPath>$(Wrath)\UnityEngine.IMGUIModule.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityModManager">
+	    <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\UnityModManager\UnityModManager.dll</HintPath>
+	  </Reference>
+
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\BastionOfGood.png" />
+  </ItemGroup>
+	<ItemGroup>
+		<Using Include="HarmonyLib" />
+		<Using Include="Kingmaker.Blueprints" />
+		<Using Include="Kingmaker.EntitySystem.Entities" />
+		<Using Include="Kingmaker.Enums" />
+		<Using Include="Kingmaker.Blueprints.JsonSystem" />
+		<Using Include="Kingmaker.Localization" />
+		<Using Include="Kingmaker.PubSubSystem" />
+		<Using Include="Kingmaker.RuleSystem" />
+		<Using Include="Kingmaker.Utility" />
+		<Using Static="true" Include="Way_of_the_shield.Settings" />
+		<Using Static="true" Include="Way_of_the_shield.Utilities" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="Info.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Localization\enGB.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="OwlcatModificationManifest.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="OwlcatModificationSettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+	<Target Name="Publicize" AfterTargets="Clean">
+		<ItemGroup>			
+			<Assemblies Include="$(Wrath)\Assembly-CSharp.dll" />
+		</ItemGroup>
+
+		<PublicizeTask InputAssemblies="@(Assemblies)" OutputDir="$(SolutionDir)lib/" />
+	</Target>
+
+</Project>
