@@ -21,4 +21,4 @@ This mod creates save dependency.
 
 ## Known bugs
 -   Shield Focus feat applies its bonus twice. I may fix it at some point, but for now consider it a feature.
--   It's possible to bash with a buckler while handing a weapon two-handedly if you have both Unhindering Shield and Upsetting Shield. Will likely fix it out soon, but leave a setting to turn it back for people who'd like it.
+-   It's possible to bash with a buckler while holding a weapon two-handedly if you have both Unhindering Shield and Upsetting Shield. Will likely fix it out soon, but leave a setting to turn it back for people who'd like it.
