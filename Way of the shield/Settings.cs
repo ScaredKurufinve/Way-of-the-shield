@@ -112,8 +112,8 @@ namespace Way_of_the_shield
             }
 #endif
 
-            Comment.Log("9");
             #region Add to ModMenu
+            if (Main.ModMenu is null) goto skipModMenu;
             MethodInfo Wolfie = null;
             IEnumerable<Type> wolfies = Main.ModMenu.GetTypes().Where(tx => tx.Name.Contains("ModMenu"));
 #if DEBUG
@@ -128,6 +128,7 @@ namespace Way_of_the_shield
             }
             if (Wolfie is null) Comment.Log("Did not find the ModMenu.AddSettings");
             else Wolfie.Invoke(null, new object[] { SettingsGroup });
+            skipModMenu:
             #endregion
 
             initialized = true;
