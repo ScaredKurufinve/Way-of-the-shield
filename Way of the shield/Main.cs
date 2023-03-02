@@ -157,13 +157,13 @@ namespace Way_of_the_shield
 
     }
 
-    /*[HarmonyPatch(typeof(BlueprintsCache), nameof(BlueprintsCache.Init))]
+    [HarmonyPatch(typeof(BlueprintsCache), nameof(BlueprintsCache.Init))]
     public static class LocalizationPatchForUMM
     {
         [HarmonyPrepare]
         public static bool UMMCheck()
         {
-            if (Main.mod is OwlcatModification) return false;
+            if (Main.mod is OwlcatModification || Main.BeenLoaded) return false;
             else return true;
         }
 
@@ -190,16 +190,16 @@ namespace Way_of_the_shield
 
         
     }
-    [HarmonyPatch(typeof(OwlcatModification), nameof(OwlcatModification.TryLoadBundle))]
-    public static class DumbBundleFix
-    {
-        [HarmonyPrefix]
-        public static bool Fix(OwlcatModification __instance, string bundleName, ref AssetBundle __result)
-        {
-            if (!__instance.Settings.BundlesLayout.GuidToBundle.Values.Contains(bundleName))
-                __result = null;
-            else __result = __instance.LoadBundle(bundleName);
-            return false;
-        }
-    }*/
+    //[HarmonyPatch(typeof(OwlcatModification), nameof(OwlcatModification.TryLoadBundle))]
+    //public static class DumbBundleFix
+    //{
+    //    [HarmonyPrefix]
+    //    public static bool Fix(OwlcatModification __instance, string bundleName, ref AssetBundle __result)
+    //    {
+    //        if (!__instance.Settings.BundlesLayout.GuidToBundle.Values.Contains(bundleName))
+    //            __result = null;
+    //        else __result = __instance.LoadBundle(bundleName);
+    //        return false;
+    //    }
+    //}
 }

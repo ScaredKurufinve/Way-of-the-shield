@@ -744,8 +744,7 @@
         },
 		{
             "Key": "WayOfTheShield_DruidProficiencies_Shieldless", 
-            "Value": "Druids are proficient with the following weapons: club, dagger, dart, quarterstaff, scimitar, scythe, sickle, shortspear, sling, and spear. They are also proficient with all {g|Encyclopedia:NaturalAttack}natural attacks{/g} (claw, bite, and so forth) of any form they assume with wild shape.
-Druids are proficient with light and medium armor but are prohibited from wearing metal armor; thus, they may wear only padded, leather, or hide armor. A druid may also wear wooden armor that has been altered by the ironwood {g|Encyclopedia:Spell}spell{/g} so that it functions as though it were steel. Druids are proficient with shields (except tower shields and bucklers) but must use only wooden ones."
+            "Value": "Druids are proficient with the following weapons: club, dagger, dart, quarterstaff, scimitar, scythe, sickle, shortspear, sling, and spear. They are also proficient with all {g|Encyclopedia:NaturalAttack}natural attacks{/g} (claw, bite, and so forth) of any form they assume with wild shape. Druids are proficient with light and medium armor but are prohibited from wearing metal armor; thus, they may wear only padded, leather, or hide armor. A druid may also wear wooden armor that has been altered by the ironwood {g|Encyclopedia:Spell}spell{/g} so that it functions as though it were steel. Druids are proficient with shields (except tower shields and bucklers) but must use only wooden ones."
         },
 		{
             "Key": "WayOfTheShield_OracleProficiency_Shieldless", 
@@ -865,11 +864,11 @@ Druids are proficient with light and medium armor but are prohibited from wearin
         },
 		{
             "Key": "way-of-the-shield.allow-two-handed-spears-as-one-handed-when-mounted_Description", 
-            "Value": "Allow couching longspears when mounted"
+            "Value": "Allow couching spears and longspears when mounted"
         },
 		{
             "Key": "way-of-the-shield.allow-two-handed-spears-as-one-handed-when-mounted_TooltipDescription", 
-            "Value": "Homebrew. Enable this option to bring another benefit to Mounted Combat feat - it will allow the character to wield longspears one-handed when mounted (you may swap handedness through the \"Use weapons one-handedly\")."
+            "Value": "Homebrew. Enable this option to bring another benefit to Mounted Combat feat - it will allow the character to wield spears and  longspears one-handed when mounted (you may swap handedness through the \"Use weapons one-handedly\")."
         },
 		{
             "Key": "way-of-the-shield.allow-two-handed-as-one-handed-when-buckler_Description", 
