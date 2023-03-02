@@ -1,4 +1,5 @@
-# Way of the Shield - a mod for the game Pathfinder Wrath of the Righteous
+# Way of the Shield - a mod for the game Pathfinder Wrath of the Righteous to make shields more enjoyable
+And some other tweaks like flanking rules
 
 This mod supports installation by both UMM and through Owlcat Modifications Manager. <b>Please, don't install it both ways! Having it installed twice is likely to cause unstable work!</b> The Modfinder support will be added soon™.
 This mod has no dependencies on other mods; it does support ModMenu, but does not require it. 
