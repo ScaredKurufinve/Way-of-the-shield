@@ -12,10 +12,11 @@ This mod creates save dependency.
 -   Use your Heavy or Light shield actively in combat to get sizable bonus to AC by taking Two-Weapon Fighting penalties;
 -   Use Bucklers or Light shields to parry incoming melee attacks by taking Two-Weapon Fighting penalties;
 -   use Tower shields to grant yourself total cover as per table-top rules;
--   new homebrew backstab mechanic - come to your enemies from behind to ignore their shield bonuses;
--   flanking mechanic and soft cover rules faithful to tabletop rules as well as reworks to some teamwork feats to make those more impactful;
--   Upsetting Shield style to allow bashing with bucklers;
 -   Unhindering Shield feat to let those magi, monks and duelists benefit from bucklers;
+-   Upsetting Shield style to allow bashing with bucklers;
+-   Get the ability to perform shield bash without the Improved Shield Bash feat.
+-   New homebrew backstab mechanic - come to your enemies from behind to ignore their shield bonuses;
+-   Flanking mechanic and soft cover rules faithful to tabletop rules as well as reworks to some teamwork feats to make those more impactful;
 -   The comeback of the mechanic from Call of the Wild allowing to use two-handed weapons while equipped with shields. As well as Shield Brace feat and ability to use -   two-handed spears with shields while mounted;
 -   It's now possible to equip shields, armor and weapon without the proficiency as per tabletop rules at the expense of attack bonus;
 -   New Paladin Archetype from tabletop - Sacred Shield;
