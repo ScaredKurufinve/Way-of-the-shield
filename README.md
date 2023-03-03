@@ -10,7 +10,7 @@ This mod creates save dependency.
 ## Highlights
 
 -   Use your Heavy or Light shield actively in combat to get sizable bonus to AC by taking Two-Weapon Fighting penalties;
--   Use Bucklers or Light shields to riposte incoming melee attacksby taking Two-Weapon Fighting penalties;
+-   Use Bucklers or Light shields to parry incoming melee attacksby taking Two-Weapon Fighting penalties;
 -   use Tower shields to grant yourself total cover as per table-top rules;
 -   new homebrew backstab mechanic - come to your enemies from behind to ignore their shield bonuses;
 -   flanking mechanic and soft cover rules faithful to tabletop rules as well as reworks to some teamwork feats to make those more impactful;
