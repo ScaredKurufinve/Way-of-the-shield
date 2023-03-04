@@ -36,6 +36,7 @@ namespace Way_of_the_shield.NewComponents
             public ItemEntityWeapon weapon;
             public bool HasParries;
             public int n = 0;
+            public bool Triggered;
 
             IEnumerator<int> parries;
 
@@ -91,7 +92,7 @@ namespace Way_of_the_shield.NewComponents
                     activated = false;
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log("OffHand Parry part is deactivated through TryDeactivate call.");   
+                        Comment.Log("OffHandParry part is deactivated through TryDeactivate call.");   
 #endif
                 }
                 flag = false;
@@ -101,11 +102,15 @@ namespace Way_of_the_shield.NewComponents
             {
 #if DEBUG
                 if (Debug.GetValue())
-                    Comment.Log("OffHand Parry noticed the incoming attack.");
+                    Comment.Log($"OffHandParry of {Owner.CharacterName} noticed the incoming attack.  Attacker is {evt.Initiator.CharacterName}, weapon is {evt.Weapon.Name}." +
+                        $"Existing parry? {evt.Parry != null}. " +
+                        $"Weapon is melee? {evt.Weapon.Blueprint.IsMelee}. " +
+                        $"Part activated? {activated}. " +
+                        $"Has parries? {HasParries}.");
 #endif
                 RuleCheckTargetFlatFooted_OnTrigger_patch.rule = evt;
                 bool NotSuitable = evt.Parry != null
-                        || !evt.Weapon.Blueprint.IsMelee || evt.Parry != null || !activated
+                        || !evt.Weapon.Blueprint.IsMelee || !activated
                         || !Owner.State.CanAct
                         || Rulebook.Trigger<RuleCheckTargetFlatFooted>(new(evt.Initiator, evt.Target)).IsFlatFooted // code out later
                         || !HasParries;
@@ -113,15 +118,12 @@ namespace Way_of_the_shield.NewComponents
                 if (NotSuitable)
                     return;
 
-#if DEBUG
-                if (Debug.GetValue())
-                    Comment.Log($"OffHand Parry part of {Owner.CharacterName} is triggered. Attacker is {evt.Initiator.CharacterName}, weapon is {evt.Weapon.Name}."); 
-#endif
                 evt.TryParry(Owner, weapon, parries.Current);
+                Triggered = true;
                 n--;
 #if DEBUG
                 if (Debug.GetValue())
-                    Comment.Log($"OffHand Parry part of {Owner.CharacterName} wishes to parry."); 
+                    Comment.Log($"OffHandParry part of {Owner.CharacterName} wishes to parry. The Triggered flag is set to {Triggered}"); 
 #endif
                 ModifiableValue additionalAttackBonus = Owner.Stats.AdditionalAttackBonus;
                 int num = evt.Initiator.Descriptor.State.Size - Owner.State.Size;
@@ -139,12 +141,14 @@ namespace Way_of_the_shield.NewComponents
                 if (parry != null
                     && parry.Initiator == Owner
                     && activated
-                    && parry.IsTriggered)
+                    && parry.IsTriggered
+                    && Triggered)
                 {
                     HasParries = parries.MoveNext();
+                    Triggered = false;
 #if DEBUG
                     if (Debug.GetValue())
-                        Comment.Log($"{parry.Initiator.CharacterName} parried the attack of {evt.Initiator.CharacterName}. Attempted to move the parry enumerator."); 
+                        Comment.Log($"OffHandParry {parry.Initiator.CharacterName} parried the attack of {evt.Initiator.CharacterName}. Attempted to move the parry enumerator. The Triggered flag is now set to {Triggered}."); 
 #endif
                     if (evt.Result == AttackResult.Parried && riposte == true)
                         Game.Instance.CombatEngagementController.ForceAttackOfOpportunity(Owner, evt.Initiator, false);
