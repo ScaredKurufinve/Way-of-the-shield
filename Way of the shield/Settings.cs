@@ -22,10 +22,10 @@ namespace Way_of_the_shield
 
         #region Setting Entities
         public static SettingsEntityBool AllowEquipNonProfficientItems = new(settingsModName + "allow-equip-non-profficient-items", true, false, true);
-        public static SettingsEntityBool ForbidCloseFlanking = new(settingsModName + "forbid-close-flanking", true, true, true);
-        public static SettingsEntityBool AllowCloseFlankingToEnemies = new(settingsModName + "allow-close-flanking-to-enemies", true, true, true);
-        public static SettingsEntityBool ConcealmentAttackBonusOnBackstab = new(settingsModName + "concealment-attack-bonus-on-backstab", true, true, true);
-        public static SettingsEntityBool DenyShieldBonusOnBackstab = new(settingsModName + "deny-shield-bonus-on-backstab", true, true, true);
+        public static SettingsEntityBool ForbidCloseFlanking = new(settingsModName + "forbid-close-flanking", true, false, true);
+        public static SettingsEntityBool AllowCloseFlankingToEnemies = new(settingsModName + "allow-close-flanking-to-enemies", true, false, false);
+        public static SettingsEntityBool ConcealmentAttackBonusOnBackstab = new(settingsModName + "concealment-attack-bonus-on-backstab", true, false, false);
+        public static SettingsEntityBool DenyShieldBonusOnBackstab = new(settingsModName + "deny-shield-bonus-on-backstab", true, false, false);
         public static SettingsEntityBool FlatFootedOnBackstab = new(settingsModName + "flat-footed-on-backstab", true, true, true);
         public static SettingsEntityBool AddBucklerParry = new(settingsModName + "add-buckler-parry", true, false, true);
         public static SettingsEntityBool AllowTwoHanded_as_OneHandedWhenBuckler = new(settingsModName + "allow-two-handed-as-one-handed-when-buckler", true, true, true);
@@ -36,10 +36,10 @@ namespace Way_of_the_shield
         public static SettingsEntityBool EnableSoftCover = new(settingsModName + "enable-soft-sover", true, true, true);
         public static SettingsEntityBool ChangeBackToBack = new(settingsModName + "change-back-to-back", true, false, true);
         public static SettingsEntityBool AddSoftCoverDenialToImprovedPreciseShot = new(settingsModName + "add-soft-cover-denial-to-improved-precise-shot", true, false, true);
-        public static SettingsEntityBool ChangeShieldWall = new(settingsModName + "change-shield-wall", true, true, true);
-        public static SettingsEntityBool BuffSacredShieldEnhacementArray = new(settingsModName + "buff-sacred-shield-enhacement-array", true, true, true);
-        public static SettingsEntityBool ChangeShieldSpell = new(settingsModName + "change-shield-spell", true, true, true);
-        public static SettingsEntityBool RemoveBucklerProficiencies = new(settingsModName + "remove-buckler-proficiencies", true, true, true);
+        public static SettingsEntityBool ChangeShieldWall = new(settingsModName + "change-shield-wall", true, false, true);
+        public static SettingsEntityBool BuffSacredShieldEnhacementArray = new(settingsModName + "buff-sacred-shield-enhacement-array", true, false, true);
+        public static SettingsEntityBool ChangeShieldSpell = new(settingsModName + "change-shield-spell", true, false, true);
+        public static SettingsEntityBool RemoveBucklerProficiencies = new(settingsModName + "remove-buckler-proficiencies", true, false, true);
         public static SettingsEntityBool FixRapiers = new(settingsModName + "fix-rapiers", true, true, false);
 #if DEBUG
         public static SettingsEntityBool Debug = new(settingsModName + "debug", false); 
