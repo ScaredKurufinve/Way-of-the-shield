@@ -17,6 +17,10 @@ namespace Way_of_the_shield
         [HarmonyPostfix]
         public static void BlueprintsCache_Init_Postfix()
         {
+            LocalizedString RepositionName = new() { m_Key = "ImmediateRepositioningFeature_DisplayName" };
+            LocalizedString RepositionDescription = new() { m_Key = "ImmediateRepositioningFeature_Description" };
+            LocalizedString RepositionDescriptionShort = new () { m_Key = "ImmediateRepositioningFeature_ShortDescription" };
+
 #if DEBUG
             Comment.Log("Entered the Blueprints Cache postfix for TSSpecialistTweaks."); 
 #endif
@@ -28,8 +32,8 @@ namespace Way_of_the_shield
             {
                 AssetGuid = new BlueprintGuid(new Guid("d9f2b950745141deabefb24dbfe6adea")),
                 name = "ImmediateRepositioningAbility_WayOfTheShield",
-                m_DisplayName = new() { m_Key = "ImmediateRepositioningAbility_DisplayName" },
-                m_Description = new() { m_Key = "ImmediateRepositioningAbility_Description" },
+                m_DisplayName = RepositionName,
+                m_Description = RepositionDescriptionShort,
                 ActionType = Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Swift,
                 CanTargetEnemies = true,
                 CanTargetFriends = true,
@@ -49,9 +53,9 @@ namespace Way_of_the_shield
             {
                 AssetGuid = new BlueprintGuid(new Guid("12cf206dc2174df9ac28d2204f461d94")),
                 name = "WayOfTheShield_ImmediateRepositioningFeature",
-                m_DisplayName = new LocalizedString() { Key = "ImmediateRepositioningFeature_DisplayName" },
-                m_Description = new LocalizedString() { m_Key = "ImmediateRepositioningFeature_Description" },
-                m_DescriptionShort = new LocalizedString() { m_Key = "ImmediateRepositioningFeature_ShortDescription" },
+                m_DisplayName = RepositionName,
+                m_Description = RepositionDescription,
+                m_DescriptionShort = RepositionDescriptionShort,
                 Ranks = 1,
                 IsClassFeature = true,
                 HideInCharacterSheetAndLevelUp = false,
