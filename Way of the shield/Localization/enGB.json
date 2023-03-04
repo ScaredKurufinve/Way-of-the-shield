@@ -1005,6 +1005,14 @@
             "Key": "Mythic_BucklerParryFeature_Description", 
             "Value": "You can perform one additional parry per turn with a buckler or a light shield at your full attack bonus. If you have Two Weapon Fighting Improved or Two Weapon Fighting Greater feats, the amount of granted additional parries is further increased by 1 for each of those feats."
         },
+		{
+            "Key": "OldShieldBashFeature_DisplayName", 
+            "Value": "Improved Shield Bash"
+        },
+		{
+            "Key": "OldShieldBashFeature_Description", 
+            "Value": "<i>You can protect yourself with your shield, even if you use it to attack.</i>\n<b>Benefit:</b> When you perform a shield bash, you may still apply the shield’s shield bonus to your AC.\n<b>Normal:</b> Without this feat, a character that performs a shield bash loses the shield’s shield bonus to AC until his next turn."
+        },
         
 	]	
 }
