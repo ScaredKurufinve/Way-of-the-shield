@@ -819,7 +819,7 @@
         },
 		{
             "Key": "way-of-the-shield.allow-equip-non-profficient-items_Description", 
-            "Value": "允许装备你不擅长的装备。"
+            "Value": "允许装备你不擅长的装备"
         },
 		{
             "Key": "way-of-the-shield.allow-equip-non-profficient-items_TooltipDescription", 
