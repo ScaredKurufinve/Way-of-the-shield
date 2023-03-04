@@ -116,7 +116,9 @@ namespace Way_of_the_shield
 
 
             //};
-            Harmony.DEBUG = true;
+#if DEBUG
+            Harmony.DEBUG = true; 
+#endif
             if (BeenLoaded) harmony.UnpatchAll();
                 harmony.PatchAll();
             //foreach (var patch in Harmony.GetPatchInfo(typeof(BlueprintsCache).GetMethod(nameof(BlueprintsCache.Init))).Postfixes.Where(p =>p.owner == harmony.Id)) Comment.Log("Patch is " + patch.PatchMethod);

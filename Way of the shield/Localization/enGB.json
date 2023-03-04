@@ -714,6 +714,14 @@
             "Key": "RallyingBondActivatableAbility_Description", 
             "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add Bashing property to the shield at the cost of 2 enhancement point.\nThis armor or shield is brightly polished, and its mirror-bright surface is magically endowed with the ability to bring comfort to the wearer’s companions. Allies within 30 feet of the wearer gain a +6 morale bonus on saving throws against fear effects."
         },
+      {
+        "Key": "SacredShieldBondAdditionalUsesFeature_DisplayName",
+        "Value": "Divine Shield Bond - Additional uses"
+      },
+      {
+        "Key": "SacredShieldBondAdditionalUsesFeature_Description",
+        "Value": "At 5th level, instead of forming a divine bond with her weapon or a mount, a Sacred Shield forms a bond with her shield. As a standard action, a Sacred Shield can enhance her shield by calling on the aid of a celestial spirit. A Sacred Shield can use this ability once per day at 5th level, and one additional time per day for every four levels beyond 5th, to a maximum of four times per day at 17th level."
+      },
 		{
             "Key": "MageShield_description", 
             "Value": "Shield creates an invisible shield of force that hovers in front of you. It negates magic missile {g|Encyclopedia:Attack}attacks{/g} directed at you. The disk also provides a +4 Untyped {g|Encyclopedia:Bonus}bonus{/g} to {g|Encyclopedia:Armor_Class}AC{/g}.[LONGSTART] This bonus applies against {g|Encyclopedia:Incorporeal_Touch_Attack}incorporeal{/g} {g|Encyclopedia:TouchAttack}touch attacks{/g}, since it is a force effect. The shield has no armor {g|Encyclopedia:Check}check{/g} {g|Encyclopedia:Penalty}penalty{/g} or {g|Encyclopedia:Spell_Fail_Chance}arcane spell failure chance{/g}.[LONGEND]"
