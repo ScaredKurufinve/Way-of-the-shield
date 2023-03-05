@@ -32,9 +32,9 @@
     <Reference Include="0Harmony">
       <HintPath>$(Wrath)\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>$(SolutionDir)lib\Assembly-CSharp_public.dll</HintPath>
-		<Private>False</Private>
+	  <Reference Include="Assembly-CSharp">
+		  <HintPath>$(SolutionDir)lib\Assembly-CSharp_public.dll</HintPath>
+		  <Private>False</Private>
     </Reference>
     <Reference Include="Owlcat.Runtime.Core">
       <HintPath>$(Wrath)\Owlcat.Runtime.Core.dll</HintPath>

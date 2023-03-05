@@ -17,6 +17,7 @@ using System.Linq;
 using Way_of_the_shield.NewComponents;
 using UnityEngine;
 using Kingmaker.UnitLogic.Mechanics.Actions;
+using System.Collections.Generic;
 
 namespace Way_of_the_shield
 {
@@ -200,7 +201,29 @@ namespace Way_of_the_shield
             BlueprintUnitFactReference BucklerParryFeatureReference = BucklerParryFeature.ToReference<BlueprintUnitFactReference>();
             #endregion
             string circ = "when adding BucklerParry";
+            #region Add buckler parry to ShieldBash restrictions
+            if (!RetrieveBlueprint("3bb6b76ed5b38ab4f957c7f923c23b68", out BlueprintActivatableAbility ShieldBashAbility, "ShieldBashAbility", circ)) goto skipShieldBashAbility;
+            IEnumerable<RestrictionOtherActivatables> ROA = ShieldBashAbility.GetComponents<RestrictionOtherActivatables>();
+            if (ROA.Count() == 0)
+            {
+                var newRestriction = new RestrictionOtherActivatables()
+                {
+                    m_ActivatableAbilities = new BlueprintActivatableAbilityReference[] { BucklerParryActivatableAbility.ToReference<BlueprintActivatableAbilityReference>() }
+                };
+                ShieldBashAbility.Components = ShieldBashAbility.Components.AddToArray(newRestriction);
+            }
+            else 
+            {
+                if (ROA.Any(restriction => restriction.m_ActivatableAbilities.Contains(BucklerParryActivatableAbility))) { Comment.Log("Skipping ShieldBash"); goto skipShieldBashAbility; }
+                    else { var firstRestriction = ROA.First(); firstRestriction.m_ActivatableAbilities = firstRestriction.m_ActivatableAbilities.AddToArray(BucklerParryActivatableAbility.ToReference<BlueprintActivatableAbilityReference>()); }
+            }
+#if DEBUG
+            Comment.Log("Added ShieldedDefenseActivatableAbility to the ShieldBashAbility restrictions."); 
+#endif
+            ; skipShieldBashAbility:
             RetrieveBlueprint("cb8686e7357a68c42bdd9d4e65334633", out BlueprintFeature ShieldsProficiency, "ShieldProficiency", circ);
+
+            #endregion
             if (!AddBucklerParry.GetValue()) goto skipParry;
             #region modify Buckler Proficiency blueprint
             if (!RetrieveBlueprint("7c28228ce4eed1543a6b670fd2a88e72", out BlueprintFeature BucklerProf, "Buckler Proficiency", circ)) goto SkipBucklerProf;

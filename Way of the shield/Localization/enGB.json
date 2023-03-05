@@ -80,7 +80,7 @@
         },
 		{
             "Key": "BucklerParry_Description",
-            "Value": "You may decide to parry incoming attacks with your Buckler or Light Shield. To parry the attack, make an attack roll as if you were performing a Shield Bash, including applicable attack bonuses. If your result is greater than the attacking creature's result, its attack automatically misses. You can parry as many attacks per turn as the number of attacks you would be able to make with your shield hand. \nYou must make the decision to use your shield for parries at the start of the turn. You can not Use Shield Defensively on this turn. If you make any attacks with your other hand this turn, you take penalties for Two-Weapon Fighting until the start of your next turn."
+            "Value": "You may decide to parry incoming attacks with your Buckler or Light Shield. To parry the attack, make an attack roll as if you were performing a Shield Bash, including applicable attack bonuses. If your result is greater than the attacking creature's result, its attack automatically misses. You can parry as many attacks per turn as the number of attacks you would be able to make with your shield hand. \nYou must make the decision to use your shield for parries at the start of the turn. You can not Use Shield Defensively or perform regular shield bashes on this turn. If you make any attacks with your other hand this turn, you take penalties for Two-Weapon Fighting until the start of your next turn."
         },
 		{
             "Key": "BucklerParry_DynamicDescription",
@@ -328,7 +328,7 @@
         },
 		{
             "Key": "ShieldedDefenseActivatableAbility_Description",
-            "Value": "You may decide to actively defend yourself with the shield instead of having it just hang on your hand as a dead weight. By doing though until the end of turn your Shield bonus to AC will be increased by +1, but you will take penalties on all attacks as if you were fighting with two weapons. If you are using a light shield, this bonus will be additionally increased by 1 when your Base Attack Bonus reaches 6 and every 6 points afterwards; if you are using a heavy or tower shield, the bonus will instead be increased when your Base Attack Bonus reaches 4 and eevry 4 points afterwards.\nHowever, this bonus will be decreased by 1 after each time you are attacked, even if the attack misses. You also can't benefit from this ability if you are flat-footed or can't use Dexterity for defense for any reason."
+            "Value": "You may decide to actively defend yourself with the shield instead of having it just hang on your hand as a dead weight. By doing though until the end of turn your Shield bonus to AC will be increased by +1, but you will take penalties on all attacks as if you were fighting with two weapons. If you are using a light shield, this bonus will be additionally increased by 1 when your Base Attack Bonus reaches 6 and every 6 points afterwards; if you are using a heavy or tower shield, the bonus will instead be increased when your Base Attack Bonus reaches 4 and every 4 points afterwards.\nHowever, this bonus will be decreased by 1 after each time you are attacked, even if the attack misses. You also can't benefit from this ability if you are flat-footed or can't use Dexterity for defense for any reason. \n<b>Note:</b> You can't perform Shield Bash if you decided to use Shielded Defense."
         },
 		{
             "Key": "ShieldedDefenseActivatableAbility_ShortDescription",

@@ -18,6 +18,7 @@ using Kingmaker.Designers.EventConditionActionSystem.Actions;
 using Kingmaker.UnitLogic.Mechanics.Conditions;
 using Kingmaker.UnitLogic.Mechanics.Actions;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Way_of_the_shield.NewFeatsAndAbilities
 {
@@ -208,6 +209,27 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             ShieldedDefenseActivatableAbility.AddComponent(new ShieldEquippedRestriction() { categories = new ArmorProficiencyGroup[] { ArmorProficiencyGroup.LightShield, ArmorProficiencyGroup.HeavyShield, ArmorProficiencyGroup.TowerShield } });
             ShieldedDefenseActivatableAbility.AddToCache();
             #endregion
+            #region Add buckler parry to ShieldBash restrictions
+            if (!RetrieveBlueprint("3bb6b76ed5b38ab4f957c7f923c23b68", out BlueprintActivatableAbility ShieldBashAbility, "ShieldBashAbility", circ)) goto skipShieldBashAbility;
+            IEnumerable<RestrictionOtherActivatables> ROA = ShieldBashAbility.GetComponents<RestrictionOtherActivatables>();
+            if (ROA.Count() == 0)
+            {
+                var newRestriction = new RestrictionOtherActivatables()
+                {
+                    m_ActivatableAbilities = new BlueprintActivatableAbilityReference[] { ShieldedDefenseActivatableAbility.ToReference<BlueprintActivatableAbilityReference>() }
+                };
+                ShieldBashAbility.Components = ShieldBashAbility.Components.AddToArray(newRestriction);
+            }
+            else
+            {
+                if (ROA.Any(restriction => restriction.m_ActivatableAbilities.Contains(ShieldedDefenseActivatableAbility)))  goto skipShieldBashAbility;
+                else {var firstRestriction = ROA.First(); firstRestriction.m_ActivatableAbilities = firstRestriction.m_ActivatableAbilities.AddToArray(ShieldedDefenseActivatableAbility.ToReference<BlueprintActivatableAbilityReference>()); }
+            }
+#if DEBUG
+            Comment.Log("Added ShieldedDefenseActivatableAbility to the ShieldBashAbility restrictions."); 
+#endif
+            skipShieldBashAbility:
+            #endregion
             if (!RetrieveBlueprint("cb8686e7357a68c42bdd9d4e65334633", out BlueprintFeature ShieldProficiency, "ShieldProficiency", circ)) goto skipShieldProficiency;
             AddFacts af = ShieldProficiency.GetComponent<AddFacts>();
             if (af is null)
@@ -217,6 +239,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             }
             if (!af.m_Facts.Any(f => f.Guid == ShieldedDefenseActivatableAbility.AssetGuid))
                 af.m_Facts = af.m_Facts.AddToArray(ShieldedDefenseActivatableAbility.ToReference<BlueprintUnitFactReference>());
+
 #if DEBUG
             Comment.Log("Added ShieldedDefenseActivatableAbility to the ShieldProficiency blueprint."); 
 #endif
