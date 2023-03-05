@@ -28,19 +28,19 @@
         },
 		{
             "Key": "Flanking_With_a_masterful_feat_of_teamwork",
-            "Value": "拥有精通团队专长"
+            "Value": "并拥有精通团队专长，"
         },
 		{
             "Key": "Flanking_improvedOutflank",
-            "Value": "拥有高等团队专长"
+            "Value": "并拥有高等团队专长，"
         },
 		{
             "Key": "Flanking_from_another_flank",
-            "Value": "侧翼正在被 {source} 攻击。双方夹角为 {angle}。"
+            "Value": "其侧翼正在被 {source} 攻击。双方夹角为 {angle}."
         },
 		{
             "Key": "Flanking_angle_of_attacks",
-            "Value": "来自攻击者 {source} 和侧翼攻击者 {flanker} 的夹角只有 {angle}. 这不足以达到 {requirement} 的要求，不能分散 {target} 的注意力。"
+            "Value": "来自攻击者 {source} 和侧翼攻击者 {flanker} 的夹角只有 {angle}. 这不足以达到 {requirement} 的要求，不能分散 {target} 的注意力"
         },
 		{
             "Key": "Flanking_and",
@@ -56,7 +56,7 @@
         },
 		{
             "Key": "Flanking_not_enough_to_distract",
-            "Value": "来自攻击者 {source} 和侧翼攻击者 {flanker} 的夹角只有 {angle}. 这不足以达到 {requirement} 的要求，不能分散 {target} 的注意力。"
+            "Value": "来自攻击者 {source} 和侧翼攻击者 {flanker} 的夹角只有 {angle}. 这不足以达到 {requirement} 的要求，不能分散 {target} 的注意力"
         },
 		{
             "Key": "Flanking_not_flanking_attack",
@@ -228,7 +228,7 @@
         },
 		{
             "Key": "UpsettingVengeance_Description",
-            "Value": "<i>百密一疏， 乘隙而入。</i>\n<b>效果</b>：使用盾扰流派时，因为你的盾扰流派受到减值的敌人在攻击任何目标时都受到减值。如果附近受到这个减值的敌人攻击任何目标，且因为低于目标防御等级（AC）5点以上导致失手，,会引发你的借机攻击。\n你以这种方式或盾扰强击每个回合只能对单个敌人触发一次借机攻击。"
+            "Value": "<i>百密一疏， 乘隙而入。</i>\n<b>效果</b>：使用盾扰流派时，因为你的盾扰流派受到减值的敌人在攻击任何目标时都受到减值。如果附近受到这个减值的敌人攻击任何目标，且因为低于目标防御等级（AC）5点以上导致失手，会引发你的借机攻击。\n你以这种方式或盾扰强击每个回合只能对单个敌人触发一次借机攻击。"
         },
 		{
             "Key": "UpsettingVengeance_ShortDescription",
