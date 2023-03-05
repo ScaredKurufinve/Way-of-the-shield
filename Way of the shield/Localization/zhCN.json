@@ -228,7 +228,7 @@
         },
 		{
             "Key": "UpsettingVengeance_Description",
-            "Value": "<i>百密一疏， 乘隙而入。</i>\n<b>效果</b>：使用盾扰流派时，因为你的盾扰流派受到减值的敌人在攻击任何目标时都受到减值。如果附近受到这个减值的敌人攻击任何目标，且因为低于目标防御等级（AC）5点以上导致失手，会引发你的借机攻击。\n你以这种方式或盾扰强击每个回合只能对单个敌人触发一次借机攻击。"
+            "Value": "<i>百密一疏， 乘隙而入。</i>\n<b>效果</b>：使用盾扰流派时，因为你的盾扰流派受到减值的敌人在攻击任何目标时都受到减值。如果附近受到这个减值的敌人攻击任何目标，且因为低于目标防御等级（AC）5点以上导致失手，,会引发你的借机攻击。\n你以这种方式或盾扰强击每个回合只能对单个敌人触发一次借机攻击。"
         },
 		{
             "Key": "UpsettingVengeance_ShortDescription",
@@ -274,23 +274,12 @@
             "Key": "ImmediateRepositioningFeature_DisplayName",
             "Value": "瞬间换防"
         },
-		{
-            "Key": "ImmediateRepositioningAbility_DisplayName",
-            "Value": "瞬间换防"
-        },
-		{
+	{
             "Key": "ImmediateRepositioningFeature_Description",
             "Value": "达到13级时，以一个迅捷动作，塔盾专精斗士可以将其塔盾转向另外一个方向，但是不能使用这个能力中断敌人攻击。\n这替代了武器训练3。"
-        },		{
-            "Key": "ImmediateRepositioningAbility_Description",
-            "Value": "达到13级时，以一个迅捷动作，塔盾专精斗士可以将其塔盾转向另外一个方向，但是不能使用这个能力中断敌人攻击。\n这替代了武器训练3。"
-        },
+        },	
 		{
             "Key": "ImmediateRepositioningFeature_ShortDescription",
-            "Value": "以一个迅捷动作，塔盾专精斗士可以将其塔盾转向另外一个方向，但是不能使用这个能力中断敌人攻击。"
-        },
-		{
-            "Key": "ImmediateRepositioningAbility_ShortDescription",
             "Value": "以一个迅捷动作，塔盾专精斗士可以将其塔盾转向另外一个方向，但是不能使用这个能力中断敌人攻击。"
         },
 		{
@@ -496,14 +485,6 @@
 		{
             "Key": "ArrowCatching_ShieldOfTarget",
             "Value": "，使用{text}, 但是投射物飞向了{target}的附魔盾牌。"
-        },
-		{
-            "Key": "SacredShieldBondAdditionalUsesFeature_DisplayName", 
-            "Value": "神圣盟誓（盾）额外使用次数"
-        },
-		{
-            "Key": "SacredShieldBondAdditionalUsesFeature_Description", 
-            "Value": "增加神圣盟誓（盾）每天使用次数"
         },
 		{
             "Key": "ShieldSacredBondFeature_DisplayName", 
@@ -732,6 +713,14 @@
 		{
             "Key": "RallyingBondActivatableAbility_Description", 
             "Value": "圣盾卫使用神圣盟誓强化盾牌时可以附加增援属性，占用2点增强加值。\n这种盔甲或盾牌闪耀着光辉的明亮魔法表面给同伴带来信心。30尺内盟军面对恐惧效果豁免检定获得+6士气加值。"
+        },
+		{
+            "Key": "SacredShieldBondAdditionalUsesFeature_DisplayName", 
+            "Value": "神圣盟誓（盾）额外使用次数"
+        },
+		{
+            "Key": "SacredShieldBondAdditionalUsesFeature_Description", 
+            "Value": "达到5级时，替代通常的武器或者坐骑，圣盾卫和盾牌结成神圣盟誓。使用标准动作，圣盾卫召唤天界精魂为盾牌附魔。圣盾卫5级起每天可以使用1次此能力，并在5级后每4级使用额外1次，在17级时达到最大4次。"
         },
 		{
             "Key": "MageShield_description", 
@@ -967,7 +956,7 @@
         },
 		{
             "Key": "way-of-the-shield.allow-shield-bash-without-improved-feature_TooltipDescription", 
-            "Value": "桌面规则中，任何装备盾的人物都可以发动盾击，但是会在回合结束前失去AC上的盾牌加值。学习精通盾击专长可以避免失去AC。默认游戏中则必须拥有精通盾击专长才能发动盾击。激活此选项使用桌面规则。"
+            "Value": "桌面规则中，任何装备盾的人物都可以发动盾击，但是会在回合结束前失去AC上的盾牌加值。学习精通盾击专长可以避免失去AC。默认游戏中则必须拥有精通盾击（默认名盾击）专长才能发动盾击。激活此选项使用桌面规则。"
         },
 		{
             "Key": "way-of-the-shield.change-back-to-back_Description", 
@@ -1012,6 +1001,14 @@
 		{
             "Key": "Mythic_BucklerParryFeature_Description", 
             "Value": "每个回合你可以用最高攻击加值，用圆盾和轻型盾进行额外一次格挡。如果你你拥有精通双武器战斗和高等双武器战斗专长，你从每个专长获得额外1次格挡。"
+        },
+		{
+            "Key": "OldShieldBashFeature_DisplayName", 
+            "Value": "精通盾击"
+        },
+		{
+            "Key": "OldShieldBashFeature_Description", 
+            "Value": "<i>攻守皆宜，转换自如。</i>\n<b>效果：</b>当你发动盾击时，你可以保留盾牌在AC上提供的盾牌加值。\n<b>正常：</b>没有该专长时，发动盾击的角色会在下个回合前失去盾牌加值。"
         },
         
 	]	
