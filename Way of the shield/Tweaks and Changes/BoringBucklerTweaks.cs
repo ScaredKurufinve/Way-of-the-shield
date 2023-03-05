@@ -190,15 +190,28 @@ namespace Way_of_the_shield
             BucklerParryActivatableAbility.AddComponent(new ShieldEquippedRestriction() { categories = new ArmorProficiencyGroup[] { ArmorProficiencyGroup.Buckler, ArmorProficiencyGroup.LightShield } });
             BucklerParryActivatableAbility.AddToCache();
             #endregion
+            #region BucklerParryFeature
+            BlueprintFeature BucklerParryFeature = new()
+            {
+                HideInUI = true,
+            };
+            BucklerParryFeature.AddToCache("e547039b227a42d7a8d98fad72f8717c", "BucklerParryFeature");
+            BucklerParryFeature.AddComponent(new AddFacts() { m_Facts = new BlueprintUnitFactReference[] { BucklerParryActivatableAbility.ToReference<BlueprintUnitFactReference>() } });
+            BlueprintUnitFactReference BucklerParryFeatureReference = BucklerParryFeature.ToReference<BlueprintUnitFactReference>();
+            #endregion
             string circ = "when adding BucklerParry";
             RetrieveBlueprint("cb8686e7357a68c42bdd9d4e65334633", out BlueprintFeature ShieldsProficiency, "ShieldProficiency", circ);
             if (!AddBucklerParry.GetValue()) goto skipParry;
             #region modify Buckler Proficiency blueprint
             if (!RetrieveBlueprint("7c28228ce4eed1543a6b670fd2a88e72", out BlueprintFeature BucklerProf, "Buckler Proficiency", circ)) goto SkipBucklerProf;
-                BucklerProf.AddComponent(new AddFacts()
-                {
-                    m_Facts = new BlueprintUnitFactReference[] { BucklerParryActivatableAbility.ToReference<BlueprintUnitFactReference>() }
-                });
+            AddFacts af  = BucklerProf.GetComponent<AddFacts>();
+            if (af is null)
+            {
+                af = new();
+                BucklerProf.AddComponent(af);
+            }
+            if (!af.m_Facts.Contains(BucklerParryFeatureReference)) af.m_Facts = af.m_Facts.AddToArray(BucklerParryFeatureReference);
+            Comment.Log("Added BucklerParryActivatableFeature to the BucklerProficiency blueprint.");
             BucklerProf.AddComponent(new AddProficiencies() { ArmorProficiencies = new ArmorProficiencyGroup[] { }, WeaponProficiencies = new WeaponCategory[] { WeaponCategory.WeaponLightShield } });
             BucklerProf.m_Description = new() { m_Key = "BucklerProficiencyWithParry_Description" };
             ;SkipBucklerProf:;
@@ -206,14 +219,14 @@ namespace Way_of_the_shield
             #region modify Light Shield Proficiency blueprint
             if (!ShieldsProficiency) goto skipParry;
             ShieldsProficiency.AddComponent(new AddProficiencies() { ArmorProficiencies = new ArmorProficiencyGroup[] { }, WeaponProficiencies = new WeaponCategory[] { WeaponCategory.WeaponLightShield, WeaponCategory.WeaponHeavyShield } });
-            AddFacts af = ShieldsProficiency.GetComponent<AddFacts>();
+             af = ShieldsProficiency.GetComponent<AddFacts>();
             if (af is null)
             {
                 af = new() { m_Facts = new BlueprintUnitFactReference[] { } };
                 ShieldsProficiency.AddComponent(af);
             }
-            af.m_Facts = af.m_Facts.AddToArray(BucklerParryActivatableAbility.ToReference<BlueprintUnitFactReference>());
-            Comment.Log("Added BucklerParryActivatableAbility to the ShieldProficiency blueprint.");
+            if (!af.m_Facts.Contains(BucklerParryFeatureReference)) af.m_Facts = af.m_Facts.AddToArray(BucklerParryFeatureReference);
+            Comment.Log("Added BucklerParryActivatableFeature to the ShieldProficiency blueprint.");
             ;skipParry:;
             #endregion
             #region meddle with proficiencies
@@ -330,7 +343,7 @@ namespace Way_of_the_shield
             });
             NewBuckler.AddComponent(new AddFacts()
             {
-                m_Facts = new BlueprintUnitFactReference[] {new() { deserializedGuid = BlueprintGuid.Parse("cb8686e7357a68c42bdd9d4e65334633") } }
+                m_Facts = new BlueprintUnitFactReference[] {new() { deserializedGuid = BlueprintGuid.Parse("7c28228ce4eed1543a6b670fd2a88e72") } }
             });
             NewBuckler.AddToCache("8f75e3d5d1024385a3c5e7ca450591ca", "NewBucklerProficiencyFeature");
             NewBuckler.m_Icon = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("7c28228ce4eed1543a6b670fd2a88e72")?.m_Icon;
