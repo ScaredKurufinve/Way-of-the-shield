@@ -18,6 +18,9 @@ using System.Reflection.Emit;
 using System.Reflection;
 using Way_of_the_shield.NewComponents;
 using Owlcat.Runtime.Core.Utils;
+using Kingmaker.UnitLogic.Parts;
+using Kingmaker.Utility;
+using System.Diagnostics;
 
 namespace Way_of_the_shield
 {
@@ -60,7 +63,7 @@ namespace Way_of_the_shield
                 if (TacticalCombatHelper.IsActive) return;
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log("Entered the SoftCoverRule.OnTrigger"); 
+                    Comment.Log("Entered the SoftCoverRule.OnTrigger");
 #endif
                 if (SoftCoverDenied)
                 {
@@ -71,9 +74,11 @@ namespace Way_of_the_shield
                     return;
                 }
                 Vector3 vectorofAttack = targetPosition - attackerPosition;
-                
-                foreach (UnitEntityData unit in GameHelper.GetTargetsAround(targetPosition, vectorofAttack.magnitude, false).Where(unit => unit != Initiator
-                                                                                     && unit != Target))
+                List<UnitEntityData> PeopleAround = GameHelper.GetTargetsAround(targetPosition, vectorofAttack.magnitude, false).Where(unit => unit != Initiator
+                                                                                     && unit != Target).ToList();
+                PeopleAround.Remove(Initiator.Get<UnitPartRider>()?.SaddledUnit ?? Initiator.Get<UnitPartSaddled>()?.Rider);
+                if (Initiator.Get<UnitPartRider>())
+                foreach (UnitEntityData unit in PeopleAround)
                 {
                     Vector3 unitPosition = unit.Position;
                     float distance = (unitPosition - attackerPosition).magnitude;
