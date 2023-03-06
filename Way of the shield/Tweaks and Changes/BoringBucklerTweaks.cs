@@ -210,7 +210,7 @@ namespace Way_of_the_shield
                 {
                     m_ActivatableAbilities = new BlueprintActivatableAbilityReference[] { BucklerParryActivatableAbility.ToReference<BlueprintActivatableAbilityReference>() }
                 };
-                ShieldBashAbility.Components = ShieldBashAbility.Components.AddToArray(newRestriction);
+                ShieldBashAbility.AddComponent(newRestriction);
             }
             else 
             {

@@ -65,9 +65,6 @@
 
   </ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Icons\BastionOfGood.png" />
-  </ItemGroup>
 	<ItemGroup>
 		<Using Include="HarmonyLib" />
 		<Using Include="Kingmaker.Blueprints" />
@@ -98,7 +95,7 @@
 
 	<Target Name="Publicize" AfterTargets="Clean">
 		<ItemGroup>			
-			<Assemblies Include="$(Wrath)\Assembly-CSharp.dll" />
+			<Assemblies Include="$(Wrath)\Owlcat.Runtime.UI.dll" />
 		</ItemGroup>
 
 		<PublicizeTask InputAssemblies="@(Assemblies)" OutputDir="$(SolutionDir)lib/" />

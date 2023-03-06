@@ -218,7 +218,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 {
                     m_ActivatableAbilities = new BlueprintActivatableAbilityReference[] { ShieldedDefenseActivatableAbility.ToReference<BlueprintActivatableAbilityReference>() }
                 };
-                ShieldBashAbility.Components = ShieldBashAbility.Components.AddToArray(newRestriction);
+                ShieldBashAbility.AddComponent(newRestriction);
             }
             else
             {
