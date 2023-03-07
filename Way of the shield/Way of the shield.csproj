@@ -93,9 +93,9 @@
 	  </None>
 	</ItemGroup>
 
-	<Target Name="Publicize" AfterTargets="Clean">
+	<Target Name="Publicize" AfterTargets="Clean, Build">
 		<ItemGroup>			
-			<Assemblies Include="$(Wrath)\Owlcat.Runtime.UI.dll" />
+			<Assemblies Include="$(Wrath)\Assembly-CSharp.dll" />
 		</ItemGroup>
 
 		<PublicizeTask InputAssemblies="@(Assemblies)" OutputDir="$(SolutionDir)lib/" />

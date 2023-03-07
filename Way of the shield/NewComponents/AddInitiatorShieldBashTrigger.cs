@@ -44,14 +44,12 @@ namespace Way_of_the_shield.NewComponents
                 }
                 else
                 {
-                    RuleAttackWithWeaponResolve ruleAttackWithWeaponResolve2 = ruleAttackWithWeaponResolve;
-                    Delegate onResolve = ruleAttackWithWeaponResolve2.OnResolve;
-                    Action<RuleAttackWithWeaponResolve> actionOnReolsve = new(rule =>
+                    var onResolve = new Action<RuleAttackWithWeaponResolve>(rule =>
                     {
                         if (!fact.Active) return;
                         RunActions(this, evt, context, fact);
                     });
-                    ruleAttackWithWeaponResolve2.OnResolve += actionOnReolsve;
+                    typeof(RuleAttackWithWeaponResolve).GetEvent("OnResolve").AddEventHandler(ruleAttackWithWeaponResolve, onResolve);
                 }
 
             }

@@ -39,7 +39,7 @@ namespace Way_of_the_shield.NewComponents
 
             static MethodInfo TheTargetMethod()
             {
-                var info = typeof(TooltipTemplateBuff).GetNestedType("<GetBody>d__9", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+                var info = typeof(TooltipTemplateBuff).GetNestedType("<GetBody>d__10", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
                 if (info is null) return null;
                 EnumerableType = info;
                 var method = info.GetMethod("MoveNext", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);

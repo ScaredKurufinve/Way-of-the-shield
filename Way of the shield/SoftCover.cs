@@ -77,7 +77,6 @@ namespace Way_of_the_shield
                 List<UnitEntityData> PeopleAround = GameHelper.GetTargetsAround(targetPosition, vectorofAttack.magnitude, false).Where(unit => unit != Initiator
                                                                                      && unit != Target).ToList();
                 PeopleAround.Remove(Initiator.Get<UnitPartRider>()?.SaddledUnit ?? Initiator.Get<UnitPartSaddled>()?.Rider);
-                if (Initiator.Get<UnitPartRider>())
                 foreach (UnitEntityData unit in PeopleAround)
                 {
                     Vector3 unitPosition = unit.Position;
