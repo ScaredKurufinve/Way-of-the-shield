@@ -74,25 +74,34 @@ namespace Way_of_the_shield
                     return;
                 }
                 Vector3 vectorofAttack = targetPosition - attackerPosition;
-                List<UnitEntityData> PeopleAround = GameHelper.GetTargetsAround(targetPosition, vectorofAttack.magnitude, false).Where(unit => unit != Initiator
+                float vectorofAttackSqrMagnitude = vectorofAttack.sqrMagnitude;
+                UnitEntityData unitWithCorpulence = Initiator.Get<UnitPartRider>()?.SaddledUnit ?? Initiator;
+                float sqrcorpulencecorpulencecorpulence = unitWithCorpulence.Corpulence * unitWithCorpulence.Corpulence * Convert.ToSingle(0.75);
+                List<UnitEntityData> PeopleAround = GameHelper.GetTargetsAround(attackerPosition, vectorofAttack.magnitude, false).Where(unit => unit != Initiator
                                                                                      && unit != Target).ToList();
                 PeopleAround.Remove(Initiator.Get<UnitPartRider>()?.SaddledUnit ?? Initiator.Get<UnitPartSaddled>()?.Rider);
                 foreach (UnitEntityData unit in PeopleAround)
                 {
                     Vector3 unitPosition = unit.Position;
-                    float distance = (unitPosition - attackerPosition).magnitude;
                     Vector3 towardsUnitVector = unitPosition - attackerPosition;
+                    float sqrDistanceFromUnitToAttacker = towardsUnitVector.sqrMagnitude;
                     float angle = Vector3.Angle(towardsUnitVector, vectorofAttack);
+                    float sqrCorpulence = unit.Corpulence * unit.Corpulence;
+                    float sqrCorpulenceLess = sqrCorpulence * Convert.ToSingle(0.75);
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log($"Unit is {unit.CharacterName}, distance is {distance}, angle is {angle}"); 
+                        Comment.Log($"Unit is {unit.CharacterName}, " +
+                            $"vectorofAttackSqrMagnitude is {vectorofAttackSqrMagnitude},  " +
+                            $"sqrDistanceFromUnitToAttacker.sqrMagnitude is {sqrDistanceFromUnitToAttacker}, " +
+                            $"angle is {angle}, " +
+                            $"reduced squared corpulence is {sqrCorpulenceLess}. " +
+                            $"vectorofAttack.sqrMagnitude is {vectorofAttack.sqrMagnitude}." +
+                            $"{(sqrDistanceFromUnitToAttacker > sqrcorpulencecorpulencecorpulence ? "" : "UNIT IS INSIDE THE ATTACKER")}"); 
 #endif
-                    if (distance > 150) continue;
-                    float sqrCorpulence = unit.Corpulence * unit.Corpulence;
-                    float sqrCorpulenceLess = sqrCorpulence * Convert.ToSingle(0.9);
 
-                    if ((targetPosition - unitPosition).sqrMagnitude <= sqrCorpulence
-                        || VectorMath.SqrDistancePointSegment(attackerPosition, targetPosition, unitPosition) <= sqrCorpulenceLess)
+                    if (   sqrDistanceFromUnitToAttacker < vectorofAttackSqrMagnitude
+                        && VectorMath.SqrDistancePointSegment(attackerPosition, targetPosition, unitPosition) <= sqrCorpulenceLess
+                        && !(sqrDistanceFromUnitToAttacker <= sqrcorpulencecorpulencecorpulence))
                     {
                         int sizeDifference = unit.OriginalSize - targetSize;
                         int penalty = sizeDifference switch

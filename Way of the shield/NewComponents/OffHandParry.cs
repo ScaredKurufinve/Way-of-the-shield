@@ -220,7 +220,7 @@ namespace Way_of_the_shield.NewComponents
 
         }
 
-        [HarmonyPatch(typeof(RuleCalculateAttacksCount), nameof(RuleCalculateAttacksCount.OnTrigger))]
+        [HarmonyPatch(typeof(RuleCalculateAttacksCount), nameof(RuleCalculateAttacksCount.PrepareHandVariables))]
         public static class RuleCalculateAttacksCount_OnTrigger_patch
         {
 
@@ -278,39 +278,39 @@ namespace Way_of_the_shield.NewComponents
 
             }
 
-            [HarmonyPatch(nameof(RuleCalculateAttacksCount.AddExtraAttacks))]
-            [HarmonyTranspiler]
-            public static IEnumerable<CodeInstruction> Transpiler2(IEnumerable<CodeInstruction> instructions)
-            {
-#if DEBUG
-                if (Settings.Debug.GetValue())
-                    Comment.Log("Entered RuleCalculateAttacksCount AddExtraAttacks transpiler"); 
-#endif
-                List<CodeInstruction> _instructions = instructions.ToList();
+//            [HarmonyPatch(nameof(RuleCalculateAttacksCount.AddExtraAttacks))]
+//            [HarmonyTranspiler]
+//            public static IEnumerable<CodeInstruction> Transpiler2(IEnumerable<CodeInstruction> instructions)
+//            {
+//#if DEBUG
+//                if (Settings.Debug.GetValue())
+//                    Comment.Log("Entered RuleCalculateAttacksCount AddExtraAttacks transpiler"); 
+//#endif
+//                List<CodeInstruction> _instructions = instructions.ToList();
 
-                CodeInstruction[] toSearch =
-                    new CodeInstruction[]
-                    {
-                        new CodeInstruction(OpCodes.Ldfld, typeof(UnitDescriptor).GetField(nameof(UnitDescriptor.State))),
-                        new CodeInstruction(OpCodes.Ldfld, typeof(UnitState).GetField(nameof(UnitState.Features))),
-                        new CodeInstruction(OpCodes.Ldfld, typeof(UnitMechanicFeatures).GetField(nameof(UnitMechanicFeatures.ShieldBash))),
-                        new CodeInstruction(OpCodes.Call),
-                        new CodeInstruction(OpCodes.Brtrue_S)
-                    };
+//                CodeInstruction[] toSearch =
+//                    new CodeInstruction[]
+//                    {
+//                        new CodeInstruction(OpCodes.Ldfld, typeof(UnitDescriptor).GetField(nameof(UnitDescriptor.State))),
+//                        new CodeInstruction(OpCodes.Ldfld, typeof(UnitState).GetField(nameof(UnitState.Features))),
+//                        new CodeInstruction(OpCodes.Ldfld, typeof(UnitMechanicFeatures).GetField(nameof(UnitMechanicFeatures.ShieldBash))),
+//                        new CodeInstruction(OpCodes.Call),
+//                        new CodeInstruction(OpCodes.Brtrue_S)
+//                    };
 
-                int index = IndexFinder(instructions, toSearch);
-                if (index == -1) { return instructions; };
+//                int index = IndexFinder(instructions, toSearch);
+//                if (index == -1) { return instructions; };
 
-                _instructions.InsertRange(index - 1,
-                    new CodeInstruction[]
-                    {
-                        new CodeInstruction (OpCodes.Ldarg_0),
-                        CodeInstruction.Call(typeof(OffHandParry), nameof(OffHandParry.BucklerOrBash))
-                    });
+//                _instructions.InsertRange(index - 1,
+//                    new CodeInstruction[]
+//                    {
+//                        new CodeInstruction (OpCodes.Ldarg_0),
+//                        CodeInstruction.Call(typeof(OffHandParry), nameof(OffHandParry.BucklerOrBash))
+//                    });
 
-                return _instructions;
+//                return _instructions;
 
-            }
+//            }
 
             [HarmonyPatch(typeof(HandSlot), nameof(HandSlot.MaybeWeapon), MethodType.Getter)]
             [HarmonyTranspiler]

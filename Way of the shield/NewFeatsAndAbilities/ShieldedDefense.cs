@@ -19,20 +19,30 @@ using Kingmaker.UnitLogic.Mechanics.Conditions;
 using Kingmaker.UnitLogic.Mechanics.Actions;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Way_of_the_shield.NewFeatsAndAbilities
 {
     [HarmonyPatch]
     public static class ShieldedDefense
     {
+        public static BlueprintFeature ShieldedDefenseFeature { get { if (!Created && !InProcess) BlueprintCache_Init_Patch(); return m_ShieldedDefenseFeature; } }
+        static BlueprintFeature m_ShieldedDefenseFeature;
+
+        internal static bool Created;
+        internal static bool InProcess;
+
         [HarmonyPatch(typeof(BlueprintsCache), nameof(BlueprintsCache.Init))]
         [HarmonyPostfix]
         public static void BlueprintCache_Init_Patch()
         {
+            InProcess = true;
 #if DEBUG
-            Comment.Log("Begin creating Shielded Defense"); 
+            Comment.Log($"Begin creating Shielded Defense (flag is {Created})");
 #endif
+            if (Created) return;
             string circ = "when creating Shielded Defense";
+            LocalizedString Name = new() { Key = "ShieldedDefenseActivatableAbility_DisplayName" };
             Sprite DefenseIcon = LoadIcon("Heavy");
             #region Create ShieldedDefenseProperty
             BlueprintUnitProperty ShieldedDefenseProperty = new()
@@ -197,7 +207,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             {
                 name = modName + "ShieldedDefenseActivatableAbility",
                 AssetGuid = new(new Guid("7ca07f3bdbf145c2a975b11d9690c0b3")),
-                m_DisplayName = new() { Key = "ShieldedDefenseActivatableAbility_DisplayName" },
+                m_DisplayName = Name,
                 m_Description = new() { m_Key = "ShieldedDefenseActivatableAbility_Description" },
                 m_DescriptionShort = new() { m_Key = "ShieldedDefenseActivatableAbility_ShortDescription" },
                 m_Icon = DefenseIcon,
@@ -208,6 +218,16 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             };
             ShieldedDefenseActivatableAbility.AddComponent(new ShieldEquippedRestriction() { categories = new ArmorProficiencyGroup[] { ArmorProficiencyGroup.LightShield, ArmorProficiencyGroup.HeavyShield, ArmorProficiencyGroup.TowerShield } });
             ShieldedDefenseActivatableAbility.AddToCache();
+            #endregion
+            #region Create ShieldedDefenseFeature
+            BlueprintFeature BlueprintShieldedDefenseFeature = new()
+            {
+                HideInUI = true,
+                m_DisplayName = Name,
+            };
+            BlueprintShieldedDefenseFeature.AddToCache("76c121e7d9644d77948fe031b0eafe21", "ShieldedDefenseFeature");
+            m_ShieldedDefenseFeature = BlueprintShieldedDefenseFeature;
+            BlueprintShieldedDefenseFeature.AddComponent(new AddFacts() { m_Facts = new BlueprintUnitFactReference[] { ShieldedDefenseActivatableAbility.ToReference<BlueprintUnitFactReference>() } });
             #endregion
             #region Add buckler parry to ShieldBash restrictions
             if (!RetrieveBlueprint("3bb6b76ed5b38ab4f957c7f923c23b68", out BlueprintActivatableAbility ShieldBashAbility, "ShieldBashAbility", circ)) goto skipShieldBashAbility;
@@ -255,9 +275,11 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             if (!(MythicPetEmptyFeature.Components.Any(c => c is AddFacts af && af.m_Facts.Any(f => f.Guid == ShieldedDefenseActivatableAbility.AssetGuid))))
                 MythicPetEmptyFeature.AddComponent(new AddFacts() { m_Facts = new BlueprintUnitFactReference[] { ShieldedDefenseActivatableAbility.ToReference<BlueprintUnitFactReference>() } });
 #if DEBUG
-            Comment.Log("Added ShieldedDefenseActivatableAbility to the MythicPetEmptyFeature blueprint."); 
+            Comment.Log("Added ShieldedDefenseActivatableAbility to the MythicPetEmptyFeature blueprint.");
 #endif
         skipMythicPet:;
+            Created = true;
+            InProcess = false;
 
         }
 

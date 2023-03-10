@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using Kingmaker.TextTools;
+using Kingmaker.UnitLogic.Parts;
 
 namespace Way_of_the_shield
 
@@ -151,6 +152,8 @@ namespace Way_of_the_shield
                     return; };
                 List<UnitEntityData> EngagedUnits = CombatController.IsInTurnBasedCombat() ? target.CombatState.EngagedBy.ToList() : target.CombatState.EngagedBy.Where(x => x.Commands.AnyCommandTargets(target)).ToList();
                 UnitEntityData attacker = __instance.Initiator;
+                UnitEntityData MountRider = attacker.Get<UnitPartRider>()?.SaddledUnit ?? attacker.Get<UnitPartSaddled>()?.Rider;
+                if (MountRider is not null) EngagedUnits.Remove(MountRider);
                 if (!EngagedUnits.Contains(attacker) || EngagedUnits.Count < 2) { __instance.TargetIsFlanked = false;
 #if DEBUG
                     if (Settings.Debug.GetValue())

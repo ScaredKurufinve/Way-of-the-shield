@@ -4,6 +4,7 @@ using System.Linq;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.FactLogic;
+using UnityEngine;
 using static Way_of_the_shield.Main;
 
 namespace Way_of_the_shield
@@ -20,13 +21,14 @@ namespace Way_of_the_shield
             LocalizedString RepositionName = new() { m_Key = "ImmediateRepositioningFeature_DisplayName" };
             LocalizedString RepositionDescription = new() { m_Key = "ImmediateRepositioningFeature_Description" };
             LocalizedString RepositionDescriptionShort = new () { m_Key = "ImmediateRepositioningFeature_ShortDescription" };
+            Sprite Icon = LoadIcon("ImmediateReposition");
 
 #if DEBUG
             Comment.Log("Entered the Blueprints Cache postfix for TSSpecialistTweaks."); 
 #endif
             #region Create Immediate Repositioning ability
 #if DEBUG
-            Comment.Log("Begin creating the Immediate Repositioning ability blueprint"); 
+            Comment.Log("Begin creating the Immediate Repositioning ability blueprint");
 #endif
             BlueprintAbility ImmediateRepositioningAbility = new()
             {
@@ -41,7 +43,8 @@ namespace Way_of_the_shield
                 CanTargetSelf = false,
                 EffectOnAlly = AbilityEffectOnUnit.None,
                 EffectOnEnemy = AbilityEffectOnUnit.None,
-                Type = AbilityType.Extraordinary
+                Type = AbilityType.Extraordinary,
+                m_Icon = Icon,
             };
             ImmediateRepositioningAbility.AddComponent(new NewComponents.AbilityDeliverTurnTo());
             ImmediateRepositioningAbility.AddToCache();
@@ -60,7 +63,8 @@ namespace Way_of_the_shield
                 IsClassFeature = true,
                 HideInCharacterSheetAndLevelUp = false,
                 HideInUI = false,
-                HideNotAvailibleInUI = false
+                HideNotAvailibleInUI = false,
+                m_Icon = Icon,
             };
             ImmediateRepositioningFeature.AddComponent(new AddFacts() { m_Facts = new BlueprintUnitFactReference[] { ImmediateRepositioningAbility.ToReference<BlueprintUnitFactReference>() } });
             ImmediateRepositioningFeature.AddToCache();

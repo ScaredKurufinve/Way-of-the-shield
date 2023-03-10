@@ -38,8 +38,26 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             new ("2049abc955bf6fe41a76f2cb6ba8214a", "CrusaderFeat20"),
             new ("303fd456ddb14437946e344bad9a893b", "WarpriestFeatSelection"),
         };
-        
-        
+
+        public static BlueprintActivatableAbility Ability { get { if (!Created) BlueprintsCache_Init_Patch(); return m_Ability; } }
+        private static BlueprintActivatableAbility m_Ability;
+        public static BlueprintFeature Strike {get { if (!Created) BlueprintsCache_Init_Patch(); return m_Strike; } }
+        private static BlueprintFeature m_Strike;
+        public static BlueprintFeature Vengeance { get { if (!Created) BlueprintsCache_Init_Patch(); return m_Vengeance; } }
+        private static BlueprintFeature m_Vengeance;
+        public static BlueprintBuff VengeanceBuff { get { if (!Created) BlueprintsCache_Init_Patch(); return m_VengeanceBuff; } }
+        private static BlueprintBuff m_VengeanceBuff;
+        public static BlueprintBuff StrikeBuff { get { if (!Created) BlueprintsCache_Init_Patch(); return m_StrikeBuff; } }
+        private static BlueprintBuff m_StrikeBuff;
+        public static BlueprintBuff StyleBuff { get { if (!Created) BlueprintsCache_Init_Patch(); return m_StyleBuff; } }
+        private static BlueprintBuff m_StyleBuff;
+        public static BlueprintBuff checker { get { if (!Created) BlueprintsCache_Init_Patch(); return m_checker; } }
+        private static BlueprintBuff m_checker;
+        public static BlueprintBuff MainBuff { get { if (!Created) BlueprintsCache_Init_Patch(); return m_MainBuff; } }
+        private static BlueprintBuff m_MainBuff;
+
+        internal static bool Created;
+
 
         [HarmonyPatch(typeof(BlueprintsCache), nameof(BlueprintsCache.Init))]
         [HarmonyPostfix]
@@ -74,6 +92,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             };
             UpsettingShieldBuffMain.AddComponent(new UpsettingShieldComponent());
             UpsettingShieldBuffMain.AddToCache("dfcbc91d3c2d4f8685acf158dcb58815", "UpsettingShieldStyleBuff");
+            m_MainBuff = UpsettingShieldBuffMain;
             #endregion
             #region Create Upsetting Shield activatable ability
 #if DEBUG
@@ -96,6 +115,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             };
             UpsettingShieldStyleAbility.AddComponent(new DeactivateImmediatelyIfNoAttacksThisRound());
             UpsettingShieldStyleAbility.AddToCache();
+            m_Ability = UpsettingShieldStyleAbility;
             #endregion
             #region Create UpsettingShield feature
 #if DEBUG
@@ -214,7 +234,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             ShieldBash.IsPrerequisiteFor.Add(UpsettingStrikeFeatureReference);
             CombatReflexes.IsPrerequisiteFor ??= new();
             CombatReflexes.IsPrerequisiteFor.Add(UpsettingStrikeFeatureReference);
-            UpsettingShieldComponent.Strike = UpsettingStrikeFeature;
+            m_Strike = UpsettingStrikeFeature;
             UpsettingStrikeFeature.AddFeatureToSelections(selections);
 
             #endregion
@@ -277,7 +297,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             ShieldBash.IsPrerequisiteFor.Add(UpsettingVengeanceFeatureReference);
             CombatReflexes.IsPrerequisiteFor ??= new();
             CombatReflexes.IsPrerequisiteFor.Add(UpsettingVengeanceFeatureReference);
-            UpsettingShieldComponent.Vengeance = UpsettingVengeanceFeature;
+            m_Vengeance = UpsettingVengeanceFeature;
             foreach ((string guid, string name) in selections)
             {
                 if (!RetrieveBlueprint(guid, out selection, name)) continue;
@@ -293,14 +313,15 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             #region Create checker buff
 #if DEBUG
             if (Settings.Debug.GetValue())
-                Comment.Log("Begin creating Checker Buff for the Upsetting Shield style."); 
+                Comment.Log("Begin creating Checker Buff for the Upsetting Shield style.");
 #endif
             BlueprintBuff checker = new()
             {
-                m_Flags = BlueprintBuff.Flags.HiddenInUi
+                m_Flags = BlueprintBuff.Flags.HiddenInUi,
+                FxOnRemove = new(),
             };
             checker.AddToCache("725ff3821a1242a8bf9e15429319152d", "Checker Buff for the Upsetting Shield style");
-            UpsettingShieldComponent.checker = checker;
+            m_checker = checker;
             BlueprintBuffReference checkerReference = checker.ToReference<BlueprintBuffReference>();
             #endregion
             #region Create Style buff
@@ -324,7 +345,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 Descriptor = ModifierDescriptor.UntypedStackable
             });
             UpsettingShieldBuff.AddToCache("5a698c8b9ebe4ce49f21d965a8723786", "UpsettingShieldEffectBuff");
-            UpsettingShieldComponent.StyleBuff = UpsettingShieldBuff;
+            m_StyleBuff = UpsettingShieldBuff;
             #endregion
             #region Create Strike buff
 #if DEBUG
@@ -348,7 +369,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             });
             UpsettingStrikeBuff.AddComponent(new AoOOnFarMiss() { CheckBuff = true, CheckOnCaster = true, m_FactToCheck = checkerReference, CasterOnly = true });
             UpsettingShieldBuff.AddToCache("8256f265fae94c7a891a23e796d23956", "UpsettingStrikeBuff");
-            UpsettingShieldComponent.StrikeBuff = UpsettingStrikeBuff;
+            m_StrikeBuff = UpsettingStrikeBuff;
             #endregion
             #region Create Vengeance Strike buff
 #if DEBUG
@@ -371,10 +392,11 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 Descriptor = ModifierDescriptor.UntypedStackable,
                 Stat = StatType.AdditionalAttackBonus
             });
-            UpsettingVengeanceBuff.AddComponent(new AoOOnFarMiss() { CheckBuff = true, CheckOnCaster = false, m_FactToCheck = checkerReference, CasterOnly = false });
+            UpsettingVengeanceBuff.AddComponent(new AoOOnFarMiss() { CheckBuff = true, CheckOnCaster = true, m_FactToCheck = checkerReference, CasterOnly = false });
             UpsettingVengeanceBuff.AddToCache("f66c775241f54f79a520f25ef3c0887e", "UpsettingVengeanceBuff");
-            UpsettingShieldComponent.VengeanceBuff = UpsettingVengeanceBuff;
+            m_VengeanceBuff = UpsettingVengeanceBuff;
             #endregion
+            Created = true;
         }
 
     }
