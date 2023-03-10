@@ -19,24 +19,20 @@ namespace Way_of_the_shield.NewComponents
         }
         public void OnEventDidTrigger(RuleAttackWithWeapon evt)
         {
-#if DEBUG
-            if (Debug.GetValue())
-                Comment.Log("I'm inside AoOOnFarMiss OnEventDidTrigger"); 
-#endif
             BlueprintBuff buff = m_FactToCheck?.Get();
 #if DEBUG
             if (Debug.GetValue())
             {
-                Comment.Log("!evt.Weapon.Blueprint.IsMelee is " + !evt.Weapon.Blueprint.IsMelee);
-                Comment.Log("CheckBuff is " + CheckBuff);
-                Comment.Log("Buff is null is " + (buff is null));
-                Comment.Log("(CheckOnCaster ? !Owner.Descriptor.Buffs.HasFact(Buff) : evt.Target.Descriptor.Buffs.HasFact(Buff)) is " + ((CheckOnCaster ? !Owner.Descriptor.Buffs.HasFact(buff) : evt.Target.Descriptor.Buffs.HasFact(buff))));
-                Comment.Log("Result is " + (!evt.Weapon.Blueprint.IsMelee ||
-                CheckBuff && (buff is null || (CheckOnCaster ? !(Buff.Context.MaybeCaster?.Descriptor.Buffs.HasFact(buff) ?? true) : !evt.Target.Descriptor.Buffs.HasFact(buff)))));
+                Comment.Log($"AoOOnFarMiss RuleAttackWithWeapon OnEventAboutToTrigger - " +
+                    $"Weapon is not melee? {!evt.Weapon.Blueprint.IsMelee}. " +
+                    $"Check the buff? {CheckBuff}." +
+                    $"Buff is  {(buff is null ? "null" : buff.name)}." +
+                    $"Has buff? {(CheckOnCaster ? !Buff.Context.MaybeCaster?.Descriptor.Buffs.HasFact(buff) : evt.Target.Descriptor.Buffs.HasFact(buff))}" +
+                    $"Final result is {(!evt.Weapon.Blueprint.IsMelee || CheckBuff && (buff is null || (CheckOnCaster ? !(Buff.Context.MaybeCaster?.Descriptor.Buffs.HasFact(buff) ?? true) : !evt.Target.Descriptor.Buffs.HasFact(buff))))}");
             } 
 #endif
             if (!evt.Weapon.Blueprint.IsMelee ||
-                CheckBuff && (buff is null || (CheckOnCaster ? !Owner.Descriptor.Buffs.HasFact(buff) : !evt.Target.Descriptor.Buffs.HasFact(buff)))) return;
+                CheckBuff && (buff is null || (CheckOnCaster ? (!Buff.Context.MaybeCaster?.Descriptor.Buffs.HasFact(buff) ?? false) : !evt.Target.Descriptor.Buffs.HasFact(buff)))) return;
 #if DEBUG
             if (Debug.GetValue())
                 Comment.Log("Did not return1"); 
