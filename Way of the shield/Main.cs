@@ -73,6 +73,12 @@ namespace Way_of_the_shield
                 modName = mod.Info.Id;
                 modPath = mod.Path;
 #endif
+                harmony = new("Shield");
+                harmony.Patch(
+                    original: typeof(OwlcatModificationsManager).GetMethod(nameof(OwlcatModificationsManager.ApplyModifications), BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic),
+                    prefix: new HarmonyMethod(typeof(LocalizationPatchForUMM).GetMethod(nameof(LocalizationPatchForUMM.Patch))),
+                    postfix: new HarmonyMethod(typeof(Main).GetMethod(nameof(Main.Load1))));
+                return;
 
             }
             finally { }
@@ -101,10 +107,10 @@ namespace Way_of_the_shield
             Comment.Log("TTT-Core is " + TTTCore?.FullName ?? "not found.");
             Comment.Log("TTT-Base is " + TTTBase?.FullName ?? "not found.");
             Comment.Log("ModMenu is " + ModMenu?.FullName ?? "not found.");
-            harmony = new(modName); 
+            harmony ??= new(modName); 
             try
             {
-            if (initialized == false) Settings.Init();
+                if (initialized == false) Settings.Init();
             }
             catch(TypeLoadException ex)
             {
@@ -159,18 +165,9 @@ namespace Way_of_the_shield
 
     }
 
-    [HarmonyPatch(typeof(BlueprintsCache), nameof(BlueprintsCache.Init))]
     public static class LocalizationPatchForUMM
     {
-        [HarmonyPrepare]
-        public static bool UMMCheck()
-        {
-            if (Main.mod is OwlcatModification || Main.BeenLoaded) return false;
-            else return true;
-        }
-
-        [HarmonyPrefix]
-        public static void Prefix()
+        public static void Patch()
         {
             try
             {
