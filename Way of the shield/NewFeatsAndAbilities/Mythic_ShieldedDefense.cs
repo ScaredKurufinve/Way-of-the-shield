@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Kingmaker;
 using Kingmaker.Blueprints.JsonSystem.Converters;
+using System.Diagnostics;
 
 namespace Way_of_the_shield.NewFeatsAndAbilities
 {
@@ -18,15 +19,17 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
     {
         public static BlueprintFeature Feature
         {
-            get { if (!Created) CreateBlueprint(); return m_feature; }
+            get { if (!Created && !InProcess) CreateBlueprint(); return m_feature; }
             set { }
         }
         static BlueprintFeature m_feature;
 
         internal static bool Created;
+        internal static bool InProcess;
         internal static void CreateBlueprint()
         {
-            Sprite MythicIcon = LoadIcon("Heavy");
+            InProcess = true;
+            Sprite MythicIcon = LoadIcon("Mythic_ShieldedDefense");
 
             //LoadIcon("Mythic_ShieldedDefense");
             string circ = "when creating Mythic_ShieldedDefense blueprint";
@@ -39,13 +42,11 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 Ranks = 1,
             };
             blueprint.AddToCache("3d621329f6874035b4be27edc6b84f25", "Mythic_ShieldedDefense");
+            m_feature = blueprint;
             blueprint.AddComponent(new FeatureTagsComponent() { FeatureTags = FeatureTag.Defense });
-            blueprint.AddComponent(new PrerequisiteProficiency()
+            blueprint.AddComponent(new PrerequisiteFeature()
             {
-                ArmorProficiencies = new ArmorProficiencyGroup[] { ArmorProficiencyGroup.LightShield,
-                                                                   ArmorProficiencyGroup.HeavyShield,
-                                                                   ArmorProficiencyGroup.TowerShield },
-                WeaponProficiencies = new WeaponCategory[] { },
+                m_Feature = ShieldedDefense.ShieldedDefenseFeature.ToReference<BlueprintFeatureReference>(),
                 Group = Prerequisite.GroupType.All
             });
             if (!RetrieveBlueprint("dbec636d84482944f87435bd31522fcc", out BlueprintFeature ShieldMaster, "ShieldMaster", circ)) goto skipShieldMasterPrerequisite;
@@ -63,8 +64,8 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             MythicFeatSelection.m_AllFeatures = MythicFeatSelection.m_AllFeatures.AddToArray(blueprint.ToReference<BlueprintFeatureReference>());
             skipMythicFeatSlection:
 
-            m_feature = blueprint;
             Created = true;
+            InProcess = false;
         }
     }
 }

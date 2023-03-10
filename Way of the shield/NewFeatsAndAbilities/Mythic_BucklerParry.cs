@@ -24,21 +24,20 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
     {
         public static BlueprintFeature Mythic_BucklerParryFeature {
             get
-            {
-                if (!Created) CreateBlueprint();
-                return m_Mythic_BucklerParryFeature;
-            } 
+            { if (!Created && !InProcess) CreateBlueprint(); return m_Mythic_BucklerParryFeature; } 
         }
 
         internal static bool Created;
+        internal static bool InProcess;
         static BlueprintFeature m_Mythic_BucklerParryFeature;
 
         [HarmonyPatch(typeof(BlueprintsCache), nameof(BlueprintsCache.Init))]
         [HarmonyPostfix]
         internal static void CreateBlueprint()
         {
+            InProcess = true;
             #region Create Blueprint
-            Sprite Icon = null;
+            Sprite Icon = LoadIcon("Mythic_BucklerParry");
             string circ = "when creating the Mythic_BucklerParryFeature blueprint";
             BlueprintFeature bp = new()
             {
@@ -81,13 +80,10 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             });
             bp.AddComponent(new PrerequisiteStatValue() { Stat = StatType.Dexterity, Value = 13, Group = Prerequisite.GroupType.All });
             bp.AddComponent(new PrerequisiteFeature() { m_Feature = new() { deserializedGuid = BlueprintGuid.Parse("ac8aaf29054f5b74eb18f2af950e752d") }, Group = Prerequisite.GroupType.All }); // TwoWeaponFighting
-            bp.AddComponent(new PrerequisiteProficiency()
-            {
-                ArmorProficiencies= new ArmorProficiencyGroup[] {},
-                WeaponProficiencies = new WeaponCategory[] { WeaponCategory.WeaponLightShield}
-            });
+            bp.AddComponent(new PrerequisiteFeature() { m_Feature = new() { deserializedGuid = BlueprintGuid.Parse("e547039b227a42d7a8d98fad72f8717c") }, Group = Prerequisite.GroupType.All }); // BucklerParryFeature
             m_Mythic_BucklerParryFeature = bp;
             Created = true;
+            InProcess= false;
             #endregion
             #region Add to mythic selection
             BlueprintFeatureSelection mythicSelection = ResourcesLibrary.GetRoot()?.SystemMechanics.MythicFeatSelection;
