@@ -352,7 +352,7 @@
         },
 		{
             "Key": "HolyShield4Feature_Description", 
-            "Value": "达到4级时，圣盾卫可以用信念充能盾牌，保护友军。附近友军获得盾牌{g|Encyclopedia:Bonus}加值{/g}，等于圣盾卫本身的盾牌{g|Encyclopedia:Bonus}加值{/g}，包含其,增强{g|Encyclopedia:Bonus}加值{/g}。该加值不能和已经存在的盾牌加值叠加。圣盾激活时圣武士会发出如同光亮术的光芒。\n达到11级时，保护效果扩展到10尺范围，同时光芒效果如同昼明术。\n达到20级时，保护效果扩展到20尺范围。\n使用这个能力消耗2次圣疗，且效果持续3+圣盾卫的 {g|Encyclopedia:Charisma}魅力{/g}调整值（如果有）。\n这替代了引导正向能量。"
+            "Value": "达到4级时，圣盾卫可以用信念充能盾牌，保护友军。附近友军获得盾牌{g|Encyclopedia:Bonus}加值{/g}，等于圣盾卫本身的盾牌{g|Encyclopedia:Bonus}加值{/g}，包含其增强{g|Encyclopedia:Bonus}加值{/g}。该加值不能和已经存在的盾牌加值叠加。圣盾激活时圣武士会发出如同光亮术的光芒。\n达到11级时，保护效果扩展到10尺范围，同时光芒效果如同昼明术。\n达到20级时，保护效果扩展到20尺范围。\n使用这个能力消耗2次圣疗，且效果持续3+圣盾卫的 {g|Encyclopedia:Charisma}魅力{/g}调整值（如果有）轮。\n这替代了引导正向能量。"
         },
 		{
             "Key": "HolyShield4Feature_ShortDescription", 
