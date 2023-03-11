@@ -28,12 +28,12 @@ namespace Way_of_the_shield
         public static SettingsEntityBool DenyShieldBonusOnBackstab = new(settingsModName + "deny-shield-bonus-on-backstab", true, false, false);
         public static SettingsEntityBool FlatFootedOnBackstab = new(settingsModName + "flat-footed-on-backstab", true, true, true);
         public static SettingsEntityBool AddBucklerParry = new(settingsModName + "add-buckler-parry", true, false, true);
-        public static SettingsEntityBool AllowTwoHanded_as_OneHandedWhenBuckler = new(settingsModName + "allow-two-handed-as-one-handed-when-buckler", true, true, true);
+        public static SettingsEntityBool AllowTwoHanded_as_OneHandedWhenBuckler = new(settingsModName + "allow-two-handed-as-one-handed-when-buckler", true, false, true);
         public static SettingsEntityBool AllowTwoHandedSpears_as_OneHandedWhenMounted = new(settingsModName + "allow-two-handed-spears-as-one-handed-when-mounted", true, false, true);
         public static SettingsEntityBool GiveImmediateRepositioningToTSS = new(settingsModName + "give-immediate-repositioning-to-tss", true, false, true);
         public static SettingsEntityBool RemoveTotalCoverFeatureFromTSS = new(settingsModName + "remove-total-cover-feature-from-tss", true, false, true);
         public static SettingsEntityBool AllowShieldBashToAllWhoProficient = new(settingsModName + "allow-shield-bash-without-improved-feature", true, false, true);
-        public static SettingsEntityBool EnableSoftCover = new(settingsModName + "enable-soft-sover", true, true, true);
+        public static SettingsEntityBool EnableSoftCover = new(settingsModName + "enable-soft-sover", true, false, true);
         public static SettingsEntityBool ChangeBackToBack = new(settingsModName + "change-back-to-back", true, false, true);
         public static SettingsEntityBool AddSoftCoverDenialToImprovedPreciseShot = new(settingsModName + "add-soft-cover-denial-to-improved-precise-shot", true, false, true);
         public static SettingsEntityBool ChangeShieldWall = new(settingsModName + "change-shield-wall", true, false, true);
@@ -76,6 +76,7 @@ namespace Way_of_the_shield
 
         static public void Init()
         {
+            AddSettingsNames();
             List<UISettingsEntityBase> l = new();
             foreach (var (entity, visual) in ListOfBoolSettings) { visual.LinkSetting(entity); l.Add(visual); };
             SettingsGroup.SettingsList = l.ToArray();
@@ -158,9 +159,6 @@ namespace Way_of_the_shield
         static string Default = "Default";
         static string Apply = "Apply";
         static string Cancel = "Cancel";
-
-        [HarmonyPatch(typeof (BlueprintsCache), nameof(BlueprintsCache.Init))]
-        [HarmonyPostfix]
         static void AddSettingsNames()
         {
             foreach (var (entity, visual) in ListOfBoolSettings)
