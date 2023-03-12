@@ -169,6 +169,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             addFactContextActions.Activated.Actions = addFactContextActions.NewRound.Actions.AddToArray(
                 new Conditional()
                 {
+                    name = $"{FightDefensivelyBuff}_addFactContextActions_NewRound_CheckForShieldedDefenseEffectBuff",
                     ConditionsChecker = new()
                     {
                         Conditions = new Condition[]
@@ -179,8 +180,9 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                     IfTrue = new()
                     {
                         Actions = new GameAction[] { new ContextActionApplyBuff() { m_Buff = ShieldedDefenseEffectBuff.ToReference<BlueprintBuffReference>(), ToCaster = true, Permanent = true, } }
-                    }
-                });
+                    },
+                    IfFalse = new() { }
+                });;
             addFactContextActions.NewRound ??= new();
             addFactContextActions.NewRound.Actions = addFactContextActions.NewRound.Actions.AddToArray(
                 new Conditional()

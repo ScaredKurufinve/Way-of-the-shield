@@ -65,8 +65,8 @@ namespace Way_of_the_shield.Tweaks_and_Changes
 #endif
 
             #region slap the shield denial onto ShieldBashBuff
-            if (!RetrieveBlueprint("5566971fdebf7fe468a497bbee0d3ed5", out BlueprintBuff ShieldBashBuff, "ShieldBashBuff", circ)) return;
-            if (ShieldBashBuff.ComponentsArray.Any(component => component is AddInitiatorShieldBashTrigger)) return;
+            if (!RetrieveBlueprint("5566971fdebf7fe468a497bbee0d3ed5", out BlueprintBuff ShieldBashBuff, "ShieldBashBuff", circ)) goto skipAddingTrigger;
+            if (ShieldBashBuff.ComponentsArray.Any(component => component is AddInitiatorShieldBashTrigger)) goto skipAddingTrigger;
             ShieldBashBuff.AddComponent(new AddInitiatorShieldBashTrigger()
             {
                 OnlyOnFirstBashAttack = true,
@@ -77,6 +77,7 @@ namespace Way_of_the_shield.Tweaks_and_Changes
                     {
                         new Conditional()
                         {
+                            name = $"{ShieldBashBuff.name}_AddInitiatorShieldBashTrigger_Conditional",
                             ConditionsChecker = new()
                             {
                                 Conditions = new Condition[]
@@ -105,6 +106,8 @@ namespace Way_of_the_shield.Tweaks_and_Changes
                     }
                 }
             });
+
+            skipAddingTrigger:
 #if DEBUG
             if (Debug.GetValue())
                 Comment.Log("ShieldBashAbilityTweak - Added the trigger causing Shield Forbiddance to to the ShieldBashBuff blueprint");

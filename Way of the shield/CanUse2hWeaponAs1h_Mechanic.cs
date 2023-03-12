@@ -116,12 +116,12 @@ namespace Way_of_the_shield
 
         abstract public bool CanBeUsedAs2h(ItemEntityWeapon weapon);
 
-        public override void OnActivate()
+        public override void OnTurnOn()
         {
             Owner.Ensure<UnitPartCanHold2hWeaponIn1h>().buffs.Add(Fact);
         }
 
-        public override void OnDeactivate()
+        public override void OnTurnOff()
         {
             Owner.Ensure<UnitPartCanHold2hWeaponIn1h>().buffs.Remove(Fact);
         }
