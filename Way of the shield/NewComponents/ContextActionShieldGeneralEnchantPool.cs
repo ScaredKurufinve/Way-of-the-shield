@@ -162,7 +162,7 @@ namespace Way_of_the_shield.NewComponents
             {
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log("fact is " + fact.name); 
+                    Comment.Log("fact is " + fact?.name); 
 #endif
                 try
                 {
@@ -195,7 +195,7 @@ namespace Way_of_the_shield.NewComponents
         [HarmonyPrefix]
         public static void OnRemoved(ItemEntity __instance, ItemEnchantment enchantment)
         {
-            IEnumerable<AddFactToEquipmentWielder> arr = enchantment.BlueprintComponents?.Select(c => c as AddFactToEquipmentWielder);
+            IEnumerable<AddFactToEquipmentWielder> arr = enchantment.BlueprintComponents.Select(c => c as AddFactToEquipmentWielder).Where(c => c is not null);
             if (!arr.Any() || __instance.Wielder is null) return;
             ItemEntity item = null;
             if (__instance is not ItemEntityShield shield) item = __instance;
