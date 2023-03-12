@@ -221,9 +221,8 @@ namespace Way_of_the_shield
             Comment.Log("Added ShieldedDefenseActivatableAbility to the ShieldBashAbility restrictions."); 
 #endif
             ; skipShieldBashAbility:
-            RetrieveBlueprint("cb8686e7357a68c42bdd9d4e65334633", out BlueprintFeature ShieldsProficiency, "ShieldProficiency", circ);
-
             #endregion
+            RetrieveBlueprint("cb8686e7357a68c42bdd9d4e65334633", out BlueprintFeature ShieldsProficiency, "ShieldProficiency", circ);
             if (!AddBucklerParry.GetValue()) goto skipParry;
             #region modify Buckler Proficiency blueprint
             if (!RetrieveBlueprint("7c28228ce4eed1543a6b670fd2a88e72", out BlueprintFeature BucklerProf, "Buckler Proficiency", circ)) goto SkipBucklerProf;
@@ -363,11 +362,13 @@ namespace Way_of_the_shield
                 }
                 af.m_Facts ??= new BlueprintUnitFactReference[] { };
                 af.m_Facts.AddToArray(bucklerref);
+                Comment.Log($"Returned BucklerProficiency to proficiencies of the class {name} (guid {ID})");
             };
             foreach (var (ID, name) in ShieldLessClasses)
             {
                 if (!RetrieveBlueprint(ID, out BlueprintFeature f, "name", circ2)) continue;
                 f.m_Description = new() { m_Key = "WayOfTheShield_" + name + "_Shieldless", m_ShouldProcess = true };
+                Comment.Log($"Changed the description of the class {name} (guid {ID}), {circ2}");
             };
             #endregion
             NewBuckler.AddFeatureToSelections(ShieldSelections, circ2);
