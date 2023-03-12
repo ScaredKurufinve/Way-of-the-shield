@@ -46,7 +46,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 Groups = new FeatureGroup[] { FeatureGroup.TeamworkFeat, FeatureGroup.CombatFeat, FeatureGroup.Feat},
         };
             blueprint.AddToCache("6314293bce0b4e1490ab10b1a7a5a318", "BackToBackImproved");
-            if (ChangeBackToBack) blueprint.AddComponent(new BackToBackImprovedComponent());
+            if ((ChangeBackToBack && (ConcealmentAttackBonusOnBackstab || DenyShieldBonusOnBackstab))) blueprint.AddComponent(new BackToBackImprovedComponent());
             else
             {
                 Comment.Log("ChangeBackToBack setting is disabled, will be adding BackToBackBetter component to the BackToBackImproved feature blueprint instead of BackToBackImprovedComponent.");
