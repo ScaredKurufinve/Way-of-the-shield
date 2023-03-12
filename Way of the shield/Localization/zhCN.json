@@ -967,6 +967,14 @@
             "Value": "如果您在启用此选项的同时启用软掩蔽选项，背靠背不再为你对抗夹击时的AC提供+2环境加值，而是改为提高你队友对你的软掩蔽效果，增加1.5倍；此外，如果你启用了在背刺时失去盾牌加值的选项，那么当你从背靠背中受益时，你的盟友将能够为你提供他们自己的盾牌加值。然而，为了从中受益，你和盟友必须背靠背，且彼此之间的距离不得超过1英尺。\n此设置也会改变新团队技能精通背靠背的效果。当此设置被禁用时，专长的改进版本只会将专长的基本版本的加成增加2。如果启用了此设置，同时您还启用了在背刺获得隐蔽加值和/或背刺视为目标措手不及的选项，精通背靠背可以抵消这些效果。"
         },
 		{
+            "Key": "way-of-the-shield.allow-buckler-bash-when-two-handed-with-unhindering_Description", 
+            "Value": "如果拥有自由之盾，允许在持用双手武器的同时使用小圆盾盾击"
+        },
+		{
+            "Key": "way-of-the-shield.allow-buckler-bash-when-two-handed-with-unhindering_TooltipDescription", 
+            "Value": "开启此选项，如果你希望能够在拥有自由之盾专长时，持用双手武器的同时使用小圆盾盾击（需要拥有相应能力）。这一专长的描述有歧义，按照设计不该能这么做，但是某些人可能会需要此功能。"
+        },
+		{
             "Key": "MountedCombat_description", 
             "Value": "每{g|Encyclopedia:Combat_Round}轮{/g}一次，当你的坐骑在战斗中被击中时，你可以尝试{g|Encyclopedia:Mobility}灵巧{/g}检定来抵消这次{g|Encyclopedia:Attack}攻击{/g}。如果你的灵巧{g|Encyclopedia:Check}检定{/g}结果高于敌方攻击检定结果，这次攻击就会被抵消。{shield_check_set_bool|allow-two-handed-spears-as-one-handed-when-mounted| \n此外，当你骑乘战斗时，你可以单手持用双手长矛。| }"
         },

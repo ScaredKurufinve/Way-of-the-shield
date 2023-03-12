@@ -468,11 +468,24 @@ namespace Way_of_the_shield.NewComponents
 #if DEBUG
             Comment.Log($"RuleCalculateAttacksCount transpiler - flag is {flag}, parry flag is {OffHandParryUnitPart.flag}"
         + $"prof group is {evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup}, "
-        + $"{(evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler ? "" : (", BucklerBash is " + evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash))}"
-        + $"Result is {flag && (evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler || evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash)}"); 
+        + $"{(evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler ? "" : (", BucklerBash is " + evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash))}" +
+        $"Hold in two hands? {!(evt.Initiator.Body.PrimaryHand.Weapon?.HoldInTwoHands ?? false)}, has Unhindering? {evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield ?? false}. "
+        + $"Result is {OffHandParryUnitPart.flag
+                || (flag && (evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler
+                               || (evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash
+                                    && (!(evt.Initiator.Body.PrimaryHand.Weapon?.HoldInTwoHands ?? false) || evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield)
+                                   )
+                             )
+                    )}"); 
 #endif
             if (flag is false && !OffHandParryUnitPart.flag) return flag;
-            return OffHandParryUnitPart.flag || (flag && (evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler || evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash));
+            return OffHandParryUnitPart.flag 
+                || (flag  && (evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler 
+                               || (evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash 
+                                    && (!(evt.Initiator.Body.PrimaryHand.Weapon?.HoldInTwoHands ?? false) || evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield)
+                                   )
+                             )
+                    );
         }
         public static bool BucklerOrBash4(bool flag, HandSlot slot)
         {
@@ -486,7 +499,11 @@ namespace Way_of_the_shield.NewComponents
         public static bool BucklerOrBash3(bool flag, UnitEntityData unit)
         {
             if (flag is false) return flag;
-            return flag && (unit.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler || unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash);
+            return flag && (unit.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler 
+                                || (unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash
+                                    && (!(unit.Body.PrimaryHand.Weapon?.HoldInTwoHands ?? false) || unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield)
+                                )
+                            );
         }
 
 
