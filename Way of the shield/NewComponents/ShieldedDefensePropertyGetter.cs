@@ -18,12 +18,12 @@ namespace Way_of_the_shield.NewComponents
                 Comment.Log($"Inside the TotalShieldBonusGetter for {unit.CharacterName}"); 
 #endif
             ItemEntityShield shield = unit.Body.SecondaryHand?.MaybeShield;
-            if (shield == null) return -1;
+            if (shield == null) return -2;
             int Base = unit.Stats.BaseAttackBonus;
             ArmorProficiencyGroup prof = shield.ArmorComponent.Blueprint.ProficiencyGroup;
             if (prof is ArmorProficiencyGroup.LightShield) return Base / 3 ;
             else if (prof is ArmorProficiencyGroup.HeavyShield or ArmorProficiencyGroup.TowerShield) return Base / 2 ;
-            else return -1;
+            else return -2;
         }
     }
 }
