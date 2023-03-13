@@ -22,6 +22,10 @@ namespace Way_of_the_shield.NewComponents
 
         public override string GenerateDescription()
         {
+#if DEBUG
+            if (Settings.Debug.GetValue())
+                Comment.Log("BuffDynamicDecriptionComponent_Charges - inside"); 
+#endif
             if (Buff is null)
             {
                 Comment.Error(this, $"BuffDynamicDecriptionComponent_Charges - Owner blueprint is {OwnerBlueprint}, Owner is {Owner?.CharacterName}. Could not find a buff to retrieve ranks.");
@@ -32,6 +36,10 @@ namespace Way_of_the_shield.NewComponents
                 Comment.Log($"Progression is null? {m_calculation is null}. {(m_calculation is not null ? "calculation is " + m_calculation.ToString() + ", value is " + m_calculation.ApplyProgression(Buff.Rank) : "")}"); 
 #endif
             int num = m_calculation is null ? Buff.Rank : m_calculation.ApplyProgression(Buff.Rank);
+
+#if DEBUG
+            Comment.Log("BuffDynamicDecriptionComponent_Charges - result is 2"); 
+#endif
             return string.Format(UIUtilityTexts.TooltipString.SimpleParameter, m_basic, num);
         }
     }
