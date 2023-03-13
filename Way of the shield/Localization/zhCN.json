@@ -352,7 +352,7 @@
         },
 		{
             "Key": "HolyShield4Feature_Description", 
-            "Value": "达到4级时，圣盾卫可以用信念充能盾牌，保护友军。附近友军获得盾牌{g|Encyclopedia:Bonus}加值{/g}，等于圣盾卫本身的盾牌{g|Encyclopedia:Bonus}加值{/g}，包含其,增强{g|Encyclopedia:Bonus}加值{/g}。该加值不能和已经存在的盾牌加值叠加。圣盾激活时圣武士会发出如同光亮术的光芒。\n达到11级时，保护效果扩展到10尺范围，同时光芒效果如同昼明术。\n达到20级时，保护效果扩展到20尺范围。\n使用这个能力消耗2次圣疗，且效果持续3+圣盾卫的 {g|Encyclopedia:Charisma}魅力{/g}调整值（如果有）。\n这替代了引导正向能量。"
+            "Value": "达到4级时，圣盾卫可以用信念充能盾牌，保护友军。附近友军获得盾牌{g|Encyclopedia:Bonus}加值{/g}，等于圣盾卫本身的盾牌{g|Encyclopedia:Bonus}加值{/g}，包含其增强{g|Encyclopedia:Bonus}加值{/g}。该加值不能和已经存在的盾牌加值叠加。圣盾激活时圣武士会发出如同光亮术的光芒。\n达到11级时，保护效果扩展到10尺范围，同时光芒效果如同昼明术。\n达到20级时，保护效果扩展到20尺范围。\n使用这个能力消耗2次圣疗，且效果持续3+圣盾卫的 {g|Encyclopedia:Charisma}魅力{/g}调整值（如果有）轮。\n这替代了引导正向能量。"
         },
 		{
             "Key": "HolyShield4Feature_ShortDescription", 
@@ -963,16 +963,16 @@
             "Value": "修改背靠背团队专长"
         },
 		{
-            "Key": "way-of-the-shield.change-back-to-back_TooltipDescription", 
-            "Value": "如果您在启用此选项的同时启用软掩蔽选项，背靠背不再为你对抗夹击时的AC提供+2环境加值，而是改为提高你队友对你的软掩蔽效果，增加1.5倍；此外，如果你启用了在背刺时失去盾牌加值的选项，那么当你从背靠背中受益时，你的盟友将能够为你提供他们自己的盾牌加值。然而，为了从中受益，你和盟友必须背靠背，且彼此之间的距离不得超过1英尺。\n此设置也会改变新团队技能精通背靠背的效果。当此设置被禁用时，专长的改进版本只会将专长的基本版本的加成增加2。如果启用了此设置，同时您还启用了在背刺获得隐蔽加值和/或背刺视为目标措手不及的选项，精通背靠背可以抵消这些效果。"
-        },
-		{
             "Key": "way-of-the-shield.allow-buckler-bash-when-two-handed-with-unhindering_Description", 
             "Value": "如果拥有自由之盾，允许在持用双手武器的同时使用小圆盾盾击"
         },
 		{
             "Key": "way-of-the-shield.allow-buckler-bash-when-two-handed-with-unhindering_TooltipDescription", 
             "Value": "开启此选项，如果你希望能够在拥有自由之盾专长时，持用双手武器的同时使用小圆盾盾击（需要拥有相应能力）。这一专长的描述有歧义，按照设计不该能这么做，但是某些人可能会需要此功能。"
+        },
+		{
+            "Key": "way-of-the-shield.change-back-to-back_TooltipDescription", 
+            "Value": "如果您在启用此选项的同时启用软掩蔽选项，背靠背不再为你对抗夹击时的AC提供+2环境加值，而是改为提高你队友对你的软掩蔽效果，增加1.5倍；此外，如果你启用了在背刺时失去盾牌加值的选项，那么当你从背靠背中受益时，你的盟友将能够为你提供他们自己的盾牌加值。然而，为了从中受益，你和盟友必须背靠背，且彼此之间的距离不得超过1英尺。\n此设置也会改变新团队技能精通背靠背的效果。当此设置被禁用时，专长的改进版本只会将专长的基本版本的加成增加2。如果启用了此设置，同时您还启用了在背刺获得隐蔽加值和/或背刺视为目标措手不及的选项，精通背靠背可以抵消这些效果。"
         },
 		{
             "Key": "MountedCombat_description", 
@@ -993,6 +993,10 @@
 		{
             "Key": "BackToBackImproved_Unchanged_Description", 
             "Value": "<i>心有灵犀，生死相托。</i>\n背靠背的环境加值提高到+4。"
+        },
+		{
+            "Key": "BackToBackImproved_SemiUnchanged_Description", 
+            "Value": "<i>心有灵犀，生死相托。</i>\n<b>效果：</b> 你被夹击时AC上获得额外+2环境加值。"
         },
 		{
             "Key": "Mythic_ShieldedDefense_m_DisplayName", 
