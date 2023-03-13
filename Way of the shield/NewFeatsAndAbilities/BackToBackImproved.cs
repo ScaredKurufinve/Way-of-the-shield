@@ -60,6 +60,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
 
             m_feature = blueprint;
             Created = true;
+            blueprint.AddFeatureAsTeamwork();
 
 
             if (!RetrieveBlueprint("c920f2cd2244d284aa69a146aeefcb2c", out BlueprintFeature BTB, "BackToBack", circ) ) return;
@@ -69,7 +70,6 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
 #if DEBUG
             if (Settings.Debug.GetValue())
                 Comment.Log($"Added {blueprint.name} to the {BTB.name} prerequisites.");
-            blueprint.AddFeatureAsTeamwork();
 #endif
 
         }
