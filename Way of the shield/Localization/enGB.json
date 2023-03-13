@@ -998,6 +998,11 @@
 <b>Benefit:</b> The Circumstance bonus to AC from the Back to Back feat is additionally increased by 2 up to +4."
         },
 		{
+            "Key": "BackToBackImproved_SemiUnchanged_Description", 
+            "Value": "<i>Your ally's eyes are your own, and your are his</i>
+<b>Benefit:</b> You get an additional +2 Circumstance bonus to AC when flanked."
+        },
+		{
             "Key": "Mythic_ShieldedDefense_m_DisplayName", 
             "Value": "Shielded Defense (Mythic)"
         },
