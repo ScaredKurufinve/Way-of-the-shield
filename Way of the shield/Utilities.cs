@@ -479,7 +479,7 @@ namespace Way_of_the_shield
                 return false;
             }
         }
-        public static void AddFeatureToSelections(this BlueprintFeature feature, IEnumerable<(string guid, string BlueprintName)> selections)
+        public static void AddFeatureToSelections(this BlueprintFeature feature, IEnumerable<(string guid, string BlueprintName)> selections, string circumstances = "")
         {
             string featureName = (!String.IsNullOrEmpty(feature.m_DisplayName) ? feature.m_DisplayName : feature.name);
             BlueprintFeatureReference featureToList = feature.ToReference<BlueprintFeatureReference>();
@@ -494,7 +494,7 @@ namespace Way_of_the_shield
                 fs.m_AllFeatures ??= new BlueprintFeatureReference[0];
                 fs.m_AllFeatures = fs.m_AllFeatures.AddToArray(featureToList);
 #if DEBUG
-                Comment.Log("Successfully added " + featureName + " to " + name); 
+                Comment.Log($"Successfully added {featureName} to {name}{", " + circumstances}"); 
 #endif
             };
         }

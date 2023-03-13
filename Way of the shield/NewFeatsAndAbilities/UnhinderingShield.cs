@@ -48,7 +48,8 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 m_DisplayName = new LocalizedString() { m_Key = "UnhinderingShieldFeature_DisplayName" },
                 m_Description = new LocalizedString() { m_Key = "UnhinderingShieldFeature_Description" },
                 m_DescriptionShort = new LocalizedString() { m_Key = "UnhinderingShieldFeature_ShortDescription" },
-                m_Icon = LoadIcon("UnhinderingShield", 200, 64)
+                m_Icon = LoadIcon("UnhinderingShield", 200, 64),
+                Groups = new[] {FeatureGroup.Feat, FeatureGroup.CombatFeat }
             };
             UnhinderingShield.AddComponent(new AddMechanicsFeature() { m_Feature = MechanicsFeatureExtension.UnhinderingShield });
             UnhinderingShield.AddComponent(new PrerequisiteProficiency()
@@ -62,6 +63,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             if (ShieldFocusReference.Get() is null) { Comment.Warning("WARNING. Failed to find the Shield Focus feature blueprint when creating prerequisites for Unhindering Shield"); }
             BlueprintFeatureReference ArmorTrainingReference = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("3c380607706f209499d951b29d3c44f3")?.ToReference<BlueprintFeatureReference>();
             if (ShieldFocusReference.Get() is null) { Comment.Warning("WARNING. Failed to find the Armor Training feature blueprint when creating prerequisites for Unhindering Shield"); }
+            UnhinderingShield.AddComponent(new FeatureTagsComponent() { FeatureTags = FeatureTag.Defense | FeatureTag.Attack | FeatureTag.Magic | FeatureTag.ClassSpecific });
             UnhinderingShield.AddComponent(new PrerequisiteFeaturesFromList()
             {
                 m_Features = new BlueprintFeatureReference[]

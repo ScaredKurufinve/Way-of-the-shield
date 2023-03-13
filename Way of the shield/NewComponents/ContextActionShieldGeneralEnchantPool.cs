@@ -17,6 +17,7 @@ using Kingmaker.Blueprints.Items.Components;
 using Kingmaker.UnitLogic;
 using Kingmaker.EntitySystem;
 using static Kingmaker.UnitLogic.UnitHelper;
+using System.Runtime.Remoting.Contexts;
 
 namespace Way_of_the_shield.NewComponents
 {
@@ -151,21 +152,17 @@ namespace Way_of_the_shield.NewComponents
         {
 #if DEBUG
             if (Settings.Debug.GetValue())
-                Comment.Log("I'm inside ExternalEnchantmentsAddFactsFix OnAdded"); 
+                Comment.Log($"ExternalEnchantmentsAddFactsFix OnAdded - parentContext is not null? {parentContext is not null}. Array has any entries? {blueprint.Components?.Select(c => c as AddFactToEquipmentWielder)?.Where(c => c is not null)?.Any().ToString() ?? "False"}"); 
 #endif
-            IEnumerable<AddFactToEquipmentWielder> arr = blueprint.Components?.Select(c => c as AddFactToEquipmentWielder);
+            IEnumerable<AddFactToEquipmentWielder> arr = blueprint.Components?.Select(c => c as AddFactToEquipmentWielder).Where(c => c is not null);
             if (!arr.Any()) return;
             __instance.m_FactsAppliedToWielder.EmptyIfNull();
-#if DEBUG
-            if (Settings.Debug.GetValue())
-                Comment.Log("Context is null? " + (parentContext is null)); 
-#endif
             EntityFact f;
             foreach (AddFactToEquipmentWielder fact in arr)
             {
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log("fact is " + fact.name); 
+                    Comment.Log("fact is " + fact?.name); 
 #endif
                 try
                 {
@@ -198,7 +195,7 @@ namespace Way_of_the_shield.NewComponents
         [HarmonyPrefix]
         public static void OnRemoved(ItemEntity __instance, ItemEnchantment enchantment)
         {
-            IEnumerable<AddFactToEquipmentWielder> arr = enchantment.BlueprintComponents?.Select(c => c as AddFactToEquipmentWielder);
+            IEnumerable<AddFactToEquipmentWielder> arr = enchantment.BlueprintComponents.Select(c => c as AddFactToEquipmentWielder).Where(c => c is not null);
             if (!arr.Any() || __instance.Wielder is null) return;
             ItemEntity item = null;
             if (__instance is not ItemEntityShield shield) item = __instance;

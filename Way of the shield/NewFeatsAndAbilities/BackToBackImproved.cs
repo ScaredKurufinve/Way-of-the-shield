@@ -37,16 +37,17 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 Comment.Log("Begin creating BackToBackImproved feature blueprint"); 
 #endif
             string circ = "when creating BackToBackImproved blueprint";
+            bool flag = (ChangeBackToBack && (ConcealmentAttackBonusOnBackstab || DenyShieldBonusOnBackstab));
             BlueprintFeature blueprint = new()
             {
                 m_DisplayName = new() { m_Key = "BackToBackImproved_DisplayName" },
-                m_Description = new() { m_Key = ChangeBackToBack ? "BackToBackImproved_Description" : "BackToBackImproved_Unchanged_Description" },
+                m_Description = new() { m_Key = ChangeBackToBack ? (flag ? "BackToBackImproved_Description" : "BackToBackImproved_SemiUnchanged_Description") : "BackToBackImproved_Unchanged_Description" },
                 m_Icon = LoadIcon("BackToBackImproved"),
 
                 Groups = new FeatureGroup[] { FeatureGroup.TeamworkFeat, FeatureGroup.CombatFeat, FeatureGroup.Feat},
         };
             blueprint.AddToCache("6314293bce0b4e1490ab10b1a7a5a318", "BackToBackImproved");
-            if (ChangeBackToBack) blueprint.AddComponent(new BackToBackImprovedComponent());
+            if (flag) blueprint.AddComponent(new BackToBackImprovedComponent());
             else
             {
                 Comment.Log("ChangeBackToBack setting is disabled, will be adding BackToBackBetter component to the BackToBackImproved feature blueprint instead of BackToBackImprovedComponent.");
@@ -59,6 +60,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
 
             m_feature = blueprint;
             Created = true;
+            blueprint.AddFeatureAsTeamwork();
 
 
             if (!RetrieveBlueprint("c920f2cd2244d284aa69a146aeefcb2c", out BlueprintFeature BTB, "BackToBack", circ) ) return;
@@ -68,7 +70,6 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
 #if DEBUG
             if (Settings.Debug.GetValue())
                 Comment.Log($"Added {blueprint.name} to the {BTB.name} prerequisites.");
-            blueprint.AddFeatureAsTeamwork();
 #endif
 
         }

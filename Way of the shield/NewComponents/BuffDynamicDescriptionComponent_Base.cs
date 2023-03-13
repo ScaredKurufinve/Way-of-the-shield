@@ -1,4 +1,5 @@
-﻿using Kingmaker.EntitySystem;
+﻿using HarmonyLib;
+using Kingmaker.EntitySystem;
 using Kingmaker.UI.MVVM._VM.Tooltip.Bricks;
 using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
 using Kingmaker.UnitLogic.Buffs;
@@ -21,19 +22,20 @@ namespace Way_of_the_shield.NewComponents
     {
         public abstract string GenerateDescription();
 
-
-
-
         [HarmonyPatch]
-        static class Transpiler
+        public static class Transpiler
         {
+
+            public static TooltipBrickText TemporaryStorage;
+
             static Type EnumerableType;
 
             [HarmonyPatch(typeof(BlueprintsCache), nameof (BlueprintsCache.Init))]
             [HarmonyPostfix]
             static void ManualPatchOf_TooltipTemplateBuff_GetBody()
             {
-                Main.harmony.Patch(TheTargetMethod(), transpiler: new HarmonyMethod(typeof(Transpiler).GetMethod(nameof(TooltipTemplateBuff_GetBody_InsertDynamicDescriptionCall), BindingFlags.NonPublic | BindingFlags.Static)));
+                Main.harmony.Patch(original: TheTargetMethod(),
+                                    transpiler: new HarmonyMethod(typeof(Transpiler).GetMethod(nameof(TooltipTemplateBuff_GetBody_InsertDynamicDescriptionCall), BindingFlags.NonPublic | BindingFlags.Static)));
             }
 
 
@@ -53,6 +55,9 @@ namespace Way_of_the_shield.NewComponents
 
                 CodeInstruction[] toSearch = new CodeInstruction[]
                 {
+                    new (OpCodes.Ldarg_0),
+                    new (OpCodes.Ldc_I4_M1),
+                    new (OpCodes.Stfld, EnumerableType?.GetField("<>1__state", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)),
                     new (OpCodes.Ldloc_1),
                     new (OpCodes.Ldfld, typeof(TooltipTemplateBuff).GetField(nameof(TooltipTemplateBuff.m_Stacking))),
                     new (OpCodes.Brfalse_S)
@@ -61,43 +66,73 @@ namespace Way_of_the_shield.NewComponents
                 int index = IndexFinder(__instructions, toSearch, before: true);
                 if (index == -1) return instructions;
 
-                Label label = generator.DefineLabel();
-                __instructions[index].WithLabels(label);
+                Label BeforeStacking = generator.DefineLabel();
+                __instructions[index+3].WithLabels(BeforeStacking);
+
 
                 CodeInstruction[] toInsert = new CodeInstruction[]
                 {
-                    new CodeInstruction(OpCodes.Ldarg_0),
+                    new (OpCodes.Ldarg_0),
+                    new (OpCodes.Ldc_I4_M1),
+                    new (OpCodes.Stfld, EnumerableType?.GetField("<>1__state", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)),
                     new (OpCodes.Ldloc_1),
                     new (OpCodes.Ldfld, typeof(TooltipTemplateBuff).GetField(nameof(TooltipTemplateBuff.Buff))),
                     CodeInstruction.Call(typeof(Transpiler), nameof(DynamicComponentCaller)),
+                    new (OpCodes.Brtrue, BeforeStacking),
+                    new CodeInstruction(OpCodes.Ldarg_0),
+                    new (OpCodes.Ldsfld, typeof(Transpiler).GetField(nameof(TemporaryStorage), BindingFlags.Static | BindingFlags.Public)),
                     new (OpCodes.Stfld, EnumerableType?.GetField("<>2__current", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)),
                     new (OpCodes.Ldarg_0),
                     new (OpCodes.Ldc_I4_2),
                     new (OpCodes.Stfld, EnumerableType?.GetField("<>1__state", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)),
                     new (OpCodes.Ldc_I4_1),
                     new (OpCodes.Ret),
-                    new (OpCodes.Ldarg_0),
-                    new (OpCodes.Ldc_I4_M1),
-                    new (OpCodes.Stfld, EnumerableType?.GetField("<>1__state", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)),
-                    new CodeInstruction(OpCodes.Br, __instructions[index +2].operand)
+                    new CodeInstruction(OpCodes.Br, __instructions[index +5].operand)
                 };
                 __instructions.InsertRange(index, toInsert);
                 return __instructions;
             }
 
-            static TooltipBrickText DynamicComponentCaller(Buff buff)
+            public static bool DynamicComponentCaller(Buff buff)
             {
-                string result = "";
+#if DEBUG
+                if (Settings.Debug.GetValue())
+                    Comment.Log("DynamicComponentCaller"); 
+#endif
 
                 var generator = buff.Components.Where(entityFactComponent => entityFactComponent.SourceBlueprintComponent is BuffDynamicDescriptionComponent_Base).FirstOrDefault();
                 if (generator is not null)
                 {
                     using (generator.RequestEventContext())
+                        try
+                        {
+                        TemporaryStorage = new TooltipBrickText((generator.SourceBlueprintComponent as BuffDynamicDescriptionComponent_Base)?.GenerateDescription(), TooltipTextType.Simple);
+                        }
+                        catch (Exception ex) 
+                        {
+                            TemporaryStorage = null;
+                            Exception exception= ex;
+                            while (exception != null)
+                            {
+                                Comment.Log(exception.Message);
+                                exception= exception.InnerException;
+                            }
+                            Comment.Error(ex.StackTrace);
+                        }
+                    if (TemporaryStorage is not null) 
                     {
-                        result = (generator.SourceBlueprintComponent as BuffDynamicDescriptionComponent_Base).GenerateDescription();
+#if DEBUG
+                        if (Settings.Debug.GetValue())
+                            Comment.Log($"DynamicComponentCaller - result is '{TemporaryStorage.m_Text}'"); 
+#endif
+                        return true;
                     }
                 }
-                return new TooltipBrickText(result, TooltipTextType.Simple);
+#if DEBUG
+                if (Settings.Debug.GetValue())
+                    Comment.Log("DynamicComponentCaller - result is null"); 
+#endif
+                return false;
             }
         }
     }

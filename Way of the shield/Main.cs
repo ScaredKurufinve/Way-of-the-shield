@@ -75,7 +75,7 @@ namespace Way_of_the_shield
 #endif
                 harmony = new("Shield");
                 harmony.Patch(
-                    original: typeof(OwlcatModificationsManager).GetMethod(nameof(OwlcatModificationsManager.ApplyModifications), BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic),
+                    original: typeof(OwlcatModificationsManager).GetMethod(nameof(OwlcatModificationsManager.Start), BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic),
                     prefix: new HarmonyMethod(typeof(LocalizationPatchForUMM).GetMethod(nameof(LocalizationPatchForUMM.Patch))),
                     postfix: new HarmonyMethod(typeof(Main).GetMethod(nameof(Main.Load1))));
                 return;

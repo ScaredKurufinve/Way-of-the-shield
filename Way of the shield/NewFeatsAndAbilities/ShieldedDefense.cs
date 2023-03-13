@@ -10,16 +10,21 @@ using Kingmaker.UnitLogic.Mechanics.Properties;
 using System;
 using UnityEngine;
 using Way_of_the_shield.NewComponents;
-using static Way_of_the_shield.Main;
 using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
 using Kingmaker.Blueprints.Items.Armors;
-using static Way_of_the_shield.BoringBucklerTweaks;
 using Kingmaker.Designers.EventConditionActionSystem.Actions;
 using Kingmaker.UnitLogic.Mechanics.Conditions;
 using Kingmaker.UnitLogic.Mechanics.Actions;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Owlcat.Runtime.UI.Tooltips;
+using Kingmaker.UI.MVVM._VM.Tooltip.Bricks;
+using Kingmaker.UI.Common;
+using Kingmaker.UI.Tooltip;
+using static Way_of_the_shield.Main;
+using static Way_of_the_shield.BoringBucklerTweaks;
+using static Way_of_the_shield.NewComponents.BuffDynamicDescriptionComponent_Base;
 
 namespace Way_of_the_shield.NewFeatsAndAbilities
 {
@@ -47,7 +52,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             #region Create ShieldedDefenseProperty
             BlueprintUnitProperty ShieldedDefenseProperty = new()
             {
-                BaseValue = 1,
+                BaseValue = 2,
             };
             ShieldedDefenseProperty.AddComponent(new ShieldedDefensePropertyGetter());
             ShieldedDefenseProperty.AddToCache("fa65cbcf6bba4f3992261173381a3874", "ShieldedDefenseProperty");
@@ -64,6 +69,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 FxOnStart = new(),
                 Stacking = StackingType.Rank,
                 Ranks = 100,
+                m_Icon = DefenseIcon,
             };
             ShieldedDefenseEffectBuff.AddComponent(new AddMechanicsFeature() { m_Feature = MechanicsFeatureExtension.ForceDualWieldingPenalties });
             ShieldedDefenseEffectBuff.AddComponent(new BuffSetRanksOnApply()
@@ -92,7 +98,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 m_BuffRankMultiplier = 1,
                 m_Progression = ContextRankProgression.Div2,
             }); // AC bonus config
-            ShieldedDefenseEffectBuff.AddComponent(new AddTargetAttackRollTrigger
+            ShieldedDefenseEffectBuff.AddComponent(new AddTargetAttackWithWeaponTrigger
             {
                 DoNotPassAttackRoll = true,
                 Categories = new WeaponCategory[]{ },
@@ -122,7 +128,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 m_UseMin = true,
                 m_Min = 1,
                 m_BaseValueType = ContextRankBaseValueType.FeatureRank,
-                m_Progression = ContextRankProgression.DelayedStartPlusDivStep,
+                m_Progression = ContextRankProgression.StartPlusDivStep,
                 m_Feature = Mythic_ShieldedDefense.Feature.ToReference<BlueprintFeatureReference>(),
                 m_StepLevel = -1,
                 m_StartLevel = 1,
@@ -141,8 +147,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 m_Icon = DefenseIcon,
                 FxOnRemove = new(),
                 FxOnStart = new(),
-                m_Flags = BlueprintBuff.Flags.StayOnDeath
-                   //| BlueprintBuff.Flags.HiddenInUi,
+                m_Flags = BlueprintBuff.Flags.StayOnDeath | BlueprintBuff.Flags.HiddenInUi,
             };
 
             /*ShieldedDefenseVisibleBuff.AddComponent(new BuffExtraEffects()
@@ -169,6 +174,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             addFactContextActions.Activated.Actions = addFactContextActions.NewRound.Actions.AddToArray(
                 new Conditional()
                 {
+                    name = $"{FightDefensivelyBuff}_addFactContextActions_NewRound_CheckForShieldedDefenseEffectBuff",
                     ConditionsChecker = new()
                     {
                         Conditions = new Condition[]
@@ -179,8 +185,9 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                     IfTrue = new()
                     {
                         Actions = new GameAction[] { new ContextActionApplyBuff() { m_Buff = ShieldedDefenseEffectBuff.ToReference<BlueprintBuffReference>(), ToCaster = true, Permanent = true, } }
-                    }
-                });
+                    },
+                    IfFalse = new() { }
+                });;
             addFactContextActions.NewRound ??= new();
             addFactContextActions.NewRound.Actions = addFactContextActions.NewRound.Actions.AddToArray(
                 new Conditional()
@@ -292,6 +299,25 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 //Comment.Log("I'm inside TooltipTemplateBuff_Prepare_Postfix_ForShamelessStackingCheckOfShieldedDefense"); 
 #endif
             if (__instance.Buff?.Blueprint.AssetGuid == BlueprintGuid.Parse("29397505648a462a874872b132a00b75")) __instance.m_Stacking = true;
+        }
+
+
+        [HarmonyPatch(typeof(TooltipTemplateBuff), nameof(TooltipTemplateBuff.GetBody))]
+        [HarmonyPostfix]
+        public static void TooltipTemplateBuff_GetBody_Postfix_ForShamelessStackingCheckOfShieldedDefense(TooltipTemplateBuff __instance, ref IEnumerable<ITooltipBrick> __result)
+        {
+#if DEBUG
+            if (Settings.Debug.GetValue())
+                Comment.Log("I'm inside TooltipTemplateBuff_Prepare_Postfix_ForShamelessStackingCheckOfShieldedDefense");
+#endif
+            int index =__result.FindIndex(brick => brick is TooltipBrickText TextBrick && TextBrick.m_Text.StartsWith(UIUtility.GetGlossaryEntryName(TooltipElement.Charges.ToString())));
+            if (Transpiler.DynamicComponentCaller(__instance.Buff))
+                __result = __result.Select(brick =>
+                {
+                    if (brick is TooltipBrickText TextBrick && TextBrick.m_Text.StartsWith(UIUtility.GetGlossaryEntryName(TooltipElement.Charges.ToString())))
+                        return Transpiler.TemporaryStorage;
+                    else return brick;
+                });
         }
     }
 }

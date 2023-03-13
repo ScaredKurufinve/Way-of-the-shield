@@ -71,7 +71,7 @@ namespace Way_of_the_shield.NewComponents
                     }
                     
                     buff.Rank = Math.Max(buff.Rank - v, min);
-                    if (buff.Rank < 1 && !RemoveWhenZero)
+                    if (buff.Rank < 1 && RemoveWhenZero)
                     {
                         EntityFactsManager manager = buff.Manager;
                         if (manager != null) manager.Remove(buff, true);
