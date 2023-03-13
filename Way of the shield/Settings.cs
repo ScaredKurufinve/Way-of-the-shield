@@ -187,10 +187,10 @@ namespace Way_of_the_shield
             Main.mod.OnGUI = new(x => CreateUnityGUISettings());
 #endif
         }
-
-        static string Default = "Default";
-        static string Apply = "Apply";
-        static string Cancel = "Cancel";
+        static LocalizedString Empty = new() { m_Key = "Empty" };
+        static LocalizedString Default = Empty;
+        static LocalizedString Apply = Empty;
+        static LocalizedString Cancel = Empty;
         static void AddSettingsNames()
         {
             foreach (var (entity, visual) in ListOfBoolSettings)
