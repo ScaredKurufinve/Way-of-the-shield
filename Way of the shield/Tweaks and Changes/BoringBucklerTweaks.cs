@@ -166,7 +166,8 @@ namespace Way_of_the_shield
                 m_DescriptionShort = new LocalizedString() { Key = "BucklerParry_ShortDescription" },
                 Stacking = StackingType.Ignore,
                 m_Icon = BucklerParryIcon,
-                FxOnRemove = new()
+                FxOnRemove = new(),
+                FxOnStart = new()
             };
             BucklerParryBuff.AddToCache();
             BucklerParryBuff.AddComponent(new OffHandParry.OffHandParryComponent() { category = WeaponCategory.WeaponLightShield });
