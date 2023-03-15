@@ -107,7 +107,7 @@ namespace Way_of_the_shield.Tweaks_and_Changes
                 }
             });
 
-            skipAddingTrigger:
+        skipAddingTrigger:;
 #if DEBUG
             if (Debug.GetValue())
                 Comment.Log("ShieldBashAbilityTweak - Added the trigger causing Shield Forbiddance to to the ShieldBashBuff blueprint");
