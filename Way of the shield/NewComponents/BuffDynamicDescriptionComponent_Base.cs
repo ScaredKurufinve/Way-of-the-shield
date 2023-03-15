@@ -34,15 +34,9 @@ namespace Way_of_the_shield.NewComponents
             static void ManualPatchOf_TooltipTemplateBuff_GetBody()
             {
                 Main.harmony.Patch(original: TheTargetMethod(),
-                                    transpiler: new HarmonyMethod(typeof(Transpiler).GetMethod(nameof(TooltipTemplateBuff_GetBody_InsertDynamicDescriptionCall))),
-                                    postfix: new HarmonyMethod(typeof(Transpiler).GetMethod(nameof(AnotherAttemptAtPostfix))));
+                                   transpiler: new HarmonyMethod(typeof(Transpiler).GetMethod(nameof(TooltipTemplateBuff_GetBody_InsertDynamicDescriptionCall))));
             }
 
-
-            public static void AnotherAttemptAtPostfix()
-            {
-                Comment.Log("AnotherAttemptAtPostfix");
-            }
             static MethodInfo TheTargetMethod()
             {
                 var info = typeof(TooltipTemplateBuff).GetNestedType("<GetBody>d__10", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
@@ -96,7 +90,7 @@ namespace Way_of_the_shield.NewComponents
             {
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log("DynamicComponentCaller"); 
+                    Comment.Log("DynamicComponentCaller is called"); 
 #endif
 
                 var generator = buff.Components.Where(entityFactComponent => entityFactComponent.SourceBlueprintComponent is BuffDynamicDescriptionComponent_Base).FirstOrDefault();
@@ -119,13 +113,7 @@ namespace Way_of_the_shield.NewComponents
                             Comment.Error(ex.StackTrace);
                         }
                     if (TemporaryStorage is not null) 
-                    {
-#if DEBUG
-                        if (Settings.Debug.GetValue())
-                            Comment.Log($"DynamicComponentCaller - result is '{TemporaryStorage.m_Text}'"); 
-#endif
                         return true;
-                    }
                 }
 #if DEBUG
                 if (Settings.Debug.GetValue())
