@@ -33,6 +33,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
         public static bool ShieldFlag = false;
         public static bool ShieldFlag2 = false;
 
+        [HarmonyAfter("TabletopTweaks-Base")]
         [HarmonyPatch(typeof(BlueprintsCache), nameof(BlueprintsCache.Init))]
         [HarmonyPostfix]
         public static void BlueprintsCache_Patch()
@@ -93,9 +94,9 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             });
             UnhinderingShield.AddToCache();
             #endregion
-            BlueprintFeatureSelection ShieldMastery = ResourcesLibrary.TryGetBlueprint<BlueprintScriptableObject>("ef38e0fe68f14c88a9deacc421455d14") as BlueprintFeatureSelection;
-            if (ShieldMastery is not null && ShieldMastery.Name.Contains("ShieldMasterySelection")) selections.Add((ShieldMastery.AssetGuid.ToString(), "TTT-ShieldMasterySelection"));
-            else Comment.Log("Failed to find the TTT Shield Mastery Selection blueprint to add the Unhindering Shield.");
+
+            if (RetrieveBlueprint("ef38e0fe68f14c88a9deacc421455d14", out BlueprintFeatureSelection ShieldMastery, "ShieldMasterySelection", "to add Shield Brace"))
+                selections.Add((ShieldMastery.AssetGuid.ToString(), "TTT-ShieldMasterySelection"));
             #region Add the feature to selections
             BlueprintFeatureReference Reference = UnhinderingShield.ToReference<BlueprintFeatureReference>();
             if (Reference is null)
