@@ -6,6 +6,7 @@ using Kingmaker;
 using Kingmaker.Blueprints.Facts;
 using Kingmaker.Blueprints.Items.Shields;
 using Kingmaker.Blueprints.Items.Weapons;
+using Kingmaker.Controllers.Units;
 using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Items;
@@ -78,7 +79,6 @@ namespace Way_of_the_shield.NewComponents
                 flag = false;
                 HasParries = parries.MoveNext();
             }
-
             public void TryDeactivate(WeaponCategory category)
             {
                 flag = true;
@@ -120,7 +120,6 @@ namespace Way_of_the_shield.NewComponents
 
                 evt.TryParry(Owner, weapon, parries.Current);
                 Triggered = true;
-                n--;
 #if DEBUG
                 if (Debug.GetValue())
                     Comment.Log($"OffHandParry part of {Owner.CharacterName} wishes to parry. The Triggered flag is set to {Triggered}"); 
@@ -134,7 +133,6 @@ namespace Way_of_the_shield.NewComponents
                 }
 
             }
-
             public void OnEventDidTrigger(RuleAttackRoll evt)
             {
                 RuleAttackRoll.ParryData parry = evt.Parry;
@@ -145,6 +143,7 @@ namespace Way_of_the_shield.NewComponents
                     && Triggered)
                 {
                     HasParries = parries.MoveNext();
+                    n--;
                     Triggered = false;
 #if DEBUG
                     if (Debug.GetValue())
@@ -154,7 +153,6 @@ namespace Way_of_the_shield.NewComponents
                         Game.Instance.CombatEngagementController.ForceAttackOfOpportunity(Owner, evt.Initiator, false);
                 }
             }
-
             public void Refresh()
             {
 #if DEBUG
@@ -189,12 +187,13 @@ namespace Way_of_the_shield.NewComponents
         [TypeId("ba113232f466438cadd7263f03a536be")]
         public class OffHandParryComponent : UnitFactComponentDelegate
 
+
         {
             public WeaponCategory category;
             public bool riposte = false;
 
 
-            public override void OnTurnOn()
+            public override void OnActivate()
             {
 #if DEBUG
                 if (Settings.Debug.GetValue())
@@ -209,7 +208,7 @@ namespace Way_of_the_shield.NewComponents
                 part.TryActivate(category, riposte);
             }
 
-            public override void OnTurnOff()
+            public override void OnDeactivate()
             {
 #if DEBUG
                 if (Debug.GetValue())

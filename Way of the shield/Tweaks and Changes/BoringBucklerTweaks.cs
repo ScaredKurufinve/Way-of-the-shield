@@ -160,11 +160,10 @@ namespace Way_of_the_shield
             {
                 AssetGuid = new BlueprintGuid(new Guid("a8f2b254bc2e4f8b95e12aa444287c58")),
                 name = "BucklerParryBuff",
-                m_Flags = BlueprintBuff.Flags.StayOnDeath,
                 m_DisplayName = new LocalizedString() { Key = "BucklerParry_DisplayName" },
                 m_Description = new LocalizedString() { Key = "BucklerParry_Description" },
                 m_DescriptionShort = new LocalizedString() { Key = "BucklerParry_ShortDescription" },
-                Stacking = StackingType.Ignore,
+                Stacking = StackingType.Replace,
                 m_Icon = BucklerParryIcon,
                 FxOnRemove = new(),
                 FxOnStart = new()
@@ -174,15 +173,46 @@ namespace Way_of_the_shield
             //BucklerParryBuff.AddComponent(new AddMechanicsFeature() { m_Feature = MechanicsFeatureExtension.ShieldDenied });
             BucklerParryBuff.AddComponent(new BuffDynamicDescriptionComponent_Parries(new() { m_Key = "BucklerParry_DynamicDescription" }));
             #endregion
+            #region BucklerParryMainBuff
+            BlueprintBuff BucklerParryMainBuff = new()
+            {
+                m_Flags = BlueprintBuff.Flags.HiddenInUi | BlueprintBuff.Flags.StayOnDeath,
+                FxOnRemove = new(),
+                FxOnStart = new()
+            };
+            BucklerParryMainBuff.AddToCache("dc65131392614eecba8b399e279c3915", "BucklerParryMainBuff");
+            BucklerParryMainBuff.AddComponent(new AddInitiatorAttackWithWeaponTrigger()
+            {
+                ActionsOnInitiator = true,
+                CheckWeaponRangeType = true,
+                RangeType = WeaponRangeType.Melee,
+                TriggerBeforeAttack = true,
+                OnlyOnFirstAttack = true,
+                Action = new()
+                {
+                    Actions = new GameAction[]
+                    {
+                        new ContextActionApplyBuff()
+                        {
+                            m_Buff = BucklerParryBuff.ToReference<BlueprintBuffReference>(),
+                            UseDurationSeconds = true,
+                            DurationSeconds = 7,
+                            IsNotDispelable = true,
+                            ToCaster = true,
+                        }
+                    }
+                }
+            });
+            #endregion
             #region Create BucklerParryActivatableAbility
             BlueprintActivatableAbility BucklerParryActivatableAbility = new()
             {
                 AssetGuid = new BlueprintGuid(new Guid("a86db1a253d0446b857938314af1ae51")),
                 name = "BucklerParryActivatableAbility",
-                m_Buff = BucklerParryBuff.ToReference<BlueprintBuffReference>(),
-                ActivationType = AbilityActivationType.OnUnitAction,
-                m_ActivateOnUnitAction = AbilityActivateOnUnitActionType.Attack,
-                DeactivateAfterFirstRound = true,
+                m_Buff = BucklerParryMainBuff.ToReference<BlueprintBuffReference>(),
+                ActivationType = AbilityActivationType.Immediately,
+                //DeactivateAfterFirstRound = true,
+                DeactivateIfCombatEnded= true,
                 m_DisplayName = new LocalizedString() { Key = "BucklerParry_DisplayName" },
                 m_Description = new LocalizedString() { Key = "BucklerParry_Description" },
                 m_DescriptionShort = new LocalizedString() { Key = "BucklerParry_ShortDescription" },
