@@ -20,7 +20,7 @@ namespace Way_of_the_shield
 #endif
     public static class Main
     {
-
+        const string Shield = "Shield";
         internal static Harmony harmony;
         public static string modName = "";
 #if Dynamic
@@ -73,7 +73,7 @@ namespace Way_of_the_shield
                 modName = mod.Info.Id;
                 modPath = mod.Path;
 #endif
-                harmony = new("Shield");
+                harmony = new(Shield);
                 harmony.Patch(
                     original: typeof(OwlcatModificationsManager).GetMethod(nameof(OwlcatModificationsManager.Start), BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic),
                     prefix: new HarmonyMethod(typeof(LocalizationPatchForUMM).GetMethod(nameof(LocalizationPatchForUMM.Patch))),
@@ -89,11 +89,13 @@ namespace Way_of_the_shield
 
         public static void Load1()
         {
-//#if DEBUG
+            //#if DEBUG
             Stopwatch timer = new();
             timer.Start();
+            harmony ??= new(Shield); 
+            harmony.UnpatchAll(Shield);
 //#endif
-            Comment.Log(modName);
+            Comment.Log($"Start loading {modName} mod");
 #region get assemblies
             allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             UMM = CheckForMod("UnityModManager");
@@ -107,7 +109,6 @@ namespace Way_of_the_shield
             Comment.Log("TTT-Core is " + TTTCore?.FullName ?? "not found.");
             Comment.Log("TTT-Base is " + TTTBase?.FullName ?? "not found.");
             Comment.Log("ModMenu is " + ModMenu?.FullName ?? "not found.");
-            harmony ??= new(modName); 
             try
             {
                 if (initialized == false) Settings.Init();
@@ -125,7 +126,7 @@ namespace Way_of_the_shield
 #if DEBUG
             Harmony.DEBUG = true; 
 #endif
-            if (BeenLoaded) harmony.UnpatchAll();
+            if (!BeenLoaded)
                 harmony.PatchAll();
             //foreach (var patch in Harmony.GetPatchInfo(typeof(BlueprintsCache).GetMethod(nameof(BlueprintsCache.Init))).Postfixes.Where(p =>p.owner == harmony.Id)) Comment.Log("Patch is " + patch.PatchMethod);
             Comment.Log("Patched things up.");
