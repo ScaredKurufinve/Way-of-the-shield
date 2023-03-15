@@ -3,6 +3,7 @@ using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Blueprints.Items.Weapons;
+using static Kingmaker.Blueprints.Items.Weapons.WeaponFighterGroupHelper;
 using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Items;
@@ -27,21 +28,25 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
 
             public override bool CanBeUsedOn(ItemEntityWeapon weapon)
             {
-                if (weapon is null) { return false; };
+                if (weapon is null) 
+                    return false; 
 
-                if (Fact.Owner.Unit.GetSaddledUnit() is not null) return false; 
+                if (Fact.Owner.Unit.GetSaddledUnit() is not null) 
+                    return false; 
 
-                if (!weapon.Blueprint.IsTwoHanded) { return false; }
+                if (!weapon.Blueprint.IsTwoHanded) 
+                    return false;
 
                 ItemEntityShield shield = (weapon.HoldingSlot as HandSlot)?.PairSlot?.MaybeShield;
-                if (shield is null) { return false; };
+                if (shield is null) 
+                    return false;
 
                 var shield_proficiency = shield.ArmorComponent.Blueprint.ProficiencyGroup;
 
                 if (shield_proficiency == ArmorProficiencyGroup.Buckler || !ProficiencyRework.ProficiencyPatches.IsProficient_Short(shield))
-                { return false; }
+                    return false;
 
-                return weapon.Blueprint.FighterGroup == WeaponFighterGroupFlags.Spears ||  weapon.Blueprint.FighterGroup == WeaponFighterGroupFlags.Polearms;
+                return weapon.Blueprint.FighterGroup.Contains(WeaponFighterGroup.Spears) ||  weapon.Blueprint.FighterGroup.Contains(WeaponFighterGroup.Polearms) ;
             }
 
             public void OnEventAboutToTrigger(RuleCalculateAttackBonusWithoutTarget evt)
@@ -145,9 +150,9 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 feature.AddComponent(new FeatureTagsComponent() { FeatureTags = FeatureTag.Defense });
                 feature.AddToCache();
                 #endregion
-                BlueprintFeatureSelection ShieldMastery = ResourcesLibrary.TryGetBlueprint<BlueprintScriptableObject>("ef38e0fe68f14c88a9deacc421455d14") as BlueprintFeatureSelection;
-                if (ShieldMastery is not null && ShieldMastery.Name.Contains("ShieldMasterySelection")) selections.Add((ShieldMastery.AssetGuid.ToString(), "TTT-ShieldMasterySelection"));
-                else Comment.Log("Failed to find the TTT Shield Mastery Selection blueprint to add the Shield Brace.");
+                if (!RetrieveBlueprint("ef38e0fe68f14c88a9deacc421455d14", out BlueprintFeatureSelection ShieldMastery, "ShieldMasterySelection", "to add Shield Brace")) goto skipShieldMastery;
+                selections.Add((ShieldMastery.AssetGuid.ToString(), "TTT-ShieldMasterySelection"));
+                skipShieldMastery:;
                 feature.AddFeatureToSelections(selections);
             }
         }
