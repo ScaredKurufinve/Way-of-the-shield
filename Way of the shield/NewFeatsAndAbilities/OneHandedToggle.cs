@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Kingmaker.Blueprints.Classes;
+using Kingmaker.Blueprints.Facts;
 using Kingmaker.UnitLogic.FactLogic;
 using Kingmaker.Items;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
@@ -17,8 +18,10 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
         [HarmonyPrepare]
         public static bool Prepare()
         {
-            if ( Main.UMM is null || Main.TTTBase is null) return true;
-            return !Main.CheckForModEnabled("TabletopTweaks-Base");
+            if ( Main.TTTBase is null) return true;
+            bool flag = Main.CheckForModEnabled("TabletopTweaks-Base");
+            Comment.Log((flag ? "TabletopTweaks is enabled, OneHandedToggle will not be added" : "TabletopTweaks is not enabled, OneHandedToggle will be added"));
+            return !flag;
         }
 
         [HarmonyPatch(typeof(BlueprintsCache), nameof(BlueprintsCache.Init))]
@@ -45,7 +48,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
 #region Create OneHanded ability
             BlueprintActivatableAbility OneHandedAbility = new()
             {
-                name = "OneHandedAbility",
+                name = "OneHandedToggleAbility",
                 AssetGuid = new BlueprintGuid(new Guid("15542aa4e3f542a4bbd66bcb13392798")),
                 m_DisplayName = new LocalizedString() { Key = "OneHandedAbility_DisplayName" },
                 m_Description = new LocalizedString() { Key = "OneHandedAbility_Description" },
@@ -60,7 +63,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
 #region Create OneHanded Feature
             BlueprintFeature OneHandedFeature = new()
             {
-                name = "OneHandedFeature",
+                name = "OneHandedToggleFeature",
                 AssetGuid = new BlueprintGuid(new Guid("21a2cfc0fc894dd9ac1ab49e4c35ba38")),
                 m_DisplayName = new LocalizedString() { Key = "OneHandedFeature_DisplayName" },
                 m_Description = new LocalizedString() { Key = "OneHandedFeature_Description" },
@@ -73,7 +76,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             OneHandedFeature.AddToCache();
 #endregion
             var AddFacts = FightDefensivelyFeature.GetComponent<AddFacts>();
-            if (!AddFacts.m_Facts.Any(x => x.Guid == OneHandedFeature.AssetGuid))
+            if (!AddFacts.m_Facts.Contains(OneHandedFeature as BlueprintUnitFact))
                 AddFacts.m_Facts = AddFacts.m_Facts.Append(OneHandedFeature.ToReference<BlueprintUnitFactReference>()).ToArray();
         }
 
