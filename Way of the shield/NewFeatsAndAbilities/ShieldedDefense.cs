@@ -223,8 +223,9 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 DoNotTurnOffOnRest = true,
                 m_Buff = ShieldedDefenseMainBuff.ToReference<BlueprintBuffReference>(),
             };
-            ShieldedDefenseActivatableAbility.AddComponent(new ShieldEquippedRestriction() { categories = new ArmorProficiencyGroup[] { ArmorProficiencyGroup.LightShield, ArmorProficiencyGroup.HeavyShield, ArmorProficiencyGroup.TowerShield } });
             ShieldedDefenseActivatableAbility.AddToCache();
+            ShieldedDefenseActivatableAbility.AddComponent(new RestrictionOtherActivatables() { Require = true, m_ActivatableAbilities = new[] { new BlueprintActivatableAbilityReference() { deserializedGuid = BlueprintGuid.Parse("09d742e8b50b0214fb71acfc99cc00b3") } } }); // FightDefensivelyToggleAbility
+            ShieldedDefenseActivatableAbility.AddComponent(new ShieldEquippedRestriction() { categories = new ArmorProficiencyGroup[] { ArmorProficiencyGroup.LightShield, ArmorProficiencyGroup.HeavyShield, ArmorProficiencyGroup.TowerShield } });
             #endregion
             #region Create ShieldedDefenseFeature
             BlueprintFeature BlueprintShieldedDefenseFeature = new()
@@ -288,36 +289,6 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             Created = true;
             InProcess = false;
 
-        }
-
-        [HarmonyPatch(typeof(TooltipTemplateBuff), nameof(TooltipTemplateBuff.Prepare))]
-        [HarmonyPostfix]
-        public static void TooltipTemplateBuff_Prepare_Postfix_ForShamelessStackingCheckOfShieldedDefense(TooltipTemplateBuff __instance)
-        {
-#if DEBUG
-            //if (Settings.Debug.GetValue())
-                //Comment.Log("I'm inside TooltipTemplateBuff_Prepare_Postfix_ForShamelessStackingCheckOfShieldedDefense"); 
-#endif
-            if (__instance.Buff?.Blueprint.AssetGuid == BlueprintGuid.Parse("29397505648a462a874872b132a00b75")) __instance.m_Stacking = true;
-        }
-
-
-        [HarmonyPatch(typeof(TooltipTemplateBuff), nameof(TooltipTemplateBuff.GetBody))]
-        [HarmonyPostfix]
-        public static void TooltipTemplateBuff_GetBody_Postfix_ForShamelessStackingCheckOfShieldedDefense(TooltipTemplateBuff __instance, ref IEnumerable<ITooltipBrick> __result)
-        {
-#if DEBUG
-            if (Settings.Debug.GetValue())
-                Comment.Log("I'm inside TooltipTemplateBuff_Prepare_Postfix_ForShamelessStackingCheckOfShieldedDefense");
-#endif
-            int index =__result.FindIndex(brick => brick is TooltipBrickText TextBrick && TextBrick.m_Text.StartsWith(UIUtility.GetGlossaryEntryName(TooltipElement.Charges.ToString())));
-            if (Transpiler.DynamicComponentCaller(__instance.Buff))
-                __result = __result.Select(brick =>
-                {
-                    if (brick is TooltipBrickText TextBrick && TextBrick.m_Text.StartsWith(UIUtility.GetGlossaryEntryName(TooltipElement.Charges.ToString())))
-                        return Transpiler.TemporaryStorage;
-                    else return brick;
-                });
         }
     }
 }
