@@ -220,6 +220,7 @@ namespace Way_of_the_shield
                 m_Icon = BucklerParryIcon,
             };
             BucklerParryActivatableAbility.AddComponent(new ShieldEquippedRestriction() { categories = new ArmorProficiencyGroup[] { ArmorProficiencyGroup.Buckler, ArmorProficiencyGroup.LightShield } });
+            BucklerParryActivatableAbility.AddComponent(new RestrictionNonRangedWeapon());
             BucklerParryActivatableAbility.AddToCache();
             #endregion
             #region BucklerParryFeature
