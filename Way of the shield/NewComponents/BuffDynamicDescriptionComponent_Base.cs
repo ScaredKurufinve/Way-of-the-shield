@@ -4,9 +4,8 @@ using Kingmaker.UI.MVVM._VM.Tooltip.Bricks;
 using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
 using Kingmaker.UnitLogic.Buffs;
 using Kingmaker.UnitLogic.Buffs.Components;
-using Kingmaker.View.MapObjects;
-using Owlcat.Runtime.UI.Tooltips;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -35,29 +34,32 @@ namespace Way_of_the_shield.NewComponents
             static void ManualPatchOf_TooltipTemplateBuff_GetBody()
             {
                 Main.harmony.Patch(original: TheTargetMethod(),
-                                    transpiler: new HarmonyMethod(typeof(Transpiler).GetMethod(nameof(TooltipTemplateBuff_GetBody_InsertDynamicDescriptionCall), BindingFlags.NonPublic | BindingFlags.Static)));
+                                    transpiler: new HarmonyMethod(typeof(Transpiler).GetMethod(nameof(TooltipTemplateBuff_GetBody_InsertDynamicDescriptionCall))),
+                                    postfix: new HarmonyMethod(typeof(Transpiler).GetMethod(nameof(AnotherAttemptAtPostfix))));
             }
 
 
+            public static void AnotherAttemptAtPostfix()
+            {
+                Comment.Log("AnotherAttemptAtPostfix");
+            }
             static MethodInfo TheTargetMethod()
             {
                 var info = typeof(TooltipTemplateBuff).GetNestedType("<GetBody>d__10", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
                 if (info is null) return null;
                 EnumerableType = info;
-                var method = info.GetMethod("MoveNext", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+                var method = info.GetMethod(nameof(IEnumerator.MoveNext), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+                Comment.Log($"Type is {info?.Name} \n Method is {method.Name}");
                 return method;
 
             }
 
-            static IEnumerable<CodeInstruction> TooltipTemplateBuff_GetBody_InsertDynamicDescriptionCall(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+            public static IEnumerable<CodeInstruction> TooltipTemplateBuff_GetBody_InsertDynamicDescriptionCall(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
             {
                 List<CodeInstruction> __instructions = instructions.ToList();
 
                 CodeInstruction[] toSearch = new CodeInstruction[]
                 {
-                    new (OpCodes.Ldarg_0),
-                    new (OpCodes.Ldc_I4_M1),
-                    new (OpCodes.Stfld, EnumerableType?.GetField("<>1__state", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)),
                     new (OpCodes.Ldloc_1),
                     new (OpCodes.Ldfld, typeof(TooltipTemplateBuff).GetField(nameof(TooltipTemplateBuff.m_Stacking))),
                     new (OpCodes.Brfalse_S)
@@ -67,18 +69,15 @@ namespace Way_of_the_shield.NewComponents
                 if (index == -1) return instructions;
 
                 Label BeforeStacking = generator.DefineLabel();
-                __instructions[index+3].WithLabels(BeforeStacking);
+                __instructions[index] = __instructions[index].WithLabels(BeforeStacking);
 
 
-                CodeInstruction[] toInsert = new CodeInstruction[]
+                CodeInstruction[] toInsert = new[]
                 {
-                    new (OpCodes.Ldarg_0),
-                    new (OpCodes.Ldc_I4_M1),
-                    new (OpCodes.Stfld, EnumerableType?.GetField("<>1__state", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)),
                     new (OpCodes.Ldloc_1),
                     new (OpCodes.Ldfld, typeof(TooltipTemplateBuff).GetField(nameof(TooltipTemplateBuff.Buff))),
                     CodeInstruction.Call(typeof(Transpiler), nameof(DynamicComponentCaller)),
-                    new (OpCodes.Brtrue, BeforeStacking),
+                    new (OpCodes.Brfalse, BeforeStacking),
                     new CodeInstruction(OpCodes.Ldarg_0),
                     new (OpCodes.Ldsfld, typeof(Transpiler).GetField(nameof(TemporaryStorage), BindingFlags.Static | BindingFlags.Public)),
                     new (OpCodes.Stfld, EnumerableType?.GetField("<>2__current", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)),
@@ -87,7 +86,7 @@ namespace Way_of_the_shield.NewComponents
                     new (OpCodes.Stfld, EnumerableType?.GetField("<>1__state", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)),
                     new (OpCodes.Ldc_I4_1),
                     new (OpCodes.Ret),
-                    new CodeInstruction(OpCodes.Br, __instructions[index +5].operand)
+                    new CodeInstruction(OpCodes.Br, __instructions[index +2].operand)
                 };
                 __instructions.InsertRange(index, toInsert);
                 return __instructions;
