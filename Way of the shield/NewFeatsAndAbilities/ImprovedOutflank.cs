@@ -32,7 +32,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             ImprovedOutflankFeature.AddComponent(new PrerequisiteStatValue() { Stat = Kingmaker.EntitySystem.Stats.StatType.BaseAttackBonus, Value = 6 });
             ImprovedOutflankFeature.AddComponent(new FeatureTagsComponent() { FeatureTags = FeatureTag.Attack | FeatureTag.Melee | FeatureTag.Ranged | FeatureTag.Teamwork });
             if (!RetrieveBlueprint("422dab7309e1ad343935f33a4d6e9f11", out BlueprintFeature Outflank, "Outflank", "when creating the Improved Outflank feature blueprint")) return;
-            ImprovedOutflankFeature.AddComponent(new PrerequisitePlayerHasFeature() { m_Feature = Outflank.ToReference<BlueprintFeatureReference>() });
+            ImprovedOutflankFeature.AddComponent(new PrerequisiteFeature() { m_Feature = Outflank.ToReference<BlueprintFeatureReference>() });
             ImprovedOutflankFeature.m_Icon = Outflank.Icon;
             ImprovedOutflankFeature.AddToCache();
             Flanking.ImprovedOutflank = ImprovedOutflankFeature;

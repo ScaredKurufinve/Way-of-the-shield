@@ -31,7 +31,9 @@ namespace Way_of_the_shield
                 m_Description = new LocalizedString() { m_Key = "FriendlyFireManeuversFeature_Description" },
                 m_DescriptionShort = new LocalizedString() { m_Key = "FriendlyFireManeuversFeature_ShortDescription" },
                 Ranks = 1,
-                Groups = new FeatureGroup[] { FeatureGroup.Feat | FeatureGroup.CombatFeat | FeatureGroup.TeamworkFeat },
+                Groups = new FeatureGroup[] {   FeatureGroup.Feat, 
+                                                FeatureGroup.CombatFeat, 
+                                                FeatureGroup.TeamworkFeat },
                 m_Icon = LoadIcon("FriendlyFire"),
                 HideInCharacterSheetAndLevelUp = false,
                 HideInUI = false
@@ -44,9 +46,9 @@ namespace Way_of_the_shield
                 FactsToCheck = new BlueprintUnitFactReference[] { FriendlyFireManeuversFeature.ToReference<BlueprintUnitFactReference>() }
             });
             if (RetrieveBlueprint("0da0c194d6e1d43419eb8d990b28e0ab", out BlueprintFeature PointBlankShot, "PointBlankShot", "when creating FriendlyFireManeuversFeature."))
-                FriendlyFireManeuversFeature.AddComponent(new PrerequisitePlayerHasFeature() { m_Feature = PointBlankShot.ToReference<BlueprintFeatureReference>() });
+                FriendlyFireManeuversFeature.AddComponent(new PrerequisiteFeature() { m_Feature = PointBlankShot.ToReference<BlueprintFeatureReference>() });
             if (RetrieveBlueprint("8f3d1e6b4be006f4d896081f2f889665", out BlueprintFeature PreciseShot, "PreciseShot", "when creating FriendlyFireManeuversFeature."))
-                FriendlyFireManeuversFeature.AddComponent(new PrerequisitePlayerHasFeature() { m_Feature = PreciseShot.ToReference<BlueprintFeatureReference>() });
+                FriendlyFireManeuversFeature.AddComponent(new PrerequisiteFeature() { m_Feature = PreciseShot.ToReference<BlueprintFeatureReference>() });
             //NewComponents.SavingBonusAgainstAlliesIfAllyHasFactAndSimpleProjectile savingThrowBonus = new()
             //{
             //    savingThrowType = SavingThrowType.Reflex,
