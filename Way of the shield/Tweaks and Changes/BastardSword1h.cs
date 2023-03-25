@@ -20,8 +20,8 @@ namespace Way_of_the_shield
             if (Debug.GetValue())
                 Comment.Log("Entered Blueprints Cache patch for exotic Bastard Sword One-handed component"); 
 #endif
-            if (!RetrieveBlueprint("57299a78b2256604dadf1ab9a42e2873", out BlueprintFeature BastardSwordProficiency, "BastardSwordProficiency", "when meddling with Bastard sowrd type handedness ")) return;
-            if (!RetrieveBlueprint("203992ef5b35c864390b4e4a1e200629", out BlueprintFeature MartialWeaponProficiency, "MartialWeaponProficiency", "when meddling with Bastard sowrd type handedness ")) return;
+            if (!RetrieveBlueprint("57299a78b2256604dadf1ab9a42e2873", out BlueprintFeature BastardSwordProficiency, "BastardSwordProficiency", "when meddling with Bastard sword type handedness ")) return;
+            if (!RetrieveBlueprint("203992ef5b35c864390b4e4a1e200629", out BlueprintFeature MartialWeaponProficiency, "MartialWeaponProficiency", "when meddling with Bastard sword type handedness ")) return;
             BastardSwordProficiency.AddComponent(new WeaponCategory1HandedComponent() { category = WeaponCategory.BastardSword });
             if (BastardSwordProficiency.ComponentsArray.FindOrDefault(c => c is PrerequisiteNotProficient) is not PrerequisiteNotProficient pnp)
             {
