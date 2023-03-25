@@ -731,7 +731,7 @@ namespace Way_of_the_shield
             };
             CavalierBuff.AddComponent(new AddFeatureIfHasFact() { Not = true, m_CheckedFact = r2, m_Feature = r2 });
             CavalierBuff.AddToCache();
-            Comment.Log("Added {0} to the Blueprints cache.", CavalierBuff.name);
+            feature.AddComponent(new AddFacts() { m_Facts = new[] {CavalierBuff.ToReference<BlueprintUnitFactReference>() } });
             #endregion
             #region Add Cavalier buff to Cavalier ability
             if (CavalierTacticianAbility is null) goto skipCavalier;
