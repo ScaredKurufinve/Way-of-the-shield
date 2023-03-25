@@ -7,6 +7,7 @@ using Kingmaker.Modding;
 using Kingmaker.Settings;
 using Kingmaker.UI.SettingsUI;
 using UnityEngine;
+using static UnityEngine.GUILayout;
 #if !Dynamic
 using UnityModManagerNet;
 #endif
@@ -186,8 +187,9 @@ namespace Way_of_the_shield
             {
                 width = main.pixelHeight *5f / 6f;
             }
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button(Default)) 
+            BeginHorizontal();
+            FlexibleSpace(); 
+            if (Button(Default, Width(width *2 / 5))) 
             {
                 foreach (var entity in SettingsGroup.SettingsList) 
                 {
@@ -195,20 +197,25 @@ namespace Way_of_the_shield
                         b.ResetToDefault(false);
                 }
             }
-            if (GUILayout.Button(Apply)) { foreach (var (entity, _) in ListOfBoolSettings) entity.ConfirmTempValue(); SettingsController.SaveAll(); }
-            if (GUILayout.Button(Cancel)) foreach (var (entity, _) in ListOfBoolSettings) entity.RevertTempValue();
-            GUILayout.EndHorizontal();
+            Space(15);
+            if (Button(Apply, Width(width * 2 / 5))) { foreach (var (entity, _) in ListOfBoolSettings) entity.ConfirmTempValue(); SettingsController.SaveAll(); }
+            Space(15);
+            if (Button(Cancel, Width(width * 2 / 5))) foreach (var (entity, _) in ListOfBoolSettings) entity.RevertTempValue();
+            FlexibleSpace();
+            EndHorizontal();
 
+            Space(5);
             foreach (var (entity, visual) in ListOfBoolSettings)
             {
                 
-                GUILayout.BeginHorizontal();
-                GUILayout.Label(visual.Description);
-                GUILayout.FlexibleSpace();
-                GUILayout.Label(visual.TooltipDescription, GUILayout.Width(width));
-                bool temp = GUILayout.Toggle(entity.GetTempValue(), "");
+                BeginHorizontal();
+                Label(visual.Description, Width(width *2 /5));
+                Space(5);
+                Label(visual.TooltipDescription);
+                FlexibleSpace();
+                bool temp = Toggle(entity.GetTempValue(), "");
                 if (temp != entity.m_TempValue) entity.SetTempValue( temp );
-                GUILayout.EndHorizontal(); 
+                EndHorizontal(); 
             }
             //GUILayout.EndArea();
         }
