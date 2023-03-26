@@ -43,7 +43,10 @@ namespace Way_of_the_shield.NewComponents
                 if (info is null) return null;
                 EnumerableType = info;
                 var method = info.GetMethod(nameof(IEnumerator.MoveNext), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
-                Comment.Log($"Type is {info?.Name} \n Method is {method.Name}");
+#if DEBUG
+
+                Comment.Log($"Type is {info?.Name} \n Method is {method.Name}"); 
+#endif
                 return method;
 
             }

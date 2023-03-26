@@ -155,7 +155,10 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 Group = Prerequisite.GroupType.All
             });
             UpsettingShieldStyleFeature.AddComponent(new PrerequisiteIsPet() { Not = true, HideInUI = true, Group = Prerequisite.GroupType.All });
-            UpsettingShieldStyleFeature.AddComponent(new AddFacts() { m_Facts = new BlueprintUnitFactReference[] { UpsettingShieldStyleAbility.ToReference<BlueprintUnitFactReference>() } });
+            UpsettingShieldStyleFeature.AddComponent(new AddFacts() { m_Facts = new [] 
+                { UpsettingShieldStyleAbility.ToReference<BlueprintUnitFactReference>(),
+                  new BlueprintUnitFactReference(){deserializedGuid = BlueprintGuid.Parse("3bb6b76ed5b38ab4f957c7f923c23b68")} //Shield Bash
+                }});
             UpsettingShieldStyleFeature.AddComponent(new FeatureTagsComponent()
             {
                 FeatureTags =
