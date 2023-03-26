@@ -1022,6 +1022,14 @@
             "Key": "OldShieldBashFeature_Description", 
             "Value": "<i>攻守皆宜，转换自如。</i>\n<b>效果：</b>当你发动盾击时，你可以保留盾牌在AC上提供的盾牌加值。\n<b>正常：</b>没有该专长时，发动盾击的角色会在下个回合前失去盾牌加值。"
         },
+		{
+            "Key": "ShieldedMageFeature_DisplayName", 
+            "Value": "持盾法师"
+        },
+		{
+            "Key": "ShieldedMageFeature_Description", 
+            "Value": "<b>效果:</b> 减少你使用的任何盾牌15%的{g|Encyclopedia:Spell_Fail_Chance}奥术失败率{/g}（最低至0%）。"
+        },
         
 	]	
 }
