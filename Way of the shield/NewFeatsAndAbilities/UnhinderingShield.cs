@@ -235,26 +235,26 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
 #endif
             List<CodeInstruction> _instructions = instructions.ToList();
 
-            CodeInstruction[] toSearch = new CodeInstruction[]
+            CodeInstruction[] toSearch = new[]
             {
                 new CodeInstruction(OpCodes.Callvirt, typeof(UnitBody).GetProperty(nameof(UnitBody.SecondaryHand)).GetMethod),
                 new CodeInstruction(OpCodes.Callvirt, typeof(HandSlot).GetProperty(nameof(HandSlot.HasShield)).GetMethod),
             };
 
-            int index = IndexFinder(_instructions, toSearch);
-            if (index == -1)
-            {
-                return instructions;
-            };
-
-            _instructions[index - 1].operand = typeof(HandSlot).GetProperty(nameof(HandSlot.MaybeShield)).GetMethod;
-
-            CodeInstruction[] toInsert = new CodeInstruction[]
+            CodeInstruction[] toInsert = new[]
             {
                 CodeInstruction.Call(typeof(UnhinderingShield), nameof(MonkBuckler))
             };
 
-            _instructions.InsertRange(index, toInsert);
+            int index = 0;
+            int a = 0;
+            while ((a = IndexFinder(_instructions.GetRange(index, _instructions.Count - index), toSearch)) != -1)
+            {
+                index += a;  
+
+                _instructions[index - 1].operand = typeof(HandSlot).GetProperty(nameof(HandSlot.MaybeShield)).GetMethod;
+                _instructions.InsertRange(index, toInsert);
+            }
             return _instructions;
 
         }
