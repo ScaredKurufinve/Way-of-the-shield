@@ -1026,6 +1026,14 @@
             "Key": "OldShieldBashFeature_Description", 
             "Value": "<i>You can protect yourself with your shield, even if you use it to attack.</i>\n<b>Benefit:</b> When you perform a shield bash, you may still apply the shield’s shield bonus to your AC.\n<b>Normal:</b> Without this feat, a character that performs a shield bash loses the shield’s shield bonus to AC until his next turn."
         },
+		{
+            "Key": "ShieldedMageFeature_DisplayName", 
+            "Value": "Shielded Mage"
+        },
+		{
+            "Key": "ShieldedMageFeature_Description", 
+            "Value": "<i>You have learned how to cast spells from behind the safety of a shield.</i> \n<b>Benefit:</b> You reduce the {g|Encyclopedia:Spell_Fail_Chance}arcane spell failure{/g} of any shield you use by 15% (to a minimum of 0%)."
+        },
         
 	]	
 }
