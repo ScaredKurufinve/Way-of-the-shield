@@ -350,7 +350,6 @@ namespace Way_of_the_shield
                 ("873f1f12bb43cda40bcc7d2878d16bf1", "HunterProficiencies"),
                 ("e59db96fa83cefd4a9a8f211500d9522", "InquisitorProficiencies"),
                 ("c5e479367d07d62428f2fe92f39c0341", "RangerProficiencies"),
-                ("c5e479367d07d62428f2fe92f39c0341", "RangerProficiencies"),
                 ("9fceea5f433969e44bb124ab3a95bb58", "DivineHunterProficiencies"),
                 ("41cd5ff7ad1bc5848906e050b06d02dc", "SlayerProficiencies"),
             };
@@ -386,14 +385,14 @@ namespace Way_of_the_shield
             foreach (var (ID, name) in ClassProficiencies)
             {
                 if (!RetrieveBlueprint(ID, out BlueprintFeature f, "name", circ2)) continue;
-                af = f.Components.FirstOrDefault(c => c is AddFacts) as AddFacts;
+                af = f.Components.OfType<AddFacts>().FirstOrDefault();
                 if (af is null)
                 {
                     Comment.Warning("Did not find AddFacts component on the {0} blueprint {1}", name, circ2);
                     f.AddComponent(af = new());
                 }
-                af.m_Facts ??= new BlueprintUnitFactReference[] { };
-                af.m_Facts.AddToArray(bucklerref);
+                if (!(af.m_Facts?.Contains(bucklerref) ?? false))
+                    af.m_Facts = (af.m_Facts ?? new BlueprintUnitFactReference[] { }).AddToArray(bucklerref);
                 Comment.Log($"Returned BucklerProficiency to proficiencies of the class {name} (guid {ID})");
             };
             foreach (var (ID, name) in ShieldLessClasses)
