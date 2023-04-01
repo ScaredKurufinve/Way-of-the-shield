@@ -328,7 +328,7 @@
         },
 		{
             "Key": "ShieldedDefenseActivatableAbility_Description",
-            "Value": "你可以用盾牌灵活防御，而不再将其作为一件死物。如果你这样做，直到回合结束，你的盾牌AC加值+1，但是你会在攻击上受到如同使用双武器战斗的减值。如果你使用轻型盾，该加值在你的基本攻击加值达到6及之后每6点时额外加1；如果你使用重型盾或塔盾，该加值在你的基本攻击加值达到4及之后每4点时额外加1。\n然而，每次你受到攻击后，不管该次攻击是否失手，该加值都会减少1。你也不能在措手不及，或者其他失去敏捷防御加值的场合从此能力中收益。"
+            "Value": "在使用防御性战斗时，你可以用盾牌灵活防御，而不再将其作为一件死物。如果你这样做，直到回合结束，你的盾牌AC加值+1，但是你会在攻击上受到如同使用双武器战斗的减值。如果你使用轻型盾，该加值在你的基本攻击加值达到6及之后每6点时额外加1；如果你使用重型盾或塔盾，该加值在你的基本攻击加值达到4及之后每4点时额外加1。\n然而，每次你受到攻击后，不管该次攻击是否失手，该加值都会减少1。你也不能在措手不及，或者其他失去敏捷防御加值的场合从此能力中收益。"
         },
 		{
             "Key": "ShieldedDefenseActivatableAbility_ShortDescription",
@@ -992,7 +992,7 @@
         },
 		{
             "Key": "BackToBackImproved_Unchanged_Description", 
-            "Value": "<i>心有灵犀，生死相托。</i>\n背靠背的环境加值提高到+4。"
+            "Value": "<i>心有灵犀，生死相托。</i>\n你从背靠背中获得的环境加值额外加2，提高到+4。"
         },
 		{
             "Key": "BackToBackImproved_SemiUnchanged_Description", 
@@ -1030,6 +1030,13 @@
             "Key": "ShieldedMageFeature_Description", 
             "Value": "<b>效果:</b> 减少你使用的任何盾牌15%的{g|Encyclopedia:Spell_Fail_Chance}奥术失败率{/g}（最低至0%）。"
         },
-        
+        	{
+            "Key": "LowProfileFeature_DisplayName", 
+            "Value": "矮身迎敌"
+        },
+		{
+            "Key": "LowProfileFeature_Description", 
+            "Value": "<i>你的小小身躯能够帮助自身免受远程攻击。</i> \n<b>效果：</b>在对抗远程攻击时，你的AC获得+1闪避加值。此外，当远程攻击通过你的方格时，你不会给其他生物提供软掩蔽。"
+        },
 	]	
 }
