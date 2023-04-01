@@ -28,7 +28,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             {
                 m_DisplayName = new() { m_Key = "LowProfileFeature_DisplayName" },
                 m_Description = new() { m_Key = "LowProfileFeature_Description" },
-                Groups = new[] {FeatureGroup.Feat, FeatureGroup.CombatFeat },
+                Groups = new[] {FeatureGroup.Feat, FeatureGroup.CombatFeat, FeatureGroup.Racial },
                 IsClassFeature = true,
             };
             feature.AddToCache("b30ed2f9c55d409cb89d9bc34e4aafd2", "LowProfileFeature");
@@ -47,6 +47,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                                      new BlueprintFeatureReference() { deserializedGuid = BlueprintGuid.Parse("b0c3ef2729c498f47970bb50fa1acd30") } }
             }
             );
+            feature.AddComponent(new FeatureTagsComponent() { FeatureTags = Kingmaker.Blueprints.Classes.Selection.FeatureTag.Defense });
             feature.AddFeatureToSelections(selections);
         }
     }
