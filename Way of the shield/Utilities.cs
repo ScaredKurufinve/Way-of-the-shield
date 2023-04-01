@@ -599,7 +599,9 @@ namespace Way_of_the_shield
                 Stacking = StackingType.Replace,
                 m_Icon = ResourcesLibrary.TryGetBlueprint<BlueprintActivatableAbility>("4230d0ca826cb6b4fb6db6cdb318ec8e")?.Icon,
                 FxOnRemove = new(),
-                Components = new BlueprintComponent[] { }
+                m_Description = feature.m_Description,
+                m_DisplayName = feature.m_DisplayName,
+                m_DescriptionShort = feature.m_DescriptionShort,
             };
             PackRagerBuff.AddComponent(new AddTemporaryFeat() { m_Feat = r });
             PackRagerBuff.AddToCache();
@@ -656,6 +658,9 @@ namespace Way_of_the_shield
                 m_Flags = BlueprintBuff.Flags.StayOnDeath,
                 Stacking = StackingType.Replace,
                 FxOnRemove = new(),
+                m_Description = feature.m_Description,
+                m_DisplayName = feature.m_DisplayName,
+                m_DescriptionShort = feature.m_DescriptionShort,
             };
             PackRagerAreaBuff.AddComponent(new AddAreaEffect() { m_AreaEffect = PackRagerAreaEffect.ToReference<BlueprintAbilityAreaEffectReference>() });
             PackRagerAreaBuff.AddToCache();
@@ -668,12 +673,14 @@ namespace Way_of_the_shield
                 AssetGuid = new BlueprintGuid(new Guid(PackRagerGuids.SwitchBuffGuid)),
                 name = "PackRager_" + name + "Buff",
                 m_Icon = feature.m_Icon,
-                m_DisplayName = new() { Key = "PackRagerAreaBuff_" + name + "_DisplayName" },
+                m_DisplayName = feature.m_DisplayName,
+                m_Description = feature.m_Description,
+                m_DescriptionShort = feature.m_DescriptionShort,
                 IsClassFeature = true,
                 m_Flags = BlueprintBuff.Flags.StayOnDeath,
                 FxOnRemove = new(),
                 Stacking = StackingType.Replace,
-                ComponentsArray = new BlueprintComponent[] { }
+                ComponentsArray = new BlueprintComponent[] { },
             };
             PackRagerSwitchBuff.AddComponent(new BuffExtraEffects()
             {
@@ -725,6 +732,8 @@ namespace Way_of_the_shield
                 m_Description = feature.m_Description,
                 m_DescriptionShort = feature.m_DescriptionShort,
                 m_Icon = feature.m_Icon,
+                FxOnRemove = new(),
+                FxOnStart = new(),
                 IsClassFeature = true,
                 Stacking = StackingType.Ignore,
                 Components = new BlueprintComponent[] { },
