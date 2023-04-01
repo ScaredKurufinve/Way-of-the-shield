@@ -17,7 +17,9 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
     {
         static readonly List<(string, string)> selections = new()
         {
-            ("247a4068296e8be42890143f451b4b45", "BasicFeatSelection")
+            ("247a4068296e8be42890143f451b4b45", "BasicFeatSelection"),
+            ("90f105c8e31a6224ea319e6a810e4af8", "LoremasterCombatFeatSelection"),
+            ("41c8486641f7d6d4283ca9dae4147a9f", "FighterFeatSelection")
         };
 
 
