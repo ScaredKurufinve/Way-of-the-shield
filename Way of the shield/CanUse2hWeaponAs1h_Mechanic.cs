@@ -16,7 +16,7 @@ namespace Way_of_the_shield
 {
 
     [HarmonyPatch(typeof(ItemEntityWeapon))]
-    [HarmonyPatch(nameof(ItemEntityWeapon.HoldInTwoHands), MethodType.Getter)]
+    [HarmonyPatch(nameof(ItemEntityWeapon.ShouldHoldInTwoHands))]
     class ItemEntityWeapon__HoldInTwoHands__Patch
     {
         [HarmonyPriority(800)]

@@ -122,7 +122,7 @@ namespace Way_of_the_shield.NewComponents
                 Triggered = true;
 #if DEBUG
                 if (Debug.GetValue())
-                    Comment.Log($"OffHandParry part of {Owner.CharacterName} wishes to parry. The Triggered flag is set to {Triggered}"); 
+                    Comment.Log($"OffHandParry part of {Owner.CharacterName} wishes to parry. The Triggered HasShieldBash is set to {Triggered}"); 
 #endif
                 ModifiableValue additionalAttackBonus = Owner.Stats.AdditionalAttackBonus;
                 int num = evt.Initiator.Descriptor.State.Size - Owner.State.Size;
@@ -147,7 +147,7 @@ namespace Way_of_the_shield.NewComponents
                     Triggered = false;
 #if DEBUG
                     if (Debug.GetValue())
-                        Comment.Log($"OffHandParry {parry.Initiator.CharacterName} parried the attack of {evt.Initiator.CharacterName}. Attempted to move the parry enumerator. The Triggered flag is now set to {Triggered}."); 
+                        Comment.Log($"OffHandParry {parry.Initiator.CharacterName} parried the attack of {evt.Initiator.CharacterName}. Attempted to move the parry enumerator. The Triggered HasShieldBash is now set to {Triggered}."); 
 #endif
                     if (evt.Result == AttackResult.Parried && riposte == true)
                         Game.Instance.CombatEngagementController.ForceAttackOfOpportunity(Owner, evt.Initiator, false);
@@ -242,7 +242,7 @@ namespace Way_of_the_shield.NewComponents
             {
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log("Entered RuleCalculateAttacksCount OnTrigger transpiler"); 
+                    Comment.Log("RuleCalculateAttacksCount PrepareHandVariables transpiler"); 
 #endif
                 List<CodeInstruction> _instructions = instructions.ToList();
 
@@ -354,7 +354,7 @@ namespace Way_of_the_shield.NewComponents
             {
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log("Entered RuleCalculateAttacksCount OnTrigger transpiler"); 
+                    Comment.Log("CharSheetWeapons Initialize transpiler"); 
 #endif
                 List<CodeInstruction> _instructions = instructions.ToList();
 
@@ -462,28 +462,28 @@ namespace Way_of_the_shield.NewComponents
         }
 
 
-        public static bool BucklerOrBash(bool flag, RuleCalculateAttacksCount evt)
+        public static bool BucklerOrBash(bool HasShieldBash, RuleCalculateAttacksCount evt)
         {
 #if DEBUG
-            Comment.Log($"RuleCalculateAttacksCount transpiler - flag is {flag}, parry flag is {OffHandParryUnitPart.flag}"
+            Comment.Log($"RuleCalculateAttacksCount transpiler - Parry flag  is {OffHandParryUnitPart.flag}, HasShieldBash is {HasShieldBash}, "
         + $"prof group is {evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup}, "
-        + $"{(evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler ? "" : (", BucklerBash is " + evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash))}" +
-        $"Hold in two hands? {!(evt.Initiator.Body.PrimaryHand.Weapon?.HoldInTwoHands ?? false)}, has Unhindering? {evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield ?? false}. "
+        + $"{(evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler ? "" : ("BucklerBash is " + evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash))}. " 
+        + $"Hold in one hand? {!(evt.Initiator.Body.PrimaryHand.Weapon?.HoldInTwoHands ?? false)}. Has Unhindering? {evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield ?? false}. "
         + $"Result is {OffHandParryUnitPart.flag
-                || (flag && (evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler
+                || (HasShieldBash && (evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler
                                || (evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash
                                     && (!(evt.Initiator.Body.PrimaryHand.Weapon?.HoldInTwoHands ?? false) || evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield)
                                    )
                              )
-                    )}"); 
+                    )}");
 #endif
-            if (flag is false && !OffHandParryUnitPart.flag) return flag;
+            //if (HasShieldBash is true && !OffHandParryUnitPart.flag) return HasShieldBash;
             return OffHandParryUnitPart.flag 
-                || (flag  && (evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler 
-                               || (evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash 
-                                    && (!(evt.Initiator.Body.PrimaryHand.Weapon?.HoldInTwoHands ?? false) || evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield)
-                                   )
-                             )
+                || (HasShieldBash  && (evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler 
+                                        || (evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash 
+                                                && (!(evt.Initiator.Body.PrimaryHand.Weapon?.HoldInTwoHands ?? false) || (evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield || AllowBucklerBashWhenTwoHandedWithUnhindering.GetValue()))
+                                           )
+                                      )
                     );
         }
         public static bool BucklerOrBash4(bool flag, HandSlot slot)
