@@ -39,7 +39,7 @@ namespace Way_of_the_shield
                 attackerPosition = initiator.Position;
                 targetPosition = target.Position;
                 Result = new();
-                targetSize = initiator.OriginalSize;
+                targetSize = target.OriginalSize;
                 Fake = fake;
             }
             public RuleSoftCover(UnitEntityData initiator, UnitEntityData target, ItemEntityWeapon weapon, bool fake = false) : this(initiator: initiator, target: target, fake: fake)
@@ -63,7 +63,7 @@ namespace Way_of_the_shield
                 if (TacticalCombatHelper.IsActive) return;
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log("Entered the SoftCoverRule.OnTrigger");
+                    Comment.Log("SoftCoverRule - entered OnTrigger");
 #endif
                 if (SoftCoverDenied)
                 {
@@ -90,7 +90,7 @@ namespace Way_of_the_shield
                     float sqrCorpulenceLess = sqrCorpulence * Convert.ToSingle(0.75);
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log($"Unit is {unit.CharacterName}, " +
+                        Comment.Log($"Soft Cover - Unit is {unit.CharacterName}, " +
                             $"vectorofAttackSqrMagnitude is {vectorofAttackSqrMagnitude},  " +
                             $"sqrDistanceFromUnitToAttacker.sqrMagnitude is {sqrDistanceFromUnitToAttacker}, " +
                             $"angle is {angle}, " +
@@ -113,7 +113,7 @@ namespace Way_of_the_shield
                         };
 #if DEBUG
                         if (Settings.Debug.GetValue())
-                            Comment.Log($"Size Difference is {sizeDifference}, penalty is {penalty}"); 
+                            Comment.Log($"Soft Cover - Size Difference between {unit.CharacterName} (size {unit.OriginalSize}) and {Target.CharacterName} (size {targetSize}) is {sizeDifference}, penalty is {penalty}"); 
 #endif
                         Result.Add(new(unit, sizeDifference, penalty));
                     }
