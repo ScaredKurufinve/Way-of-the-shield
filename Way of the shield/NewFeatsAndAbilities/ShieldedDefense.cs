@@ -10,7 +10,6 @@ using Kingmaker.UnitLogic.Mechanics.Properties;
 using System;
 using UnityEngine;
 using Way_of_the_shield.NewComponents;
-using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Designers.EventConditionActionSystem.Actions;
 using Kingmaker.UnitLogic.Mechanics.Conditions;
@@ -18,13 +17,8 @@ using Kingmaker.UnitLogic.Mechanics.Actions;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Owlcat.Runtime.UI.Tooltips;
-using Kingmaker.UI.MVVM._VM.Tooltip.Bricks;
-using Kingmaker.UI.Common;
-using Kingmaker.UI.Tooltip;
 using static Way_of_the_shield.Main;
 using static Way_of_the_shield.BoringBucklerTweaks;
-using static Way_of_the_shield.NewComponents.BuffDynamicDescriptionComponent_Base;
 
 namespace Way_of_the_shield.NewFeatsAndAbilities
 {
@@ -237,6 +231,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             m_ShieldedDefenseFeature = BlueprintShieldedDefenseFeature;
             BlueprintShieldedDefenseFeature.AddComponent(new AddFacts() { m_Facts = new BlueprintUnitFactReference[] { ShieldedDefenseActivatableAbility.ToReference<BlueprintUnitFactReference>() } });
             #endregion
+            if (AddShieldedDefense.GetValue() is false) goto skipMythicPet;
             #region Add buckler parry to ShieldBash restrictions
             if (!RetrieveBlueprint("3bb6b76ed5b38ab4f957c7f923c23b68", out BlueprintActivatableAbility ShieldBashAbility, "ShieldBashAbility", circ)) goto skipShieldBashAbility;
             IEnumerable<RestrictionOtherActivatables> ROA = ShieldBashAbility.GetComponents<RestrictionOtherActivatables>();

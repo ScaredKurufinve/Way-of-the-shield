@@ -24,11 +24,12 @@ namespace Way_of_the_shield
         #region Setting Entities
         public static SettingsEntityBool AllowEquipNonProfficientItems                  = new (settingsModName + "allow-equip-non-profficient-items", true, false, true);
         public static SettingsEntityBool ForbidCloseFlanking                            = new (settingsModName + "forbid-close-flanking", true, false, true);
-        public static SettingsEntityBool AllowCloseFlankingToEnemies                    = new(settingsModName + "allow-close-flanking-to-enemies", true, false, false);
-        public static SettingsEntityBool ConcealmentAttackBonusOnBackstab               = new(settingsModName + "concealment-attack-bonus-on-backstab", true, false, false);
+        public static SettingsEntityBool AllowCloseFlankingToEnemies                    = new (settingsModName + "allow-close-flanking-to-enemies", true, false, false);
+        public static SettingsEntityBool ConcealmentAttackBonusOnBackstab               = new (settingsModName + "concealment-attack-bonus-on-backstab", true, false, false);
         public static SettingsEntityBool DenyShieldBonusOnBackstab                      = new (settingsModName + "deny-shield-bonus-on-backstab", true, false, false);
         public static SettingsEntityBool FlatFootedOnBackstab                           = new (settingsModName + "flat-footed-on-backstab", true, true, true);
         public static SettingsEntityBool AddBucklerParry                                = new (settingsModName + "add-buckler-parry", true, false, true);
+        public static SettingsEntityBool AddShieldedDefense                             = new (settingsModName + "add-shielded-defense", true, false, true);
         public static SettingsEntityBool AllowTwoHanded_as_OneHandedWhenBuckler         = new (settingsModName + "allow-two-handed-as-one-handed-when-buckler", true, false, true);
         public static SettingsEntityBool AllowBucklerBashWhenTwoHandedWithUnhindering   = new (settingsModName + "allow-buckler-bash-when-two-handed-with-unhindering", false, false, false);
         public static SettingsEntityBool AllowTwoHandedSpears_as_OneHandedWhenMounted   = new (settingsModName + "allow-two-handed-spears-as-one-handed-when-mounted", true, false, true);
@@ -57,6 +58,7 @@ namespace Way_of_the_shield
                  new(FlatFootedOnBackstab, ScriptableObject.CreateInstance < UISettingsEntityBool >()),
                  new(DenyShieldBonusOnBackstab, ScriptableObject.CreateInstance < UISettingsEntityBool >()),
                  new(ChangeBackToBack, ScriptableObject.CreateInstance < UISettingsEntityBool >()),
+                 new(AddShieldedDefense, ScriptableObject.CreateInstance < UISettingsEntityBool >()),
                  new(AddBucklerParry, ScriptableObject.CreateInstance < UISettingsEntityBool >()),
                  new(AllowTwoHanded_as_OneHandedWhenBuckler, ScriptableObject.CreateInstance < UISettingsEntityBool >()),
                  new(AllowBucklerBashWhenTwoHandedWithUnhindering, ScriptableObject.CreateInstance < UISettingsEntityBool >()),

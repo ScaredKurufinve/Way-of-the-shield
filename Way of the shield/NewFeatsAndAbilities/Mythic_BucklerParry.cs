@@ -85,6 +85,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             Created = true;
             InProcess= false;
             #endregion
+            if (AddBucklerParry.GetValue() is false) goto skip;
             #region Add to mythic selection
             BlueprintFeatureSelection mythicSelection = ResourcesLibrary.GetRoot()?.SystemMechanics.MythicFeatSelection;
             if (mythicSelection is null)
@@ -112,6 +113,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             SkipProfLShield:;
 
             #endregion
+            ;skip:;
         }
     }
 }
