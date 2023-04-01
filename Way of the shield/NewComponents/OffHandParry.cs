@@ -477,7 +477,6 @@ namespace Way_of_the_shield.NewComponents
                              )
                     )}");
 #endif
-            //if (HasShieldBash is true && !OffHandParryUnitPart.flag) return HasShieldBash;
             return OffHandParryUnitPart.flag 
                 || (HasShieldBash  && (evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler 
                                         || (evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash 
@@ -490,7 +489,6 @@ namespace Way_of_the_shield.NewComponents
         {
             if (flag is true) return flag;
             OffHandParryUnitPart part = slot.Owner.Get<OffHandParryUnitPart>();
-            //if (part is null || !OffHandParryUnitPart.flag) return false;
             if (part is null || !OffHandParryUnitPart.flag) return false;
             //Comment.Log("Went through checks for BucklerOrBash4");
             return true;

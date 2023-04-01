@@ -104,12 +104,11 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 Comment.Warning("WARNING. Failed to create reference out of Unhindering Shield when adding to feat selection lists");
                 return;
             }
-            BlueprintFeatureSelection fs;
             string circ = "when adding Unhindering Shield";
             foreach ((string GUID, string name) in selections)
             {
                 Comment.Log("Trying to retrieve " + name + " to add Shield Brace");
-                if (!RetrieveBlueprint(GUID, out fs, name, circ)) continue;
+                if (!RetrieveBlueprint(GUID, out BlueprintFeatureSelection fs, name, circ)) continue;
                 fs.m_AllFeatures = fs.m_AllFeatures.AddToArray(Reference);
 #if DEBUG
                 Comment.Log("Successfully added Shield Brace to " + name); 
@@ -390,19 +389,15 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
         }
         public static bool MonkBuckler(ItemEntityShield shield)
         {
-            if (shield is null) return false;
-            if (shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler || !shield.Owner?.Unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield) return true;
-            else return false;
+            return (shield is not null
+                    && shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler
+                    || (!shield.Owner?.Unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield
+                    || shield.Owner.State.Features.ShieldBash));
         }
+
         public static bool MagusBuckler(ItemEntity item)
         {
-            if (item is null) return false;
-#pragma warning disable IDE0019 
-            ItemEntityShield shield = item as ItemEntityShield;
-#pragma warning restore IDE0019 
-            if (shield is null) return true;
-            if (shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler || !shield.Owner?.Unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield) return true;
-            else return false;
+            return MonkBuckler(item as ItemEntityShield);
         }
 
     }
