@@ -156,11 +156,11 @@
         },
 		{
             "Key": "ShieldBraceFeature_Description",
-            "Value": "<i>You’ve mastered the art of balancing a polearm’s weight against a shield’s stability.</i>\nBenefit(s): You can use a two-handed weapon sized appropriately for you from the polearm or spears weapon group while also using a light, heavy, or tower shield with which you are proficient. The shield’s armor check penalty (if any) applies to attacks made with the weapon."
+            "Value": "<i>You’ve mastered the art of balancing a polearm’s weight against a shield’s stability.</i>\nBenefit(s): You can use a two-handed weapon sized appropriately for you from the polearm or spears weapon group while also using a light, heavy, or tower shield with which you are proficient. The shield’s armor check penalty (if any) applies to attacks made with the weapon. \n<b>Note:</b> Benefits of this feat do not apply during mounted combat."
         },
 		{
             "Key": "ShieldBraceFeature_ShortDescription",
-            "Value": "You’ve mastered the art of balancing a polearm’s weight against a shield’s stability. You can use a two-handed weapon sized appropriately for you from the polearm or spears weapon group while also using a light, heavy, or tower shield with which you are proficient. The shield’s armor check penalty (if any) applies to attacks made with the weapon."
+            "Value": "You’ve mastered the art of balancing a polearm’s weight against a shield’s stability. You can use a two-handed weapon sized appropriately for you from the polearm or spears weapon group while also using a light, heavy, or tower shield with which you are proficient. The shield’s armor check penalty (if any) applies to attacks made with the weapon. \n<b>Note:</b> Benefits of this feat do not apply during mounted combat."
         },
 		{
             "Key": "ShieldWallRenewed_Description",
