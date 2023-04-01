@@ -4,8 +4,6 @@ using System.Linq;
 using Kingmaker.Blueprints.Root.Strings;
 using Kingmaker.UI.Common;
 using Kingmaker.UnitLogic;
-using static Way_of_the_shield.Main;
-using static Way_of_the_shield.Utilities;
 
 namespace Way_of_the_shield.NewComponents
 {
@@ -17,46 +15,46 @@ namespace Way_of_the_shield.NewComponents
             UnitEntityData owner = Owner;
 #if DEBUG
             if (Settings.Debug.GetValue())
-                Comment.Log($"Entered RemoveOthersFromSoftCover component OnEventDidTrigger. Owner is {owner.CharacterName}, event weapon is {evt.Weapon.Blueprint.m_DisplayNameText}."); 
+                Comment.Log($"RemoveOthersFromSoftCover SoftCover OnEventDidTrigger. Owner is {owner.CharacterName}, event weapon is {evt.Weapon.Blueprint.m_DisplayNameText}. " +
+                    $"Checking for facts? {CheckFacts}{(!CheckFacts ? "" : ". Facts are: " + String.Join(", ", FactsToCheck.Select(f => (f?.NameSafe() ?? "Nameless fact") + " of guid " + f.deserializedGuid)))}"); 
 #endif
 
             if (CheckWeaponType == 0) goto checkFacts;
             else if (CheckWeaponType == WeaponTypesForSoftCoverDenial.Reach && !(UIUtilityItem.GetRange(evt.Weapon) == UIStrings.Instance.Tooltips.ReachWeapon)) return;
             else if (CheckWeaponType == WeaponTypesForSoftCoverDenial.Ranged && !evt.Weapon.Blueprint.IsRanged) return;
-            bool flag1;
 
         checkFacts:
-            List<(UnitEntityData unit, int, int)> s = new();
-            foreach ((UnitEntityData unit, int, int) obstacle in evt.Result)
+            evt.Result = evt.Result.Where(r => 
             {
-                UnitEntityData unit = obstacle.unit;
+                UnitEntityData unit = r.obstacle;
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log($"Checking unit {unit.CharacterName}. Is ally? {unit.IsAlly(Owner)}."); 
+                    Comment.Log($"RemoveOthersFromSoftCover SoftCover - Checking unit {unit.CharacterName}. {(!OnlyAlly ? "" : "Is ally? " + unit.IsAlly(Owner) + ".")}");
 #endif
-                if (!(OnlyAlly && unit.IsAlly(Owner))) continue;
-                flag1 = true;
-                if (CheckFacts)
+
+                if (OnlyAlly && !unit.IsAlly(Owner)) return true;
+                if (CheckFacts is false || FactsToCheck.Length < 1)
                 {
-                    foreach (BlueprintUnitFactReference reference in FactsToCheck)
-                    {
-                        if (!unit.HasFact(reference.Get()))
-                        {
-                            flag1 = false;
-                            break;
-                        }
-                    }
-                }
-                if (flag1)
-                {
-                    s.Add(obstacle);
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log($"{obstacle.unit.CharacterName} is prepared to be removed from the obstacles list."); 
+                        Comment.Log($"RemoveOthersFromSoftCover SoftCover - {unit.CharacterName} is prepared to be removed from the obstacles list.");
 #endif
+                    return false; 
+                };
+                foreach (BlueprintUnitFactReference reference in FactsToCheck)
+                {
+                    if (!unit.HasFact(reference.Get()))
+                    {
+                        return true;
+                    }
                 }
-            }
-            for (int i = 1; i < s.Count; i++) evt.Result.Remove(s[i]);
+#if DEBUG
+                if (Settings.Debug.GetValue())
+                    Comment.Log($"RemoveOthersFromSoftCover SoftCover - {unit.CharacterName} is prepared to be removed from the obstacles list.");
+#endif
+                return false;
+
+            }).ToList();
         }
 
         public WeaponTypesForSoftCoverDenial CheckWeaponType = 0;

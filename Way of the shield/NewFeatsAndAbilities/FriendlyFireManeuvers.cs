@@ -7,8 +7,7 @@ using Kingmaker.EntitySystem.Stats;
 using Kingmaker.UnitLogic.Abilities.Components;
 using Kingmaker.UnitLogic.Mechanics.Conditions;
 using System;
-using static Way_of_the_shield.Main;
-using static Way_of_the_shield.Utilities;
+using Way_of_the_shield.NewComponents;
 
 namespace Way_of_the_shield
 {
@@ -38,7 +37,7 @@ namespace Way_of_the_shield
                 HideInCharacterSheetAndLevelUp = false,
                 HideInUI = false
             };
-            FriendlyFireManeuversFeature.AddComponent(new NewComponents.RemoveOthersFromSoftCover()
+            FriendlyFireManeuversFeature.AddComponent(new RemoveOthersFromSoftCover()
             {
                 CheckWeaponType = WeaponTypesForSoftCoverDenial.Ranged,
                 OnlyAlly = true,
@@ -57,7 +56,7 @@ namespace Way_of_the_shield
             //    ModifierDescriptor = ModifierDescriptor.Circumstance,
             //    EnablingFeature = FriendlyFireManeuversFeature.ToReference<BlueprintUnitFactReference>(),
             //};
-            NewComponents.SavingThrowBonusConditional savingThrowBonus = new()
+            SavingThrowBonusConditional savingThrowBonus = new()
             {
                 savingThrowType = SavingThrowType.Reflex,
                 Value = 4,
@@ -70,14 +69,18 @@ namespace Way_of_the_shield
                                                         {
                                                             new ContextConditionIsCaster() {Not = true },
                                                             new ContextConditionCasterIsPartyEnemy() {Not = true },
-                                                            new NewComponents.ContextConditionProjectileType() {projTypes = new AbilityProjectileType[]{AbilityProjectileType.Line, AbilityProjectileType.Simple } },
+                                                            new ContextConditionProjectileType() {projTypes = new AbilityProjectileType[]{AbilityProjectileType.Line, AbilityProjectileType.Simple } },
                                                             new ContextConditionCasterHasFact() {m_Fact = FriendlyFireManeuversFeature.ToReference<BlueprintUnitFactReference>() }
                                                         }
                 }
             };
-
             FriendlyFireManeuversFeature.AddComponent(savingThrowBonus);
-            FriendlyFireManeuversFeature.AddComponent(new FeatureTagsComponent() { FeatureTags = FeatureTag.Attack | FeatureTag.Defense | FeatureTag.Ranged | FeatureTag.SavingThrows | FeatureTag.Teamwork });
+            FriendlyFireManeuversFeature.AddComponent(new FeatureTagsComponent() { FeatureTags = 
+                  FeatureTag.Attack 
+                | FeatureTag.Defense 
+                | FeatureTag.Ranged 
+                | FeatureTag.SavingThrows 
+                | FeatureTag.Teamwork });
             FriendlyFireManeuversFeature.AddToCache();
             FriendlyFireManeuversFeature.AddFeatureAsTeamwork(PackRagerGuids: ("4284269a86c94d44a0bd5ecfda581e9f", "e6022a7dfdb74c009912af8f68f2034f", "cf3d683689134902afd8068ccfef45a2", "63b9b940834347ce953a5090f17bb2b5", "5da9646f8e214e93aeeeb54ae2e0cb99"),
                                                               CavalierGuid: "d298b0083a624aec8b31fbf1dac1e1a9",

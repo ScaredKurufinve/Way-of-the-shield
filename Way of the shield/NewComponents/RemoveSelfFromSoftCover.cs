@@ -3,8 +3,6 @@ using System.Linq;
 using Kingmaker.Blueprints.Root.Strings;
 using Kingmaker.UI.Common;
 using Kingmaker.UnitLogic;
-using static Way_of_the_shield.Main;
-using static Way_of_the_shield.Utilities;
 
 namespace Way_of_the_shield.NewComponents
 {
@@ -18,9 +16,10 @@ namespace Way_of_the_shield.NewComponents
         {
 
             UnitEntityData owner = Owner;
-            //if (Settings.IsEnabled("Debug"))
-            Comment.Log("There is an exception, but we are inside the RemoveSelfFromSoftCover!");
-
+#if DEBUG
+            if (Settings.Debug.GetValue())
+                Comment.Log("RemoveSelfFromSoftCover - OnEventDidTrigger"); 
+#endif
 
             if (evt.Initiator == owner || !evt.Result.Any(entry => entry.obstacle == owner)) return;
 
