@@ -328,7 +328,7 @@
         },
 		{
             "Key": "ShieldedDefenseActivatableAbility_Description",
-            "Value": "You may decide to actively defend yourself with the shield instead of having it just hang on your hand as a dead weight. By doing though until the end of turn your Shield bonus to AC will be increased by +1, but you will take penalties on all attacks as if you were fighting with two weapons. If you are using a light shield, this bonus will be additionally increased by 1 when your Base Attack Bonus reaches 6 and every 6 points afterwards; if you are using a heavy or tower shield, the bonus will instead be increased when your Base Attack Bonus reaches 4 and every 4 points afterwards.\nHowever, this bonus will be decreased by 1 after each time you are attacked, even if the attack misses. You also can't benefit from this ability if you are flat-footed or can't use Dexterity for defense for any reason. \n<b>Note:</b> You can't perform Shield Bash if you decided to use Shielded Defense."
+            "Value": "While Fighting Defensively, you may decide to actively defend yourself with the shield instead of having it just hang on your hand as a dead weight. By doing though until the end of turn your Shield bonus to AC will be increased by +1, but you will take penalties on all attacks as if you were fighting with two weapons. If you are using a light shield, this bonus will be additionally increased by 1 when your Base Attack Bonus reaches 6 and every 6 points afterwards; if you are using a heavy or tower shield, the bonus will instead be increased when your Base Attack Bonus reaches 4 and every 4 points afterwards.\nHowever, this bonus will be decreased by 1 after each time you are attacked, even if the attack misses. You also can't benefit from this ability if you are flat-footed or can't use Dexterity for defense for any reason. \n<b>Note:</b> You can't perform Shield Bash if you decided to use Shielded Defense."
         },
 		{
             "Key": "ShieldedDefenseActivatableAbility_ShortDescription",
@@ -360,19 +360,19 @@
         },
 		{
             "Key": "HolyShield11Feature_Description", 
-            "Value": "At 11th level, the protection granted by the Hole Shield ability expands to cover any allies within 10 feet and the radiance increases to the effects of a daylight spell."
+            "Value": "At 11th level, the protection granted by the Holy Shield ability expands to cover any allies within 10 feet and the radiance increases to the effects of a daylight spell."
         },
 		{
             "Key": "HolyShield11Feature_ShortDescription", 
-            "Value": "The protection granted by the Hole Shield ability expands to cover any allies within 10 feet and the radiance increases to the effects of a daylight spell."
+            "Value": "The protection granted by the Holy Shield ability expands to cover any allies within 10 feet and the radiance increases to the effects of a daylight spell."
         },
 		{
             "Key": "HolyShield20Feature_Description", 
-            "Value": "At 20th level, the protection granted by the Hole Shield ability expands to cover any allies within 20 feet."
+            "Value": "At 20th level, the protection granted by the Holy Shield ability expands to cover any allies within 20 feet."
         },
 		{
             "Key": "HolyShield20Feature_ShortDescription", 
-            "Value": "The protection granted by the Hole Shield ability expands to cover any allies within 20 feet."
+            "Value": "The protection granted by the Holy Shield ability expands to cover any allies within 20 feet."
         },
 		{
             "Key": "HolyShieldEnchantment_Description", 
@@ -856,11 +856,19 @@
         },
 		{
             "Key": "way-of-the-shield.add-buckler-parry_Description", 
-            "Value": "Add Buckler parry"
+            "Value": "Add Buckler Parry ability"
         },
 		{
             "Key": "way-of-the-shield.add-buckler-parry_TooltipDescription", 
-            "Value": "Homebrew. Adds new basic abilities to characters proficient with bucklers. This ability allows to use the buckler in order to parry incoming attacks at the expense of taking two-weapon fighting penalties."
+            "Value": "Homebrew. Adds new basic ability to characters proficient with bucklers and light shields. This ability allows to use the buckler in order to parry incoming attacks at the expense of taking two-weapon fighting penalties."
+        },
+		{
+            "Key": "way-of-the-shield.add-shielded-defense_Description", 
+            "Value": "Add Shielded Defense ability"
+        },
+		{
+            "Key": "way-of-the-shield.add-shielded-defense_TooltipDescription", 
+            "Value": "Homebrew. Adds new basic ability to characters proficient with heavy and light shields. This ability allows to increase the Shield bonus to AC while Fighting Defensively at the expense of taking two-weapon fighting penalties."
         },
 		{
             "Key": "way-of-the-shield.fix-rapiers_Description", 
@@ -1008,7 +1016,7 @@
         },
 		{
             "Key": "Mythic_ShieldedDefense_m_Description", 
-            "Value": "<i>Your shield hand is moving with lightning speed, able to deflect atacks coming from every direction.</i> \nWhen you fight while using Shielded Defense, only every second incoming attack reduces the AC bonus granted by the ability."
+            "Value": "<i>Your shield hand is moving with lightning speed, able to deflect attacks coming from every direction.</i> \nWhen you fight while using Shielded Defense, only every second incoming attack reduces the AC bonus granted by the ability."
         },
 		{
             "Key": "Mythic_BucklerParryFeature_DisplayName", 
@@ -1033,6 +1041,14 @@
 		{
             "Key": "ShieldedMageFeature_Description", 
             "Value": "<i>You have learned how to cast spells from behind the safety of a shield.</i> \n<b>Benefit:</b> You reduce the {g|Encyclopedia:Spell_Fail_Chance}arcane spell failure{/g} of any shield you use by 15% (to a minimum of 0%)."
+        },
+		{
+            "Key": "LowProfileFeature_DisplayName", 
+            "Value": "Low Profile"
+        },
+		{
+            "Key": "LowProfileFeature_Description", 
+            "Value": "<i>Yours small stature helps you avoid ranged attacks.</i> \n<b>Benefit:</b> You gain a +1 dodge bonus to AC against ranged attacks. In addition, you do not provide soft cover to creatures against ranged attacks."
         },
         
 	]	
