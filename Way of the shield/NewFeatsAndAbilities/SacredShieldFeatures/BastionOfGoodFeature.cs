@@ -44,7 +44,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities.SacredShieldFeatures
                 RetrieveBlueprint("3a6db57fce75b0244a6a5819528ddf26", out BlueprintFeature PaladinSmiteEvil, "PaladinSmiteEvil", circ);
                 Icon = PaladinSmiteEvil?.Icon;
             }
-
+            LocalizedString l_Displayname = new() { m_Key = "ShieldSmiteBuff_DisplayName" };
             #region Create ShieldSmiteAllyBuffHidden
                 BlueprintBuff ShieldSmiteAllyBuffHidden = new()
                 {
@@ -88,12 +88,62 @@ namespace Way_of_the_shield.NewFeatsAndAbilities.SacredShieldFeatures
                 });
             ShieldSmiteAllyBuff.AddToCache();
             #endregion
+            #region Create ShieldSmiteDebuffNoAroden
+            BlueprintBuff ShieldSmiteDebuffNoAroden = new()
+            {
+                FxOnRemove = new(),
+                FxOnStart = new(),
+                m_Flags =   BlueprintBuff.Flags.HiddenInUi |
+                            BlueprintBuff.Flags.StayOnDeath |
+                            BlueprintBuff.Flags.RemoveOnRest |
+                            BlueprintBuff.Flags.Harmful |
+                            BlueprintBuff.Flags.RemoveOnRest,
+                m_DisplayName = l_Displayname,
+            };
+            ShieldSmiteDebuffNoAroden.AddToCache("e9753adf1a5742fc96f91926054553b8", "ShieldSmiteDebuffNoAroden");
+            ShieldSmiteDebuffNoAroden.AddComponent(new ACBonusAgainstTarget()
+            {
+                CheckCaster = true,
+                CheckCasterFriend = false,
+                Descriptor = ModifierDescriptor.Deflection,
+                Value = new()
+                {
+                    ValueType = ContextValueType.Shared,
+                    ValueShared = AbilitySharedValue.StatBonus,
+                }
+            });
+            #endregion
+            #region Create ShieldSmiteDebuffWithAroden
+            BlueprintBuff ShieldSmiteDebuffWithAroden = new()
+            {
+                FxOnRemove = new(),
+                FxOnStart = new(),
+                m_Flags = BlueprintBuff.Flags.HiddenInUi |
+                            BlueprintBuff.Flags.StayOnDeath |
+                            BlueprintBuff.Flags.RemoveOnRest |
+                            BlueprintBuff.Flags.Harmful |
+                            BlueprintBuff.Flags.RemoveOnRest,
+                m_DisplayName = l_Displayname,
+            };
+            ShieldSmiteDebuffWithAroden.AddToCache("03c8370ea11e4c988fe4c6a227c5181d", "ShieldSmiteDebuffWithAroden");
+            ShieldSmiteDebuffWithAroden.AddComponent(new ACBonusAgainstTarget()
+            {
+                CheckCaster = true,
+                CheckCasterFriend = false,
+                Descriptor = ModifierDescriptor.Sacred,
+                Value = new()
+                {
+                    ValueType = ContextValueType.Shared,
+                    ValueShared = AbilitySharedValue.StatBonus,
+                }
+            });
+            #endregion
             #region Create ShieldSmiteBuff blueprint
             BlueprintBuff ShieldSmiteBuff = new()
             {
                 AssetGuid = new BlueprintGuid(new Guid("20e8cc979fb94234a9aa5bff6ea4289e")),
                 name = modName + "_ShieldSmiteBuff",
-                m_DisplayName = new LocalizedString() { m_Key = "ShieldSmiteBuff_DisplayName" },
+                m_DisplayName = l_Displayname,
                 m_Description = new LocalizedString() { m_Key = "Empty" },
                 //m_DescriptionShort = new LocalizedString() { m_Key = "ShieldSmiteBuff_ShortDescription" },
                 m_Icon = Icon,
@@ -107,15 +157,57 @@ namespace Way_of_the_shield.NewFeatsAndAbilities.SacredShieldFeatures
             ShieldSmiteBuff.AddComponent(new RemoveBuffIfCasterIsMissing());
             ShieldSmiteBuff.AddComponent(new NewComponents.HalveDamageIfHasBuffFromCaster() { m_Buff = ShieldSmiteAllyBuffHidden.ToReference<BlueprintBuffReference>() });
             ShieldSmiteBuff.AddComponent(
-                new ACBonusAgainstTarget() 
+                new AddFactContextActions()
                 {
-                    CheckCaster = true,
-                    CheckCasterFriend = false,
-                    Descriptor = ModifierDescriptor.Deflection,
-                    Value = new()
+                    NewRound = new() { Actions = Array.Empty<GameAction>() },
+                    Deactivated = new() { Actions = Array.Empty<GameAction>() },
+                    Activated = new()
                     {
-                        ValueType = ContextValueType.Shared,
-                        ValueShared = AbilitySharedValue.StatBonus,
+                        Actions = new[]
+                        {
+                            new Conditional()
+                            {
+                                ConditionsChecker = new()
+                                {
+                                    Conditions = new[]
+                                    {
+                                        new ContextConditionCasterHasFact()
+                                        {
+                                            m_Fact = new(){deserializedGuid = BlueprintGuid.Parse("36389cd62240b724f855920e2286d457") } // Scabbard_ArodensWrathFeature
+                                        }
+                                    }
+                                },
+
+                                IfTrue = new()
+                                {
+                                    Actions = new[]
+                                    {
+                                        new ContextActionApplyBuff()
+                                        {
+                                            AsChild = true,
+                                            SameDuration = true,
+                                            DurationValue = new(),
+                                            m_Buff = ShieldSmiteDebuffWithAroden.ToReference<BlueprintBuffReference>()
+                                        }
+                                    }
+                                },
+
+                                IfFalse = new()
+                                {
+                                    Actions = new[]
+                                    {
+                                        new ContextActionApplyBuff()
+                                        {
+                                            AsChild = true,
+                                            SameDuration = true,
+                                            DurationValue = new(),
+                                            m_Buff = ShieldSmiteDebuffNoAroden.ToReference<BlueprintBuffReference>()
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 });
             ShieldSmiteBuff.AddComponent(

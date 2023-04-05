@@ -22,17 +22,17 @@ namespace Way_of_the_shield.NewComponents
         }
         public void OnEventAboutToTrigger(RuleCalculateDamage evt)
         {
-            if (TheBuff is null) goto ReduceDamge;
+#if DEBUG
+            if (Debug.GetValue())
+                Comment.Log($"HalveDamageIfHasBuffFromCaster - target is {evt.Target.CharacterName}, initiator is {evt.Initiator.CharacterName}. " +
+                    $"Checking for buff {TheBuff?.name} of guid {m_Buff?.deserializedGuid} from caster {Buff?.Context.MaybeCaster?.CharacterName}. Checked? {!(TheBuff is not null && !evt.Target.Buffs.Enumerable.Any(buff => buff.Blueprint == TheBuff && buff.Context.MaybeCaster == Buff.Context.MaybeCaster))}"); 
+#endif
             UnitEntityData caster = Buff.Context.MaybeCaster;
-            foreach (Buff buff in evt.Target.Buffs)
-            {
-                if (buff.Blueprint == TheBuff && buff.Context.MaybeCaster == caster) goto ReduceDamge;
-            }
-            return;
-            ReduceDamge:
+            if (TheBuff is not null && !evt.Target.Buffs.Enumerable.Any(buff => buff.Blueprint == TheBuff && buff.Context.MaybeCaster == caster))
+                return;
             foreach (BaseDamage baseDamage in evt.DamageBundle)
             {
-                baseDamage.Durability *= 0.5f;
+                baseDamage.AddDecline(new(DamageDeclineType.ByHalf, Buff));
             }
         }
         public void OnEventDidTrigger(RuleCalculateDamage evt)
