@@ -42,7 +42,8 @@ namespace Way_of_the_shield.Tweaks_and_Changes
             if (!RetrieveBlueprint("121811173a614534e8720d7550aae253", out BlueprintFeature ShieldBashFeature, "ShieldBashFeature", circ)) return;
             IEnumerable<AddFacts> AFlist = ShieldBashFeature.Components.OfType<AddFacts>();
             if (AFlist.Count () < 1) { Comment.Error($"Failed to find any AddFacts components on the {ShieldBashFeature.name} blueprint {circ}."); return; }
-            if (!AFlist.TryFind(c => c.m_Facts.Contains(f => f.deserializedGuid == BlueprintGuid.Parse("3bb6b76ed5b38ab4f957c7f923c23b68")), out AddFacts af)) { Comment.Error($"Failed to find any AddFacts component on the {ShieldBashFeature.name} blueprint containing guid 3bb6b76ed5b38ab4f957c7f923c23b68 {circ}."); return; }
+            if (!AFlist.TryFind(c => c.m_Facts.Contains(f => f.deserializedGuid == BlueprintGuid.Parse("3bb6b76ed5b38ab4f957c7f923c23b68")), out AddFacts af)) 
+                { Comment.Error($"Failed to find any AddFacts component on the {ShieldBashFeature.name} blueprint containing guid 3bb6b76ed5b38ab4f957c7f923c23b68 {circ}."); return; }
             af.m_Facts = af.m_Facts.Where(f => f.deserializedGuid != BlueprintGuid.Parse("3bb6b76ed5b38ab4f957c7f923c23b68")).ToArray();
             ShieldBashFeature.m_DisplayName = new LocalizedString() { m_Key = "OldShieldBashFeature_DisplayName" };
             ShieldBashFeature.m_Description = new LocalizedString() { m_Key = "OldShieldBashFeature_Description" };
