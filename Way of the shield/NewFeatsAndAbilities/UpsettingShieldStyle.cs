@@ -157,7 +157,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             UpsettingShieldStyleFeature.AddComponent(new PrerequisiteIsPet() { Not = true, HideInUI = true, Group = Prerequisite.GroupType.All });
             UpsettingShieldStyleFeature.AddComponent(new AddFacts() { m_Facts = new [] 
                 { UpsettingShieldStyleAbility.ToReference<BlueprintUnitFactReference>(),
-                  new BlueprintUnitFactReference(){deserializedGuid = BlueprintGuid.Parse("3bb6b76ed5b38ab4f957c7f923c23b68")} //Shield Bash
+                  new BlueprintUnitFactReference(){deserializedGuid = BlueprintGuid.Parse("121811173a614534e8720d7550aae253")} //Shield Bash
                 }});
             UpsettingShieldStyleFeature.AddComponent(new FeatureTagsComponent()
             {
