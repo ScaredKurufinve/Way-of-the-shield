@@ -222,9 +222,9 @@ namespace Way_of_the_shield.ProficiencyRework
     [HarmonyPatch(typeof(RuleCalculateAttackBonusWithoutTarget), nameof(RuleCalculateAttackBonusWithoutTarget.OnTrigger))]
     public static class WeaponNoProficiency
     {
-        public static BonusType penalty;
+        public static BonusType penalty = Utilities.BonusTypeExtenstions.GetBonusType(160);
 
-        static WeaponNoProficiency() => penalty = Utilities.BonusTypeExtenstions.GetBonusType(160);
+        //static WeaponNoProficiency() => penalty = Utilities.BonusTypeExtenstions.GetBonusType(160);
 
 
         [HarmonyPrepare]
@@ -240,15 +240,17 @@ namespace Way_of_the_shield.ProficiencyRework
         {
             ItemEntityWeapon weapon = __instance.Weapon;
             UnitEntityData unit = __instance.Initiator;
-            if (!Game.Instance.Player.Party.Contains(unit) || weapon.Blueprint.Category.HasSubCategory(WeaponSubCategory.Natural)) return;
+            if (!Game.Instance.Player.Party.Contains(unit) || weapon.Blueprint.Category.HasSubCategory(WeaponSubCategory.Natural)) 
+                return;
             if (weapon.Blueprint.Category == WeaponCategory.WeaponLightShield
                 && weapon.IsShield
-                && weapon.Shield.ArmorComponent.Blueprint.ProficiencyGroup == ArmorProficiencyGroup.Buckler)
-            {
-                var parryPart = unit.Get<NewComponents.OffHandParry.OffHandParryUnitPart>();
-                if (parryPart is not null && parryPart.weapon == weapon) return;
-            }
-            if ( !unit.Proficiencies.Contains(weapon.Blueprint.Category)) __instance.AddModifier(-4, penalty, ModifierDescriptor.Penalty);
+                && weapon.Shield.ArmorComponent.Blueprint.ProficiencyGroup == ArmorProficiencyGroup.Buckler
+               )
+                return;
+            if (unit.Get<NewComponents.OffHandParry.OffHandParryUnitPart>()?.weapon == weapon) 
+                return;
+            if ( !unit.Proficiencies.Contains(weapon.Blueprint.Category)) 
+                __instance.AddModifier(-4, penalty, ModifierDescriptor.Penalty);
 
         }
 
