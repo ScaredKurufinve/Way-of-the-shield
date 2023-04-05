@@ -578,10 +578,11 @@ namespace Way_of_the_shield
         public static void AddFeatureAsTeamwork(this BlueprintFeature feature,
                                                 (string BuffGuid, string AreaEffectGuid, string AreaBuffGuid, string SwitchBuffGuid, string ToggleAbilityGuid) PackRagerGuids = default((string, string, string, string, string)),
                                                 string CavalierGuid = null,
-                                                (string BuffGuid, string AbilityGuid) VanguardGuids = default((string, string)))
+                                                (string BuffGuid, string AbilityGuid) VanguardGuids = default((string, string)),
+                                                bool DoNotAdd = false)
         {
             string name = feature.name.Replace(modName + "_", "").Replace("Feature", "");
-            Comment.Log("Begin adding {0} as a teamwork feature.", name);
+            Comment.Log($"Begin adding {name} as a teamwork feature. IS NOT ADDED TO SELECTIONS.");
             feature.AddFeatureToSelections(selections);
             BlueprintFeatureReference r = feature.ToReference<BlueprintFeatureReference>();
             BlueprintUnitFactReference r2 = feature.ToReference<BlueprintUnitFactReference>();
@@ -711,7 +712,7 @@ namespace Way_of_the_shield
             Comment.Log("Added {0}  to the BlueprintsCache", PackRagerToggleAbility.name);
             #endregion
             #region add Pack Rager toggle ability to PackRagerRagingTacticianBaseFeature
-            if (PackRagerRagingTacticianBaseFeature is null) goto skipPackRager;
+            if (PackRagerRagingTacticianBaseFeature is null || DoNotAdd) goto skipPackRager;
             PackRagerRagingTacticianBaseFeature.AddComponent(new AddFeatureIfHasFact()
             {
                 m_CheckedFact = r2,
@@ -757,7 +758,7 @@ namespace Way_of_the_shield
             Comment.Log("Added {0} to the Cavalier Tactician Ability.", CavalierBuff.name);
             #endregion
             #region add to CavalierTacticianSupportFeature
-            if (CavalierTacticianSupportFeature is null) goto skipCavalier;
+            if (CavalierTacticianSupportFeature is null || DoNotAdd) goto skipCavalier;
             CavalierTacticianSupportFeature.Components.AddToArray(new AddFeatureIfHasFact() { m_CheckedFact = r2, m_Feature = CavalierBuff.ToReference<BlueprintUnitFactReference>() });
             Comment.Log("Added {0} to the Cavalier Tactician Support Feature.", CavalierBuff.name);
         #endregion
@@ -765,27 +766,27 @@ namespace Way_of_the_shield
         skipCavalier:
             #region Teamwork feature to Hunter Tactics
             sfwp = HunterTactics?.ComponentsArray.FindOrDefault(c => c is ShareFeaturesWithPet) as ShareFeaturesWithPet;
-            if (sfwp is not null) sfwp.m_Features = sfwp.m_Features.AddToArray(r);
+            if (sfwp is not null || !DoNotAdd) sfwp.m_Features = sfwp.m_Features.AddToArray(r);
             Comment.Log("Added {0} to the Hunter Tactics.", name);
             #endregion
             #region Teamwork feature to Monster Tactics 
             affc = MonsterTacticsBuff?.ComponentsArray.FindOrDefault(c => c is AddFactsFromCaster) as AddFactsFromCaster;
-            if (affc is not null) affc.m_Facts = affc.m_Facts.AddToArray(r2);
+            if (affc is not null || !DoNotAdd) affc.m_Facts = affc.m_Facts.AddToArray(r2);
             Comment.Log("Added {0} to the Monster Tactics.", name);
             #endregion
             #region Teamwork feature to Sacred Huntsmaster
             sfwp = SacredHuntsmasterTactics?.ComponentsArray.FindOrDefault(c => c is ShareFeaturesWithPet) as ShareFeaturesWithPet;
-            if (sfwp is not null) sfwp.m_Features = sfwp.m_Features.AddToArray(r);
+            if (sfwp is not null || !DoNotAdd) sfwp.m_Features = sfwp.m_Features.AddToArray(r);
             Comment.Log("Added {0} to theSacred Huntsmaster.", name);
             #endregion
             #region Teamwork feature to Tactical Leader
             affc = TacticalLeaderFeatShareBuff?.ComponentsArray.FindOrDefault(c => c is AddFactsFromCaster) as AddFactsFromCaster;
-            if (affc is not null) affc.m_Facts = affc.m_Facts.AddToArray(r2);
+            if (affc is not null || !DoNotAdd) affc.m_Facts = affc.m_Facts.AddToArray(r2);
             Comment.Log("Added {0} to the Tactical Leader.", name);
             #endregion
             #region Teamwork feature to Battle Prowess
             affc = BattleProwessEffectBuff?.ComponentsArray.FindOrDefault(c => c is AddFactsFromCaster) as AddFactsFromCaster;
-            if (affc is not null) affc.m_Facts = affc.m_Facts.AddToArray(r2);
+            if (affc is not null || !DoNotAdd) affc.m_Facts = affc.m_Facts.AddToArray(r2);
             Comment.Log("Added {0} to the Battle Prowess.", name);
             #endregion
             #region Teamwork feature to Vanguard Tactician
@@ -892,7 +893,7 @@ namespace Way_of_the_shield
             Comment.Log("Added {0} to the Blueprints cache.", VanguardAbility.name);
             #endregion
             #region Add Vanguard Ability to Vanguard Tatician base ability
-            if (VanguardTacticianBaseAbility is null) goto skipVanguardTactician;
+            if (VanguardTacticianBaseAbility is null || !DoNotAdd) goto skipVanguardTactician;
             AbilityVariants av = VanguardTacticianBaseAbility.Components.FindOrDefault(c => c is AbilityVariants) as AbilityVariants;
             if (av is not null) av.m_Variants = av.m_Variants.AddToArray(VanguardAbility.ToReference<BlueprintAbilityReference>());
             Comment.Log("Added {0} to the  Vanguard Tatician base ability.", VanguardAbility.name);
