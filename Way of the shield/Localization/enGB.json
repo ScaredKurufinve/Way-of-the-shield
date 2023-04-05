@@ -983,6 +983,14 @@
             "Value": "If you have this option enabled while also having Soft Cover rulings enabled, instead of providing +2 Circumstance bonus to AC against flanking attacks the Back to Back teamwork feature will increase the Soft Cover bonus to AC by 1.5 times when you are benefiting from it; additionally, if you have enabled the option for denying shield bonuses during backstabs, your allies will be able to provide you with their own Shield bonus to AC in such situations when you benefit from Back to Back. However, in order to benefit from it both you and the ally must stand back to back no further than 1 foot from each other. \n This setting also changes effects of the new teamwork feat Back to Back Improved. While this setting is disabled, Improved version of the feat will only increase the bonus from the basic version of the feat by 2. If this setting is enabled while you also have enabled options that grant the Concealment bonus while backstabbing and/or leave the backstabbed target flat-footed, Back to Back Improved will negate these disadvantages."
         },
 		{
+            "Key": "way-of-the-shield.check-for-shield-lightness_Description", 
+            "Value": "Do not treat all shields as light weapon"
+        },
+		{
+            "Key": "way-of-the-shield.check-for-shield-lightness_TooltipDescription", 
+            "Value": "In the base game all shields are treated as light weapons for the purpose of two-weapon fighting. If this setting is enabled, there will be an actual check to see if it is light or not."
+        },
+		{
             "Key": "MountedCombat_description", 
             "Value": "Once per {g|Encyclopedia:Combat_Round}round{/g} when your mount is hit in combat, you attempt a {g|Encyclopedia:Mobility}Mobility{/g} skill check to negate the hit. The hit is negated if your Mobility {g|Encyclopedia:Check}check{/g} result is greater than the opponent's {g|Encyclopedia:Attack}attack roll{/g}.{shield_check_set_bool|allow-two-handed-spears-as-one-handed-when-mounted| \nAdditionally, when you are fighting mounted, you may couch your two-handed spear and wield it one-handed.| }"
         },

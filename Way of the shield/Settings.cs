@@ -23,6 +23,7 @@ namespace Way_of_the_shield
 
         #region Setting Entities
         public static SettingsEntityBool AllowEquipNonProfficientItems                  = new (settingsModName + "allow-equip-non-profficient-items", true, false, true);
+        public static SettingsEntityBool CheckForShieldLightness                        = new (settingsModName + "check-for-shield-lightness", true, false, true);
         public static SettingsEntityBool ForbidCloseFlanking                            = new (settingsModName + "forbid-close-flanking", true, false, true);
         public static SettingsEntityBool AllowCloseFlankingToEnemies                    = new (settingsModName + "allow-close-flanking-to-enemies", true, false, false);
         public static SettingsEntityBool ConcealmentAttackBonusOnBackstab               = new (settingsModName + "concealment-attack-bonus-on-backstab", true, false, false);
@@ -52,6 +53,7 @@ namespace Way_of_the_shield
         static internal List<(SettingsEntityBool, UISettingsEntityBool)> ListOfBoolSettings = new()
             {
                  new(AllowEquipNonProfficientItems, ScriptableObject.CreateInstance<UISettingsEntityBool>()),
+                 new(CheckForShieldLightness, ScriptableObject.CreateInstance<UISettingsEntityBool>()),
                  new(ForbidCloseFlanking, ScriptableObject.CreateInstance < UISettingsEntityBool >()),
                  new(AllowCloseFlankingToEnemies, ScriptableObject.CreateInstance < UISettingsEntityBool >()),
                  new(ConcealmentAttackBonusOnBackstab, ScriptableObject.CreateInstance < UISettingsEntityBool >()),
