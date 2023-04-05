@@ -182,7 +182,8 @@ namespace Way_of_the_shield
                 public static IEnumerable<MethodBase> ScoreMethods()
                 {
                     yield return typeof(UnitCommand).GetMethod(nameof(UnitCommand.TickApproaching));
-                    yield return typeof(UnitCommand).GetProperty(nameof(UnitCommand.IsUnitEnoughClose)).GetMethod;
+                    //yield return typeof(UnitCommand).GetProperty(nameof(UnitCommand.IsUnitEnoughClose)).GetMethod;
+                    yield return typeof(UnitCommand).GetMethod(nameof(UnitCommand.IsUnitCloseEnough), BindingFlags.Instance | BindingFlags.Public);
                 }
 
                 [HarmonyPrefix]
