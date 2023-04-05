@@ -513,9 +513,9 @@ namespace Way_of_the_shield.NewComponents
             {
                 //Comment.Log("Entered Shield Constructor postfix");
                 if (__instance.WeaponComponent == null && bpItem.Type.ProficiencyGroup == ArmorProficiencyGroup.Buckler)
-
-                    __instance.WeaponComponent = new ItemEntityWeapon(LightShieldWeapon, __instance);
-
+                
+                __instance.WeaponComponent = new ItemEntityWeapon(LightShieldWeapon, __instance);
+                
                 //Comment.Log("Weapon component for the shield " + __instance.Name + " is " + __instance.WeaponComponent);
             }
 
@@ -530,8 +530,44 @@ namespace Way_of_the_shield.NewComponents
 
                 //Comment.Log("Weapon component for the shield " + __instance.Name + " is " + __instance.WeaponComponent.Name);
             }
+
+            [HarmonyPatch(nameof(ItemEntityShield.OnPostLoad))]
+            [HarmonyTranspiler]
+            public static IEnumerable<CodeInstruction> DontDestroyBucklerWeapon(IEnumerable<CodeInstruction> instructions, ILGenerator gen)
+            {
+                var __inst = instructions.ToList();
+
+
+
+                var toSearch = new CodeInstruction[]
+                {
+                    new (OpCodes.Call, typeof(ItemEntity<>).MakeGenericType(typeof(BlueprintItemWeapon)).GetProperty(nameof(ItemEntity<BlueprintItemWeapon>.Blueprint), typeof(BlueprintItemWeapon)).GetMethod), //BlueprintItemWeapon>::get_Blueprint()
+                    new (OpCodes.Ldarg_0),
+                    new (OpCodes.Call, typeof(ItemEntity<>).MakeGenericType(typeof(BlueprintItemShield)).GetProperty(nameof(ItemEntity<BlueprintItemShield>.Blueprint), typeof(BlueprintItemShield)).GetMethod),
+                    new (OpCodes.Callvirt, typeof(BlueprintItemShield).GetProperty(nameof(BlueprintItemShield.WeaponComponent)).GetMethod),
+                    new (OpCodes.Beq)
+                };
+                int index = IndexFinder(__inst, toSearch);
+                if (index == -1) return instructions;
+
+                var toInsert = new CodeInstruction[]
+                {
+                    new (OpCodes.Ldarg_0),
+                    CodeInstruction.Call(typeof(ItemEntityShield_patch_WeaponComponentForBucklers), nameof(BucklerCheckForWeaponComponent)),
+                    new (OpCodes.Brtrue_S, __inst[index - 1].operand)
+                };
+
+                __inst.InsertRange(index, toInsert);
+                return __inst;
+            }
+
+            public static bool BucklerCheckForWeaponComponent(ItemEntityShield shield)
+            {
+                Comment.Log($"BucklerCheckForWeaponComponent - item is {shield?.Name}, wielder is {shield?.Wielder}. Buckler? {shield?.ArmorComponent.Blueprint.ProficiencyGroup == ArmorProficiencyGroup.Buckler}." +
+                    $"Check result is {(shield?.ArmorComponent.Blueprint.ProficiencyGroup == ArmorProficiencyGroup.Buckler && shield.WeaponComponent?.Blueprint == LightShieldWeapon)}." +
+                    $"Weapon part has wielder? {(shield.WeaponComponent?.Wielder is null ? "No." : "Yes," + shield.WeaponComponent.Wielder)}");
+                return shield?.ArmorComponent.Blueprint.ProficiencyGroup == ArmorProficiencyGroup.Buckler && shield.WeaponComponent?.Blueprint == LightShieldWeapon;
+            }
         }
-
-
     }
 }
