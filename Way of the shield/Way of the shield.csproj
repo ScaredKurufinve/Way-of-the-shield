@@ -15,9 +15,6 @@
     <DefineConstants>$(DefineConstants)TRACE;Dynamic</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Icons\BastionOfGood.png" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AssemblyPublicizer" Version="1.0.2">
@@ -93,12 +90,12 @@
 	  </None>
 	</ItemGroup>
 
-	<Target Name="Publicize" AfterTargets="Clean, Build">
+	<Target Name="Publicize" BeforeTargets="Build" AfterTargets="Clean">
 		<ItemGroup>			
 			<Assemblies Include="$(Wrath)\Assembly-CSharp.dll" />
 		</ItemGroup>
 
-		<PublicizeTask InputAssemblies="@(Assemblies)" OutputDir="$(SolutionDir)lib/" />
+		<PublicizeTask InputAssemblies="@(Assemblies)" OutputDir="$(SolutionDir)lib\" />
 	</Target>
 
 </Project>

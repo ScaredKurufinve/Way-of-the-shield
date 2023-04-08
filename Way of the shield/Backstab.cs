@@ -550,14 +550,14 @@ namespace Way_of_the_shield
 #endif
             if (debugFlag1)
             {
-                if (rule is not null) rule.SetCustomData(CachedConcealment, Concealment.Total);
+                rule?.SetCustomData(CachedConcealment, Concealment.Total);
                 return Concealment.Total;
             }
 
             Concealment concealment = (unitPartConcealment2 != null && unitPartConcealment2.IsConcealedFor(initiator)) ? Concealment.Total : Concealment.None;
             if (target.Descriptor.State.HasCondition(UnitCondition.Invisible) && (!initiator.Descriptor.State.HasCondition(UnitCondition.SeeInvisibility) || !initiator.Descriptor.State.GetConditionExceptions(UnitCondition.SeeInvisibility).Any((UnitConditionExceptions _exception) => _exception == null || !_exception.IsExceptional(target))))
             {
-                if (rule is not null) rule.SetCustomData(CachedConcealment, Concealment.Total);
+                rule?.SetCustomData(CachedConcealment, Concealment.Total);
                 concealment = Concealment.Total;
             }
             if (concealment < Concealment.Total && (unitPartConcealment2?.m_Concealments) != null)
@@ -630,7 +630,7 @@ namespace Way_of_the_shield
                 concealment = Concealment.Partial;
             }
 
-            if (rule is not null) rule.SetCustomData(CachedConcealment, concealment);
+            rule?.SetCustomData(CachedConcealment, concealment);
             return concealment;
         }
 

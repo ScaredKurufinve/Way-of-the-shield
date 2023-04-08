@@ -563,9 +563,12 @@ namespace Way_of_the_shield.NewComponents
 
             public static bool BucklerCheckForWeaponComponent(ItemEntityShield shield)
             {
-                Comment.Log($"BucklerCheckForWeaponComponent - item is {shield?.Name}, wielder is {shield?.Wielder}. Buckler? {shield?.ArmorComponent.Blueprint.ProficiencyGroup == ArmorProficiencyGroup.Buckler}." +
-                    $"Check result is {(shield?.ArmorComponent.Blueprint.ProficiencyGroup == ArmorProficiencyGroup.Buckler && shield.WeaponComponent?.Blueprint == LightShieldWeapon)}." +
-                    $"Weapon part has wielder? {(shield.WeaponComponent?.Wielder is null ? "No." : "Yes," + shield.WeaponComponent.Wielder)}");
+#if DEBUG
+                if (Settings.Debug.GetValue())
+                    Comment.Log($"BucklerCheckForWeaponComponent - item is {shield?.Name}, wielder is {shield?.Wielder}. Buckler? {shield?.ArmorComponent.Blueprint.ProficiencyGroup == ArmorProficiencyGroup.Buckler}." +
+                        $"Check result is {(shield?.ArmorComponent.Blueprint.ProficiencyGroup == ArmorProficiencyGroup.Buckler && shield.WeaponComponent?.Blueprint == LightShieldWeapon)}." +
+                        $"Weapon part has wielder? {(shield.WeaponComponent?.Wielder is null ? "No." : "Yes," + shield.WeaponComponent.Wielder)}"); 
+#endif
                 return shield?.ArmorComponent.Blueprint.ProficiencyGroup == ArmorProficiencyGroup.Buckler && shield.WeaponComponent?.Blueprint == LightShieldWeapon;
             }
         }
