@@ -52,6 +52,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 m_Icon = LoadIcon("UnhinderingShield", 200, 64),
                 Groups = new[] {FeatureGroup.Feat, FeatureGroup.CombatFeat }
             };
+            UnhinderingShield.AddToCache();
             UnhinderingShield.AddComponent(new AddMechanicsFeature() { m_Feature = MechanicsFeatureExtension.UnhinderingShield });
             UnhinderingShield.AddComponent(new PrerequisiteProficiency()
             {
@@ -64,7 +65,12 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             if (ShieldFocusReference.Get() is null) { Comment.Warning("WARNING. Failed to find the Shield Focus feature blueprint when creating prerequisites for Unhindering Shield"); }
             BlueprintFeatureReference ArmorTrainingReference = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("3c380607706f209499d951b29d3c44f3")?.ToReference<BlueprintFeatureReference>();
             if (ShieldFocusReference.Get() is null) { Comment.Warning("WARNING. Failed to find the Armor Training feature blueprint when creating prerequisites for Unhindering Shield"); }
-            UnhinderingShield.AddComponent(new FeatureTagsComponent() { FeatureTags = FeatureTag.Defense | FeatureTag.Attack | FeatureTag.Magic | FeatureTag.ClassSpecific });
+            UnhinderingShield.AddComponent(new FeatureTagsComponent() { FeatureTags = 
+                FeatureTag.Defense | 
+                FeatureTag.Attack | 
+                FeatureTag.Magic | 
+                FeatureTag.ClassSpecific |
+                FeatureTag.Melee});
             UnhinderingShield.AddComponent(new PrerequisiteFeaturesFromList()
             {
                 m_Features = new BlueprintFeatureReference[]
@@ -92,7 +98,6 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 HideInUI = false,
                 Group = Prerequisite.GroupType.Any
             });
-            UnhinderingShield.AddToCache();
             #endregion
 
             if (RetrieveBlueprint("ef38e0fe68f14c88a9deacc421455d14", out BlueprintFeatureSelection ShieldMastery, "ShieldMasterySelection", "to add Shield Brace"))
@@ -389,15 +394,26 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
         }
         public static bool MonkBuckler(ItemEntityShield shield)
         {
-            return (shield is not null
-                    && shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler
-                    || (!shield.Owner?.Unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield
-                    || shield.Owner.State.Features.ShieldBash));
+            //Comment.Log(
+            //    $"MonkBuckler - shield is null? {shield is null}. " + ( shield is null ? "" : (
+            //    $"Proficiency group is {shield.Blueprint.Type.ProficiencyGroup}, " +
+            //    $"Shield Bash? {shield.Owner.State.Features.ShieldBash}. " + (shield.Owner.State.Features.ShieldBash ? "" :(
+            //    $"Has Unhindering Shield? {shield.Owner?.Unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield}. "  )))) + 
+            //    $"Total result is {shield is not null
+            //        && (shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler
+            //            || (!shield.Owner?.Unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield
+            //            || shield.Owner.State.Features.ShieldBash))}");
+
+            return shield is not null
+                    && (shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler
+                        || (!shield.Owner?.Unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield                        
+                        ||  shield.Owner.State.Features.ShieldBash ));
         }
 
         public static bool MagusBuckler(ItemEntity item)
         {
-            return MonkBuckler(item as ItemEntityShield);
+            //Comment.Log($"MagusBuckler - result is {item is not null && (item is not ItemEntityShield s || MonkBuckler(s))}.");
+            return item is not null && (item is not ItemEntityShield shield || MonkBuckler(shield));
         }
 
     }
