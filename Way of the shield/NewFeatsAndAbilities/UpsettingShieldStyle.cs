@@ -1,25 +1,16 @@
-﻿using Kingmaker;
-using Kingmaker.Armies.TacticalCombat;
-using Kingmaker.Blueprints.Classes;
+﻿using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Designers.Mechanics.Buffs;
 using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.EntitySystem.Stats;
-using Kingmaker.Items;
-using Kingmaker.RuleSystem.Rules;
-using Kingmaker.UnitLogic.Buffs.Blueprints;
-using Kingmaker.RuleSystem.Rules.Damage;
-using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.ActivatableAbilities;
-using Kingmaker.UnitLogic.Buffs.Components;
+using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.FactLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Kingmaker.UnitLogic.Buffs;
-using Kingmaker.ElementsSystem;
 using Way_of_the_shield.NewComponents;
 using UnityEngine;
 
@@ -68,7 +59,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
 #endif
             if (!RetrieveBlueprint("121811173a614534e8720d7550aae253", out BlueprintFeature ShieldBash, "ShieldBashFeature")) return;
             BlueprintFeatureReference ShieldBashReference = ShieldBash.ToReference<BlueprintFeatureReference>();
-            if (!RetrieveBlueprint("121811173a614534e8720d7550aae253", out BlueprintFeature CombatReflexes, "ShieldBashFeature")) return;
+            if (!RetrieveBlueprint("0f8939ae6f220984e8fb568abbdfba95", out BlueprintFeature CombatReflexes, "CombatReflexes")) return;
             BlueprintFeatureReference CombatReflexesReference = CombatReflexes.ToReference<BlueprintFeatureReference>();
             BlueprintFeatureSelection selection;
             Sprite UpsettingStyleIcon = LoadIcon("UpsettingBucklerStyle");
@@ -138,7 +129,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 HideInUI = false,
                 HideInCharacterSheetAndLevelUp = false,
                 HideNotAvailibleInUI = false,
-                IsClassFeature = false,
+                IsClassFeature = true,
                 Ranks = 1,
                 m_Icon = UpsettingStrikeIcon,
             };
@@ -157,7 +148,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             UpsettingShieldStyleFeature.AddComponent(new PrerequisiteIsPet() { Not = true, HideInUI = true, Group = Prerequisite.GroupType.All });
             UpsettingShieldStyleFeature.AddComponent(new AddFacts() { m_Facts = new [] 
                 { UpsettingShieldStyleAbility.ToReference<BlueprintUnitFactReference>(),
-                  new BlueprintUnitFactReference(){deserializedGuid = BlueprintGuid.Parse("121811173a614534e8720d7550aae253")} //Shield Bash
+                  new BlueprintUnitFactReference(){deserializedGuid = BlueprintGuid.Parse("f42adaab0f24462c87a7875c259ffccb")} //Shield Bash
                 }});
             UpsettingShieldStyleFeature.AddComponent(new FeatureTagsComponent()
             {
