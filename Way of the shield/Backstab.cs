@@ -279,7 +279,7 @@ namespace Way_of_the_shield
             public static int CalculateACResult(RuleCalculateAC rule)
             {
                 ModifiableValueArmorClass ac = rule.Target.Stats.AC;
-                using (ac.GetTemporaryModifiersScope(rule.AllBonuses))
+                //using (ac.GetTemporaryModifiersScope(rule.AllBonuses))
 #if DEBUG
                     if (Debug.GetValue())
                     Comment.Log($"RuleCalculateAC_OnTrigger_CalculateACResult - Entered. Target is {rule.Target.CharacterName}. IsTargetFlatFooted? {rule.IsTargetFlatFooted}. Touch? {rule.AttackType.IsTouch()}. Normal AC is {(int)rule.Target.Stats.AC}, Flatfooted AC is {rule.Target.Stats.AC.FlatFooted}, Touch AC is {rule.Target.Stats.AC.Touch}, FlatfootedTouch AC is {rule.Target.Stats.AC.FlatFootedTouch}."); 
