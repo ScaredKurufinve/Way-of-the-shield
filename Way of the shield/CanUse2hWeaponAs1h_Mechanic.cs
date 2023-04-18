@@ -1,4 +1,6 @@
-﻿using Kingmaker.Blueprints.Items.Weapons;
+﻿using Kingmaker.Blueprints.Items.Armors;
+using Kingmaker.Blueprints.Items.Shields;
+using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.EntitySystem;
 using Kingmaker.Items;
 using Kingmaker.Items.Slots;
@@ -6,11 +8,12 @@ using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Buffs.Components;
 using Kingmaker.UnitLogic.Parts;
 using Kingmaker.View.Animation;
+using Kingmaker.View.Equipment;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-
-
-
+using System.Reflection.Emit;
 
 namespace Way_of_the_shield
 {
@@ -228,12 +231,12 @@ namespace Way_of_the_shield
     }
 
 
-
-    [HarmonyPatch(typeof(ItemEntityWeapon), nameof(ItemEntityWeapon.GetAnimationStyle))]
-    public class ItemEntityWeapon__GetAnimationStyle__Patch
+    [HarmonyPatch]
+    public static class TwoHandedAsOneHandedAnimationPatches
     {
+        [HarmonyPatch(typeof(ItemEntityWeapon), nameof(ItemEntityWeapon.GetAnimationStyle))]
         [HarmonyPrefix]
-        public static bool Prefix(ItemEntityWeapon __instance, ref WeaponAnimationStyle __result, bool forDollRoom)
+        public static bool ItemEntityWeapon__GetAnimationStyle__Patch(ItemEntityWeapon __instance, ref WeaponAnimationStyle __result, bool forDollRoom)
         {
             if (!__instance.HoldInTwoHands && __instance.Blueprint.IsTwoHanded)
             {
@@ -248,30 +251,103 @@ namespace Way_of_the_shield
                 //     UnitEntityData unit = wielder.Unit;
                 //     x = ((unit != null) ? unit.View : null);
                 // }
-                if (__instance.Wielder?.Unit?.View?.CharacterAvatar && !wielder.Unit.AreHandsBusyWithAnimation)
-                {
-                    WeaponAnimationStyle animStyle = __instance.Blueprint.VisualParameters.AnimStyle;
+                if (!__instance.Wielder?.Unit?.View?.CharacterAvatar) return true;
 
+                WeaponAnimationStyle animStyle = __instance.Blueprint.VisualParameters.AnimStyle;
+                if (forDollRoom && animStyle == WeaponAnimationStyle.ShieldLight && __instance.Shield?.Blueprint.Type.ProficiencyGroup == ArmorProficiencyGroup.Buckler)
+                {
+                    __result = WeaponAnimationStyle.None;
+                    return false;
+                }
+                if (!wielder.Unit.AreHandsBusyWithAnimation)
+                {
                     if (!forDollRoom)
                     {
-
-
                         if (animStyle == WeaponAnimationStyle.SlashingTwoHanded) __result = WeaponAnimationStyle.SlashingOneHanded;
                         else if (animStyle == WeaponAnimationStyle.PiercingTwoHanded) __result = WeaponAnimationStyle.PiercingOneHanded;
                         else if (animStyle == WeaponAnimationStyle.AxeTwoHanded) __result = WeaponAnimationStyle.SlashingOneHanded;
-                        return false;
+                        else return true;
                     }
-                    else if (animStyle == WeaponAnimationStyle.AxeTwoHanded)
+                    else
                     {
-                        __result = WeaponAnimationStyle.SlashingOneHanded;
-                        return false;
+                        if (animStyle == WeaponAnimationStyle.AxeTwoHanded) __result = WeaponAnimationStyle.SlashingOneHanded;
+                        else return true;
                     }
                 }
-
             }
             return true;
         }
 
-    }
+        [HarmonyPatch(typeof(UnitViewHandsEquipment), nameof(UnitViewHandsEquipment.ActiveOffHandWeaponStyle), MethodType.Getter)]
+        [HarmonyPrefix]
+        public static bool UnitViewHandsEquipment__ActiveOffHandWeaponStyle__Patch(UnitViewHandsEquipment __instance, ref WeaponAnimationStyle __result)
+        {
+            if (__instance.IsDollRoom
+                && __instance.m_ActiveSet.OffHand?.Slot.MaybeShield is ItemEntityShield shield
+                && shield.Blueprint.Type.ProficiencyGroup == ArmorProficiencyGroup.Buckler)
+            {
+                __result = WeaponAnimationStyle.None;
+                return false;
+            }
+            return true;
+        }
 
+        //[HarmonyPatch(typeof(UnitViewHandSlotData), nameof(UnitViewHandSlotData.GetPossibleVisualSlots))]
+        //[HarmonyTranspiler]
+        //public static IEnumerable<CodeInstruction> MoveBucklerAttachPointToHip(IEnumerable<CodeInstruction> instructions, ILGenerator gen)
+        //{
+        //    var _inst = instructions.ToList();
+
+        //    var toSearch = new CodeInstruction[]
+        //    {
+        //        new(OpCodes.Ldloc_0),
+        //        new(OpCodes.Callvirt, typeof(WeaponVisualParameters).GetProperty(nameof(WeaponVisualParameters.AttachSlots)).GetMethod)
+        //    };
+
+        //    int index = IndexFinder(_inst, toSearch);
+        //    if (index == -1) return instructions;
+
+        //    Label jump = gen.DefineLabel();
+        //    _inst[index].WithLabels(jump);
+
+        //    var toInsert = new CodeInstruction[]
+        //    {
+        //        new(OpCodes.Ldarg_0),
+        //        new(OpCodes.Call, typeof(TwoHandedAsOneHandedAnimationPatches).GetMethod(nameof(GetBucklerSlots))),
+        //        new(OpCodes.Dup),
+        //        new(OpCodes.Brtrue_S, jump),
+        //        new(OpCodes.Pop)
+        //    };
+
+        //    _inst.InsertRange(index - toSearch.Length, toInsert);
+        //    return _inst;
+
+        //}
+
+        [HarmonyPatch(typeof(UnitViewHandSlotData), nameof(UnitViewHandSlotData.GetPossibleVisualSlots))]
+        [HarmonyPrefix]
+        public static bool MoveBucklerAttachPointToHip(UnitViewHandSlotData __instance, List<UnitEquipmentVisualSlotType> possibleSlots)
+        {
+            var slots = GetBucklerSlots(__instance);
+            if (slots == null) return true;
+            possibleSlots.AddRange(slots);
+            return false;
+        }
+
+        public static UnitEquipmentVisualSlotType[] GetBucklerSlots(UnitViewHandSlotData slotData)
+        {
+            if (slotData == null) return null;
+            if ( slotData?.VisibleItemVisualParameters?.AnimStyle == WeaponAnimationStyle.ShieldBuckler ||
+                (slotData?.VisibleItem?.Blueprint as BlueprintItemShield)?.Type.ProficiencyGroup == ArmorProficiencyGroup.Buckler)
+                return BucklerSlots;
+            else return null;
+        }
+
+        public static UnitEquipmentVisualSlotType[] BucklerSlots = new[]
+        {
+            UnitEquipmentVisualSlotType.Shield,
+            UnitEquipmentVisualSlotType.LeftFront01,
+            UnitEquipmentVisualSlotType.Quiver
+        };
+    }
 }
