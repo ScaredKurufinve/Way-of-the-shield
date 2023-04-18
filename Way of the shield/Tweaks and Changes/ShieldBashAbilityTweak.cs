@@ -1,14 +1,15 @@
 ﻿using Kingmaker.Blueprints.Classes;
+using Kingmaker.Blueprints.Facts;
 using Kingmaker.Designers.EventConditionActionSystem.Actions;
-using Kingmaker.Designers.EventConditionActionSystem.Conditions;
-using Kingmaker.Designers.EventConditionActionSystem.Evaluators;
 using Kingmaker.ElementsSystem;
+using Kingmaker.UnitLogic.ActivatableAbilities;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.FactLogic;
 using Kingmaker.UnitLogic.Mechanics.Actions;
 using Kingmaker.UnitLogic.Mechanics.Conditions;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,13 +20,13 @@ namespace Way_of_the_shield.Tweaks_and_Changes
     [HarmonyPatch]
     public class ShieldBashAbilityTweak
     {
-        [HarmonyPrepare]
-        public static bool Prepare()
-        {
-            if (!AllowShieldBashToAllWhoProficient.GetValue())
-            { Comment.Log("AllowShieldBashToAllWhoProficient is disabled. BlueprintsCache_Init_Patch_MoveShieldBashAbilityToProficiencyBP patch will not be applied"); return false; }
-            else return true;
-        }
+        //[HarmonyPrepare]
+        //public static bool Prepare()
+        //{
+        //    if (!AllowShieldBashToAllWhoProficient.GetValue())
+        //    { Comment.Log("AllowShieldBashToAllWhoProficient is disabled. BlueprintsCache_Init_Patch_MoveShieldBashAbilityToProficiencyBP patch will not be applied"); return false; }
+        //    else return true;
+        //}
 
 
         [HarmonyPostfix]
@@ -52,12 +53,25 @@ namespace Way_of_the_shield.Tweaks_and_Changes
             });
             NewShieldBash.AddToCache("f42adaab0f24462c87a7875c259ffccb", "NewShieldBashFeature");
             #endregion
-            #region ShieldBash feature blueprint tweaks
-            string circ = "when moving the Shield Bash ability from Shield Bash Improved to Shield Proficiency" ;
+            if (!AllowShieldBashToAllWhoProficient.GetValue())
+            { 
+                Comment.Log("AllowShieldBashToAllWhoProficient is disabled. BlueprintsCache_Init_Patch_MoveShieldBashAbilityToProficiencyBP patch will not be applied"); 
+                return; 
+            }
+            if (!RetrieveBlueprint(BashAbilityGUID, out BlueprintActivatableAbility ShieldBashAbility, "ShieldBashAbility", "when tweaking Shield Bash")) return;
+            string circ = "when tweaking Shield Bash";
             if (!RetrieveBlueprint("121811173a614534e8720d7550aae253", out BlueprintFeature ShieldBashFeature, "ShieldBashFeature", circ)) return;
+            #region Restrict Bash to controllable units
+            ShieldBashAbility.AddComponent(new DirectlyControlledUnlessFactRestriction() { m_Fact = ShieldBashFeature.ToReference<BlueprintUnitFactReference>()});
+#if DEBUG
+            if (Debug.GetValue())
+                Comment.Log("ShieldBashAbilityTweak - Restricted Shield Bash to directly controlled units.");
+#endif
+            #endregion
+            #region ShieldBash feature blueprint tweaks
             IEnumerable<AddFacts> AFlist = ShieldBashFeature.Components.OfType<AddFacts>();
             if (AFlist.Count () < 1) { Comment.Error($"Failed to find any AddFacts components on the {ShieldBashFeature.name} blueprint {circ}."); return; }
-            if (!AFlist.TryFind(c => c.m_Facts.Contains(f => f.deserializedGuid == BlueprintGuid.Parse(BashAbilityGUID)), out AddFacts af)) 
+            if (!AFlist.TryFind(c => c.m_Facts.Contains(ShieldBashAbility as BlueprintUnitFact), out AddFacts af)) 
                 { Comment.Error($"Failed to find any AddFacts component on the {ShieldBashFeature.name} blueprint containing guid {BashAbilityGUID} {circ}."); return; }
             af.m_Facts = af.m_Facts
                 .Where(f => f.deserializedGuid != BlueprintGuid.Parse(BashAbilityGUID))

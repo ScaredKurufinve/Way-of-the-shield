@@ -13,7 +13,6 @@ using Kingmaker.Items.Slots;
 using Kingmaker.RuleSystem.Rules;
 using Kingmaker.UI.Common;
 using Kingmaker.UnitLogic;
-using static Way_of_the_shield.Main;
 
 
 namespace Way_of_the_shield.ProficiencyRework
@@ -185,12 +184,11 @@ namespace Way_of_the_shield.ProficiencyRework
                 return true;
             };
             UnitDescriptor unit = item.Wielder ?? item.Owner;
-            if (!Game.Instance.Player.Party.Any(u => u == unit)) return true;
             if (unit is null)
             {
 #if DEBUG
                 if (Debug.GetValue())
-                    Comment.Log("unit is null inside Prof_Short"); 
+                    Comment.Log($"unit is null inside Prof_Short for item {item}"); 
 #endif
                 return true;
             };
@@ -198,6 +196,7 @@ namespace Way_of_the_shield.ProficiencyRework
             if (Debug.GetValue())
                 Comment.Log($"Will be checking proficiency of {item.Name} for {unit.CharacterName}"); 
 #endif
+            if (!unit.Unit.IsDirectlyControllable) return true;
             bool result = IsProficient(true, unit, item);
 #if DEBUG
             if (Debug.GetValue())
@@ -240,7 +239,7 @@ namespace Way_of_the_shield.ProficiencyRework
         {
             ItemEntityWeapon weapon = __instance.Weapon;
             UnitEntityData unit = __instance.Initiator;
-            if (!Game.Instance.Player.Party.Contains(unit) || weapon.Blueprint.Category.HasSubCategory(WeaponSubCategory.Natural)) 
+            if (!unit.IsDirectlyControllable || weapon.Blueprint.Category.HasSubCategory(WeaponSubCategory.Natural)) 
                 return;
             if (weapon.Blueprint.Category == WeaponCategory.WeaponLightShield
                 && weapon.IsShield

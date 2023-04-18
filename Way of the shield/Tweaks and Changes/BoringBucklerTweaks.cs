@@ -11,12 +11,12 @@ using Kingmaker.UnitLogic.ActivatableAbilities;
 using Kingmaker.UnitLogic.ActivatableAbilities.Restrictions;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.FactLogic;
+using Kingmaker.UnitLogic.Mechanics.Actions;
 using Kingmaker.UnitLogic.Mechanics.Components;
+using UnityEngine;
+using Way_of_the_shield.NewComponents;
 using System;
 using System.Linq;
-using Way_of_the_shield.NewComponents;
-using UnityEngine;
-using Kingmaker.UnitLogic.Mechanics.Actions;
 using System.Collections.Generic;
 
 namespace Way_of_the_shield
@@ -88,12 +88,12 @@ namespace Way_of_the_shield
             public static class CachePatch
             {
 
-                [HarmonyPrepare]
-                public static bool Prepare()
-                {
-                    if (AllowTwoHanded_as_OneHandedWhenBuckler.GetValue()) return true;
-                    else { Comment.Log("AllowTwoHanded_as_OneHandedWhenBuckler setting is disabled, patch AddBuckler1hToProfficiencyBlueprint won't be applied."); return false; };
-                }
+                //[HarmonyPrepare]
+                //public static bool Prepare()
+                //{
+                //    if (AllowTwoHanded_as_OneHandedWhenBuckler.GetValue()) return true;
+                //    else { Comment.Log("AllowTwoHanded_as_OneHandedWhenBuckler setting is disabled, patch AddBuckler1hToProfficiencyBlueprint won't be applied."); return false; };
+                //}
                 [HarmonyPostfix]
                 public static void AddBuckler1hToBlueprint()
                 {
@@ -111,8 +111,11 @@ namespace Way_of_the_shield
                     };
                     Buckler1h_blueprint.AddComponent(new Buckler1h_Component());
                     Buckler1h_blueprint.AddToCache();
-
                     #endregion
+
+                    if (!AllowTwoHanded_as_OneHandedWhenBuckler.GetValue())
+                        { Comment.Log("AllowTwoHanded_as_OneHandedWhenBuckler setting is disabled, patch AddBuckler1hToProfficiencyBlueprint won't be applied."); return ; };
+
                     if (!RetrieveBlueprint("ca22afeb94442b64fb8536e7a9f7dc11", out BlueprintFeature FightDefensively, "FightDefensively", "when adding Buckler_1h to it")) return;
                     if (FightDefensively.Components.First(component => component is AddFacts) is not AddFacts AF)
                     {
@@ -126,8 +129,6 @@ namespace Way_of_the_shield
                 }
             }
         }
-
-
         public static BlueprintActivatableAbility BlueprintBucklerParryActivatableAbility 
         {
             get
@@ -221,6 +222,7 @@ namespace Way_of_the_shield
             };
             BucklerParryActivatableAbility.AddComponent(new ShieldEquippedRestriction() { categories = new ArmorProficiencyGroup[] { ArmorProficiencyGroup.Buckler, ArmorProficiencyGroup.LightShield } });
             BucklerParryActivatableAbility.AddComponent(new RestrictionNonRangedWeapon());
+            BucklerParryActivatableAbility.AddComponent(new DirectlyControlledUnlessFactRestriction() { m_Fact = new() { deserializedGuid = BlueprintGuid.Parse("ac8aaf29054f5b74eb18f2af950e752d") } }); //TwoWeaponFighting
             BucklerParryActivatableAbility.AddToCache();
             #endregion
             #region BucklerParryFeature
@@ -432,5 +434,23 @@ namespace Way_of_the_shield
                 return false;
             }
         }
+
+        //[HarmonyPatch]
+        //public static class BucklerModelReAttachment
+        //{
+        //    [HarmonyPatch(typeof(UnitViewHandSlotData), nameof(UnitViewHandSlotData.OffHandTransform), MethodType.Getter)]
+        //    public static bool Prefix(UnitViewHandSlotData __instance, ref Transform __result)
+        //    {
+        //        Comment.Log($"BucklerModelReAttachment - item {__instance?.VisibleItem?.Blueprint.name} (object name '{__instance?.VisualModel?.name}') on unit { __instance?.Owner?.CharacterName}. " +
+        //            $"Buckler? {(__instance?.VisibleItem?.Blueprint as BlueprintItemShield)?.Type.ProficiencyGroup == ArmorProficiencyGroup.Buckler}. " +
+        //            $"Owner has forearm? {__instance.Character.transform.FindChildRecursive("L_ForeArm") is not null}.");
+        //        if ((__instance?.VisibleItem?.Blueprint as BlueprintItemShield)?.Type.ProficiencyGroup == ArmorProficiencyGroup.Buckler)
+        //        {
+        //            __result = __instance.Character.transform.FindChildRecursive("L_ForeArm");
+        //        }
+        //        return __result is null;
+        //    }
+
+        //}
     }
 }

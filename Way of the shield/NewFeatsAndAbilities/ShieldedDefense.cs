@@ -220,6 +220,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             ShieldedDefenseActivatableAbility.AddToCache();
             ShieldedDefenseActivatableAbility.AddComponent(new RestrictionOtherActivatables() { Require = true, m_ActivatableAbilities = new[] { new BlueprintActivatableAbilityReference() { deserializedGuid = BlueprintGuid.Parse("09d742e8b50b0214fb71acfc99cc00b3") } } }); // FightDefensivelyToggleAbility
             ShieldedDefenseActivatableAbility.AddComponent(new ShieldEquippedRestriction() { categories = new ArmorProficiencyGroup[] { ArmorProficiencyGroup.LightShield, ArmorProficiencyGroup.HeavyShield, ArmorProficiencyGroup.TowerShield } });
+            ShieldedDefenseActivatableAbility.AddComponent(new DirectlyControlledUnlessFactRestriction() { m_Fact = new() { deserializedGuid = BlueprintGuid.Parse("ac8aaf29054f5b74eb18f2af950e752d") } }); //TwoWeaponFighting
             #endregion
             #region Create ShieldedDefenseFeature
             BlueprintFeature BlueprintShieldedDefenseFeature = new()
