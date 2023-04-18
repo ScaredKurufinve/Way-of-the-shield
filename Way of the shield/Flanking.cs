@@ -37,7 +37,16 @@ namespace Way_of_the_shield
         }
         static bool AmazingOuflankers(UnitEntityData attacker, UnitEntityData flanker)
         {
-            return (attacker.Progression.Features.HasFact(ImprovedOutflank) && flanker.Progression.Features.HasFact(ImprovedOutflank));
+#if DEBUG
+            if (Settings.Debug.GetValue())
+                Comment.Log(
+                    $"SoloTactics Improved Outlfank - attacker {attacker.CharacterName} has Imroved Outflank? {attacker.Progression.Features.HasFact(ImprovedOutflank)}. " +
+                    $"{(attacker.Progression.Features.HasFact(ImprovedOutflank) ? (attacker.State.Features.SoloTactics ?
+                    "Has Solo Tactics. " : (flanker.Progression.Features.HasFact(ImprovedOutflank) ?
+                    "Flanker " + flanker.CharacterName + " also has Improved Outflank" : "Flanker " + flanker.CharacterName + " does not have Improved Outflank, and there's no Solo Tactics")) : "")}. " +
+                    $"Result is {(attacker.Progression.Features.HasFact(ImprovedOutflank) && (attacker.State.Features.SoloTactics || flanker.Progression.Features.HasFact(ImprovedOutflank)))}"); 
+#endif
+            return attacker.Progression.Features.HasFact(ImprovedOutflank) && (attacker.State.Features.SoloTactics || flanker.Progression.Features.HasFact(ImprovedOutflank));
         }
 
         [HarmonyPatch]
@@ -181,7 +190,9 @@ namespace Way_of_the_shield
                 else __instance.TargetIsFlanked = false;
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log("When attacking {0} the angle between {1} and {2} is {3}. Improved Outflank is {5}. Flanking is {4}", target.CharacterName, attacker.CharacterName, flanker.CharacterName, biggestAngle.ToString(), __instance.TargetIsFlanked, AREamazingOutflankers); 
+                    Comment.Log(
+                        $"When attacking {target.CharacterName} the angle between {attacker.CharacterName} and {flanker.CharacterName} is {biggestAngle}. " +
+                        $"Improved Outflank is {AREamazingOutflankers}. Flanking is {__instance.TargetIsFlanked}"); 
 #endif
 
                 __instance.SetCustomData(FlankingUnitsKey, flankers);
@@ -441,13 +452,13 @@ namespace Way_of_the_shield
             {
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log("Entered the IsSuitableForOutflank method. Delegate is {0}, owner is {1}", new object[] { outflank.GetType(), outflank.Owner.CharacterName }); 
+                    Comment.Log($"IsSuitableForOutflank - Delegate is {outflank.GetType()}, owner is {outflank.Owner.CharacterName}"); 
 #endif
                 if (outflank is not OutflankAttackBonus or OutflankDamageBonus)
                 {
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log("Delegate is not OutflankAttackBonus or OutflankDamageBonus. Return false."); 
+                        Comment.Log("IsSuitableForOutflank - Delegate is not OutflankAttackBonus or OutflankDamageBonus. Return false."); 
 #endif
                     return false;
                 }
@@ -457,7 +468,7 @@ namespace Way_of_the_shield
                 {
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log("No flankers!"); 
+                        Comment.Log("IsSuitableForOutflank - No flankers!"); 
 #endif
                     return false;
                 };
@@ -466,7 +477,7 @@ namespace Way_of_the_shield
                 {
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log("Outflanker has already been set by another call to the method. Outflanker is {0}", new object[] { previousOutflanker?.CharacterName }); 
+                        Comment.Log($"IsSuitableForOutflank - Outflanker has already been set by another call to the method. Outflanker is {previousOutflanker?.CharacterName}"); 
 #endif
                 };
 
@@ -557,7 +568,7 @@ namespace Way_of_the_shield
                     {
 #if DEBUG
                         if (Settings.Debug.GetValue())
-                            Comment.Log("AppendFlankingData - Outflank flag2 is {0}, Outflank flag3 is {1}", flag2, flag3); 
+                            Comment.Log($"AppendFlankingData - Outflank flag2 is {flag2}, Outflank flag3 is {flag3}"); 
 #endif
                         return;
                     }
