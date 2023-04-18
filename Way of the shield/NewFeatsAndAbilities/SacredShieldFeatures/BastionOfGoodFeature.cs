@@ -78,13 +78,16 @@ namespace Way_of_the_shield.NewFeatsAndAbilities.SacredShieldFeatures
                             new ContextActionApplyBuff()
                             {
                                 AsChild = true,
-                                SameDuration = true,
+                                Permanent = true,
                                 IsNotDispelable = true,
                                 m_Buff = ShieldSmiteAllyBuffHidden.ToReference<BlueprintBuffReference>(),
-                                DurationValue = new(),
+                                //SameDuration = true,
+                                //DurationValue = new(),
                             }
                         }
-                    }
+                    },
+                    NewRound = new() { Actions= new GameAction[] {} },
+                    Deactivated = new() { Actions = new GameAction[] { } },
                 });
             ShieldSmiteAllyBuff.AddToCache();
             #endregion
@@ -279,10 +282,11 @@ namespace Way_of_the_shield.NewFeatsAndAbilities.SacredShieldFeatures
                             new ContextActionApplyBuff()
                             {
                                 AsChild = true,
-                                SameDuration = true,
+                                Permanent = true,
                                 IsNotDispelable = true,
                                 m_Buff = ShieldSmiteAllyBuffHidden.ToReference<BlueprintBuffReference>(),
-                                DurationValue = new()
+                                //SameDuration = true,
+                                //DurationValue = new()
 
                             }
                         }
