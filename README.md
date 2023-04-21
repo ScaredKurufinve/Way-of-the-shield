@@ -23,3 +23,4 @@ This mod creates save dependency.
 
 ## Known bugs
 -   Shield Focus feat applies its bonus twice. I may fix it at some point, but for now consider it a feature.
+-   Shield model orientation is wrong due to the fix to equipping buckler with a bow. I will re-do this, but not right now.
