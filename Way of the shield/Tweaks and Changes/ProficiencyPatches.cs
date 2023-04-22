@@ -192,16 +192,16 @@ namespace Way_of_the_shield.ProficiencyRework
 #endif
                 return true;
             };
-#if DEBUG
-            if (Debug.GetValue())
-                Comment.Log($"Will be checking proficiency of {item.Name} for {unit.CharacterName}"); 
-#endif
+//#if DEBUG
+//            if (Debug.GetValue())
+//                Comment.Log($"Will be checking proficiency of {item.Name} for {unit.CharacterName}"); 
+//#endif
             if (!unit.Unit.IsDirectlyControllable) return true;
             bool result = IsProficient(true, unit, item);
-#if DEBUG
-            if (Debug.GetValue())
-                Comment.Log($"{unit.CharacterName} proficiency with {item.Name} is {result}"); 
-#endif
+//#if DEBUG
+//            if (Debug.GetValue())
+//                Comment.Log($"{unit.CharacterName} proficiency with {item.Name} is {result}"); 
+//#endif
             return result;
         }
 

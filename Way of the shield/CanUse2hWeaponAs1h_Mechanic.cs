@@ -7,8 +7,10 @@ using Kingmaker.Items.Slots;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Buffs.Components;
 using Kingmaker.UnitLogic.Parts;
+using Kingmaker.View;
 using Kingmaker.View.Animation;
 using Kingmaker.View.Equipment;
+using Kingmaker.Visual.Animation;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -278,19 +280,64 @@ namespace Way_of_the_shield
             return true;
         }
 
-        [HarmonyPatch(typeof(UnitViewHandsEquipment), nameof(UnitViewHandsEquipment.ActiveOffHandWeaponStyle), MethodType.Getter)]
-        [HarmonyPrefix]
-        public static bool UnitViewHandsEquipment__ActiveOffHandWeaponStyle__Patch(UnitViewHandsEquipment __instance, ref WeaponAnimationStyle __result)
+        [HarmonyPatch(typeof(IKController), nameof(IKController.CheckStylesForIk))]
+        [HarmonyTranspiler]
+        public static IEnumerable<CodeInstruction> IKController__IsShield__Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            if (__instance.IsDollRoom
-                && __instance.m_ActiveSet.OffHand?.Slot.MaybeShield is ItemEntityShield shield
-                && shield.Blueprint.Type.ProficiencyGroup == ArmorProficiencyGroup.Buckler)
+#if DEBUG
+            if (Settings.Debug.GetValue())
+                Comment.Log("Begin reanspiling IKController.CheckStylesForIk"); 
+#endif
+
+            var _inst = instructions.ToList();
+
+            var toSearch = new CodeInstruction[] 
             {
-                __result = WeaponAnimationStyle.None;
-                return false;
-            }
-            return true;
+                new(OpCodes.Call, typeof(IKController).GetMethod(nameof(IKController.IsShield), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance))
+            };
+
+            int index = IndexFinder(_inst, toSearch, true);
+
+            if (index == -1) return instructions;
+
+            var toInsert = new CodeInstruction[]
+            {
+                new CodeInstruction(OpCodes.Ldarg_1),
+                new CodeInstruction(OpCodes.Call, typeof(TwoHandedAsOneHandedAnimationPatches).GetMethod(nameof(GetBucklerStyle)))
+            };
+
+            _inst.InsertRange(index, toInsert);
+            return _inst;
         }
+
+        public static WeaponAnimationStyle GetBucklerStyle(WeaponAnimationStyle original, UnitEntityView unitEntityView)
+        {
+            WeaponAnimationStyle result;
+            if (original == WeaponAnimationStyle.None) { result = original; goto ret; }
+            ItemEntityShield maybeShield = unitEntityView.EntityData.Body.CurrentHandsEquipmentSet.SecondaryHand?.MaybeShield;
+            if (maybeShield?.Blueprint is BlueprintItemShield bpShield && bpShield.Type.ProficiencyGroup == ArmorProficiencyGroup.Buckler)
+                result = bpShield.VisualParameters.AnimStyle;
+            else result = original;
+
+            ret:
+            return result;
+
+        }
+
+
+        //[HarmonyPatch(typeof(UnitViewHandsEquipment), nameof(UnitViewHandsEquipment.ActiveOffHandWeaponStyle), MethodType.Getter)]
+        //[HarmonyPrefix]
+        //public static bool UnitViewHandsEquipment__ActiveOffHandWeaponStyle__Patch(UnitViewHandsEquipment __instance, ref WeaponAnimationStyle __result)
+        //{
+        //    if (__instance.IsDollRoom
+        //        && __instance.m_ActiveSet.OffHand?.Slot.MaybeShield is ItemEntityShield shield
+        //        && shield.Blueprint.Type.ProficiencyGroup == ArmorProficiencyGroup.Buckler)
+        //    {
+        //        __result = WeaponAnimationStyle.None;
+        //        return false;
+        //    }
+        //    return true;
+        //}
 
         //[HarmonyPatch(typeof(UnitViewHandSlotData), nameof(UnitViewHandSlotData.GetPossibleVisualSlots))]
         //[HarmonyTranspiler]

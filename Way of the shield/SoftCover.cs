@@ -164,10 +164,10 @@ namespace Way_of_the_shield
             public static IEnumerable<MethodBase> GetMethods()
             {
 
-#if DEBUG
-                Comment.Log("Nested types of UnitCombatState:"); 
-                foreach (Type t in typeof(UnitCombatState).GetNestedTypes()) Comment.Log(t.Name); 
-#endif
+//#if DEBUG
+//                Comment.Log("Nested types of UnitCombatState:"); 
+//                foreach (Type t in typeof(UnitCombatState).GetNestedTypes()) Comment.Log(t.Name); 
+//#endif
 
                 yield return typeof(UnitCombatState).GetMethod(nameof(UnitCombatState.AttackOfOpportunity));
                 //yield return typeof(UnitCombatState).GetProperty(nameof(UnitCombatState.CanAttackOfOpportunity)).GetMethod;
