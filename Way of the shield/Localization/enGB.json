@@ -460,7 +460,7 @@
         },
 		{
             "Key": "PerfectBastionFeature_Description",
-            "Value": "At 20th level, a sacred shield and her allies within 20 feet gain regeneration 10 against the target of her bastion of good ability (essentially regeneration that is overcome by any damage not caused by the target).\nThis ability replaces the sacred shield’s holy champion ability."
+            "Value": "At 20th level, a sacred shield and her allies within 20 feet gain regeneration 10 against the target of her bastion of good ability (essentially regeneration that is overcome by any damage not caused by the target).\nThis ability replaces the paladin’s holy champion ability."
         },
 		{
             "Key": "PerfectBastionFeature_ShortDescription",
@@ -712,7 +712,7 @@
         },
 		{
             "Key": "RallyingBondActivatableAbility_Description", 
-            "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add Bashing property to the shield at the cost of 2 enhancement point.\nThis armor or shield is brightly polished, and its mirror-bright surface is magically endowed with the ability to bring comfort to the wearer’s companions. Allies within 30 feet of the wearer gain a +6 morale bonus on saving throws against fear effects."
+            "Value": "When Sacred Shield is enhancing his shield using the Divine Bond ability, he may choose to add Rallying property to the shield at the cost of 2 enhancement point.\nThis armor or shield is brightly polished, and its mirror-bright surface is magically endowed with the ability to bring comfort to the wearer’s companions. Allies within 30 feet of the wearer gain a +6 morale bonus on saving throws against fear effects."
         },
       {
         "Key": "SacredShieldBondAdditionalUsesFeature_DisplayName",
@@ -780,7 +780,7 @@
         },
 		{
             "Key": "WayOfTheShield_AngelfireApostleProficiencies_Shieldless", 
-            "Value": "Angelfire apostles are only proficient with light armor."
+            "Value": "Angelfire apostles are only proficient with light armor, {g|Encyclopedia:Weapon_Proficiency}simple weapons{/g} as well as with the favored weapon of their deities, and shields (except tower shields and bucklers)."
         },
 		{
             "Key": "WayOfTheShield_SettingsGroup_Title", 
@@ -1057,6 +1057,10 @@
 		{
             "Key": "LowProfileFeature_Description", 
             "Value": "<i>Yours small stature helps you avoid ranged attacks.</i> \n<b>Benefit:</b> You gain a +1 dodge bonus to AC against ranged attacks. In addition, you do not provide soft cover to creatures against ranged attacks."
+        },
+{
+            "Key": "BuffDynamicDescriptionComponent_Caster", 
+            "Value": "Effect was applied by {Caster}"
         },
         
 	]	

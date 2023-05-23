@@ -1054,5 +1054,9 @@
             "Key": "LowProfileFeature_Description", 
             "Value": "<i>你的小小身躯能够帮助自身免受远程攻击。</i> \n<b>效果：</b>在对抗远程攻击时，你的AC获得+1闪避加值。此外，当远程攻击通过你的方格时，你不会给其他生物提供软掩蔽。"
         },
+{
+            "Key": "BuffDynamicDescriptionComponent_Caster", 
+            "Value": "效果被{Caster}应用了"
+        },
 	]	
 }
