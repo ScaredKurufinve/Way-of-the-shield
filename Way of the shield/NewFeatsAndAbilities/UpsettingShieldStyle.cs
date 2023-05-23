@@ -330,7 +330,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 m_DescriptionShort = new() { Key = "UpsettingShieldEffect_ShortDescription" },
                 FxOnRemove = new(),
                 FxOnStart = new(),
-                Stacking = StackingType.Summ,
+                Stacking = StackingType.Stack,
                 m_Icon = UpsettingStyleIcon,
             };
             UpsettingShieldBuff.AddComponent(new AttackBonusAgainstCaster()
@@ -338,6 +338,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 Value = -2,
                 Descriptor = ModifierDescriptor.UntypedStackable
             });
+            UpsettingShieldBuff.AddComponent(new BuffDynamicDescriptionComponent_Caster());
             UpsettingShieldBuff.AddToCache("5a698c8b9ebe4ce49f21d965a8723786", "UpsettingShieldEffectBuff");
             m_StyleBuff = UpsettingShieldBuff;
             #endregion
@@ -353,7 +354,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 m_DescriptionShort = new() { Key = "UpsettingStrikeEffectt_ShortDescription" },
                 FxOnRemove = new(),
                 FxOnStart = new(),
-                Stacking = StackingType.Summ,
+                Stacking = StackingType.Stack,
                 m_Icon = UpsettingStrikeIcon,
             };
             UpsettingStrikeBuff.AddComponent(new AttackBonusAgainstCaster()
@@ -362,6 +363,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 Descriptor = ModifierDescriptor.UntypedStackable
             });
             UpsettingStrikeBuff.AddComponent(new AoOOnFarMiss() { CheckBuff = true, CheckOnCaster = true, m_FactToCheck = checkerReference, CasterOnly = true });
+            UpsettingShieldBuff.AddComponent(new BuffDynamicDescriptionComponent_Caster());
             UpsettingShieldBuff.AddToCache("8256f265fae94c7a891a23e796d23956", "UpsettingStrikeBuff");
             m_StrikeBuff = UpsettingStrikeBuff;
             #endregion
@@ -377,7 +379,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 m_DescriptionShort = new() { Key = "UpsettingVengeanceEffect_ShortDescription" },
                 FxOnRemove = new(),
                 FxOnStart = new(),
-                Stacking = StackingType.Summ,
+                Stacking = StackingType.Stack,
                 Frequency = Kingmaker.UnitLogic.Mechanics.DurationRate.Rounds
             };
             UpsettingVengeanceBuff.AddComponent(new AddContextStatBonus()
@@ -386,6 +388,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 Descriptor = ModifierDescriptor.UntypedStackable,
                 Stat = StatType.AdditionalAttackBonus
             });
+            UpsettingVengeanceBuff.AddComponent(new BuffDynamicDescriptionComponent_Caster());
             UpsettingVengeanceBuff.AddComponent(new AoOOnFarMiss() { CheckBuff = true, CheckOnCaster = true, m_FactToCheck = checkerReference, CasterOnly = false });
             UpsettingVengeanceBuff.AddToCache("f66c775241f54f79a520f25ef3c0887e", "UpsettingVengeanceBuff");
             m_VengeanceBuff = UpsettingVengeanceBuff;
