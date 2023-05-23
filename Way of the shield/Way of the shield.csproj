@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-	  <LangVersion>latest</LangVersion>
+	<LangVersion>latest</LangVersion>
     <RootNamespace>Way_of_the_shield</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	<AssemblyVersion>2.0.8.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

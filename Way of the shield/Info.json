@@ -2,10 +2,10 @@
   "Id": "Shield",
   "DisplayName": "Way Of The Shield",
   "Author": "Kurufinve",
-  "Version": "2.0.7",
+  "Version": "2.0.8",
   "Repository": "https://github.com/ScaredKurufinve/Way-of-the-shield",
   "ManagerVersion": "0.23.0",
   "Requirements": [],
-  "AssemblyName": "Assemblies\\Way of the shield.dll",
+  "AssemblyName": "Assemblies/Way of the shield.dll",
   "EntryMethod": "Way_of_the_shield.Main.Load"
 }
