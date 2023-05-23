@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Reflection;
 
 namespace Way_of_the_shield.NewFeatsAndAbilities
 {
@@ -232,6 +233,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
 
         [HarmonyPatch(typeof(MonkNoArmorAndMonkWeaponFeatureUnlock), nameof(MonkNoArmorAndMonkWeaponFeatureUnlock.CheckEligibility))]
         [HarmonyTranspiler]
+        [HarmonyAfter("DarkCodex")]
         public static IEnumerable<CodeInstruction> MonkNoArmorAndMonkWeaponFeatureUnlock_CheckEligibility_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
 #if DEBUG
@@ -252,8 +254,9 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
 
             int index = 0;
             int a = 0;
-            while ((a = IndexFinder(_instructions.GetRange(index, _instructions.Count - index), toSearch)) != -1)
+            for (int i = 0; i < 2; i++)
             {
+                a = IndexFinder(_instructions.GetRange(index, _instructions.Count - index), toSearch);
                 index += a;  
 
                 _instructions[index - 1].operand = typeof(HandSlot).GetProperty(nameof(HandSlot.MaybeShield)).GetMethod;
@@ -394,15 +397,18 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
         }
         public static bool MonkBuckler(ItemEntityShield shield)
         {
-            //Comment.Log(
-            //    $"MonkBuckler - shield is null? {shield is null}. " + ( shield is null ? "" : (
-            //    $"Proficiency group is {shield.Blueprint.Type.ProficiencyGroup}, " +
-            //    $"Shield Bash? {shield.Owner.State.Features.ShieldBash}. " + (shield.Owner.State.Features.ShieldBash ? "" :(
-            //    $"Has Unhindering Shield? {shield.Owner?.Unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield}. "  )))) + 
-            //    $"Total result is {shield is not null
-            //        && (shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler
-            //            || (!shield.Owner?.Unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield
-            //            || shield.Owner.State.Features.ShieldBash))}");
+#if DEBUG
+            if (Debug.GetValue())
+                Comment.Log(
+                    $"MonkBuckler - shield is null? {shield is null}. " + (shield is null ? "" : (
+                    $"Proficiency group is {shield.Blueprint.Type.ProficiencyGroup}, " +
+                    $"Shield Bash? {shield.Owner.State.Features.ShieldBash}. " + (shield.Owner.State.Features.ShieldBash ? "" : (
+                    $"Has Unhindering Shield? {shield.Owner?.Unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield}. ")))) +
+                    $"Total result is {shield is not null
+                        && (shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler
+                            || (!shield.Owner?.Unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield
+                            || shield.Owner.State.Features.ShieldBash))}"); 
+#endif
 
             return shield is not null
                     && (shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler
@@ -414,6 +420,56 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
         {
             //Comment.Log($"MagusBuckler - result is {item is not null && (item is not ItemEntityShield s || MonkBuckler(s))}.");
             return item is not null && (item is not ItemEntityShield shield || MonkBuckler(shield));
+        }
+
+        [HarmonyPatch]
+        static class SwashbucklerPreciseStrikePatch
+        {
+            static MethodInfo target;
+
+            static bool Prepare()
+            {
+                var assembly = Main.CheckForMod("Swashbuckler");
+                Type type = null;
+                assembly?.DefinedTypes.TryFind(t => t.Name.Equals("SwashbucklerPreciseStrike"), out type);
+                if (type is not null)
+                    target = type.GetMethod("OnEventAboutToTrigger");
+                Comment.Log(
+                    $"Preparing the patch in case Swashbuckler mod is present. " +
+                    $"Assembly is null? {assembly is null}. " +
+                    $"Type is null? {type is null}. " +
+                    $"Target is null? {target is null}.");
+
+                return target is not null;
+            }
+
+            static MethodInfo TargetMethod()
+                => target;
+
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                var _inst = instructions.ToList();
+
+                CodeInstruction[] toSearch = new[]
+                {
+                    new CodeInstruction(OpCodes.Callvirt, typeof(BlueprintItemArmor).GetProperty(nameof(BlueprintItemArmor.ProficiencyGroup)).GetMethod),
+                    new CodeInstruction(OpCodes.Ldc_I4_4),
+                    new CodeInstruction(OpCodes.Beq_S)
+                };
+
+
+                int index1 = _inst.FindIndex(i => i.Calls(typeof(HandSlot).GetProperty(nameof(HandSlot.MaybeShield)).GetMethod));
+                if (index1 == -1) return instructions;
+
+                int index2 = IndexFinder(_inst, toSearch);
+                if (index2 == -1) return instructions;
+
+                _inst[index2 - 1].opcode = OpCodes.Brfalse_S;
+                _inst.RemoveRange(index1+1, index2 - (index1+2));
+                _inst.Insert(index1+1, new CodeInstruction(OpCodes.Call, typeof(UnhinderingShield).GetMethod(nameof(MonkBuckler))));
+
+                return _inst;
+            }
         }
 
     }
