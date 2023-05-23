@@ -240,44 +240,35 @@ namespace Way_of_the_shield
         [HarmonyPrefix]
         public static bool ItemEntityWeapon__GetAnimationStyle__Patch(ItemEntityWeapon __instance, ref WeaponAnimationStyle __result, bool forDollRoom)
         {
-            if (!__instance.HoldInTwoHands && __instance.Blueprint.IsTwoHanded)
-            {
-                UnitDescriptor wielder = __instance.Wielder;
-                // UnityEngine.Object x;
-                // if (wielder == null)
-                // {
-                //     x = null;
-                // }
-                // else
-                // {
-                //     UnitEntityData unit = wielder.Unit;
-                //     x = ((unit != null) ? unit.View : null);
-                // }
-                if (!__instance.Wielder?.Unit?.View?.CharacterAvatar) return true;
+            if (__instance.HoldInTwoHands || !__instance.Blueprint.IsTwoHanded) return true;
+            
+            if (!__instance.Wielder?.Unit?.View?.CharacterAvatar) return true;
 
-                WeaponAnimationStyle animStyle = __instance.Blueprint.VisualParameters.AnimStyle;
-                if (forDollRoom && animStyle == WeaponAnimationStyle.ShieldLight && __instance.Shield?.Blueprint.Type.ProficiencyGroup == ArmorProficiencyGroup.Buckler)
-                {
-                    __result = WeaponAnimationStyle.None;
-                    return false;
-                }
-                if (!wielder.Unit.AreHandsBusyWithAnimation)
-                {
-                    if (!forDollRoom)
-                    {
-                        if (animStyle == WeaponAnimationStyle.SlashingTwoHanded) __result = WeaponAnimationStyle.SlashingOneHanded;
-                        else if (animStyle == WeaponAnimationStyle.PiercingTwoHanded) __result = WeaponAnimationStyle.PiercingOneHanded;
-                        else if (animStyle == WeaponAnimationStyle.AxeTwoHanded) __result = WeaponAnimationStyle.SlashingOneHanded;
-                        else return true;
-                    }
-                    else
-                    {
-                        if (animStyle == WeaponAnimationStyle.AxeTwoHanded) __result = WeaponAnimationStyle.SlashingOneHanded;
-                        else return true;
-                    }
-                }
+            WeaponAnimationStyle animStyle = __instance.Blueprint.VisualParameters.AnimStyle;
+            if (forDollRoom && animStyle == WeaponAnimationStyle.ShieldLight && __instance.Shield?.Blueprint.Type.ProficiencyGroup == ArmorProficiencyGroup.Buckler)
+            {
+                __result = WeaponAnimationStyle.None;
+                return false;
             }
-            return true;
+            //if (wielder.Unit.AreHandsBusyWithAnimation) return true;
+            
+            if (!forDollRoom)
+                __result = animStyle switch
+                {
+                    WeaponAnimationStyle.SlashingTwoHanded  => WeaponAnimationStyle.SlashingOneHanded,
+                    WeaponAnimationStyle.PiercingTwoHanded  => WeaponAnimationStyle.PiercingOneHanded,
+                    WeaponAnimationStyle.AxeTwoHanded       => WeaponAnimationStyle.SlashingOneHanded,
+                    _ => __result
+                };
+
+            else 
+                __result = animStyle switch
+                {
+                    WeaponAnimationStyle.AxeTwoHanded => WeaponAnimationStyle.PiercingTwoHanded,
+                    _ => __result
+                };
+
+            return __result is WeaponAnimationStyle.None;
         }
 
         [HarmonyPatch(typeof(IKController), nameof(IKController.CheckStylesForIk))]
