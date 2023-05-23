@@ -40,7 +40,7 @@ namespace Way_of_the_shield
 #if DEBUG
             if (Settings.Debug.GetValue())
                 Comment.Log(
-                    $"SoloTactics Improved Outlfank - attacker {attacker.CharacterName} has Imroved Outflank? {attacker.Progression.Features.HasFact(ImprovedOutflank)}. " +
+                    $"Flanking SoloTactics Improved Outlfank - attacker {attacker.CharacterName} has Imroved Outflank? {attacker.Progression.Features.HasFact(ImprovedOutflank)}. " +
                     $"{(attacker.Progression.Features.HasFact(ImprovedOutflank) ? (attacker.State.Features.SoloTactics ?
                     "Has Solo Tactics. " : (flanker.Progression.Features.HasFact(ImprovedOutflank) ?
                     "Flanker " + flanker.CharacterName + " also has Improved Outflank" : "Flanker " + flanker.CharacterName + " does not have Improved Outflank, and there's no Solo Tactics")) : "")}. " +
@@ -71,14 +71,14 @@ namespace Way_of_the_shield
             [HarmonyPostfix]
             public static bool Prefix(UnitCombatState __instance, ref bool __result)
             {
-#if Debug
-                if (Settings.Debug.GetValue()) Comment.Log("Entered the flanking prefix"); 
+#if DEBUG
+                if (Settings.Debug.GetValue()) Comment.Log("Flanking - Entered the flanking prefix"); 
 #endif
                 if (AllowCloseFlankingToEnemies.GetValue() && __instance.Unit.IsPlayerFaction)
                 {
-#if Debug
+#if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log("Unit {0} is not player faction, prefix is skipped", new object[] { __instance.Unit.CharacterName }); 
+                        Comment.Log("Flanking - Unit {0} is not player faction, prefix is skipped", new object[] { __instance.Unit.CharacterName }); 
 #endif
                     return true;
                 };
@@ -89,7 +89,7 @@ namespace Way_of_the_shield
                 UnitEntityData[] engaged_by = CombatController.IsInTurnBasedCombat() ? __instance.EngagedBy.ToArray() : __instance.EngagedBy.Where(x => x.Commands.AnyCommandTargets(__instance.Unit)).ToArray();
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log($"{__instance.Unit.CharacterName} is engaged by {engaged_by.Length.ToString()} people."); 
+                    Comment.Log($"Flanking - {__instance.Unit.CharacterName} is engaged by {engaged_by.Length} people."); 
 #endif
                 int i = 0;
                 while (i < engaged_by.Count() - 1)
@@ -102,18 +102,15 @@ namespace Way_of_the_shield
 
 #if DEBUG
                         if (Settings.Debug.GetValue())
-                            Comment.Log("When attacking {0}, the angle between {1} and {2} is {3} degrees. Required angle is {4}.",
-                            __instance.Unit.CharacterName, engaged_by[i].CharacterName, engaged_by[further].CharacterName, angle.ToString(), GetMinimalFlankingAngle(AmazingOuflankers(engaged_by[i], engaged_by[further]))); 
+                            Comment.Log(
+                                $"Flanking - When attacking {__instance.Unit.CharacterName}, " +
+                                $"the angle between {engaged_by[i].CharacterName} and {engaged_by[further].CharacterName} is {angle.ToString()} degrees. " +
+                                $"Required angle is {GetMinimalFlankingAngle(AmazingOuflankers(engaged_by[i], engaged_by[further]))}." +
+                                $"{((angle > GetMinimalFlankingAngle(AmazingOuflankers(engaged_by[i], engaged_by[further])) ? "IS FLANKED" : "Not flanked"))}."
+                                );
 #endif
                         if (angle > GetMinimalFlankingAngle(AmazingOuflankers(engaged_by[i], engaged_by[further])))
-                        {
-#if DEBUG
-                            if (Settings.Debug.GetValue())
-                                Comment.Log("Is Flanked"); 
-#endif
-                            __result = true; return false;
-                        }
-
+                        { __result = true; return false; }
                     }
                     i++;
                 };
@@ -129,6 +126,15 @@ namespace Way_of_the_shield
         [HarmonyPatch]
         public static class RuleAttackRoll_TargetIsFlanked_Patch
         {
+            public static bool Prepare()
+            {
+                if (!ForbidCloseFlanking.GetValue())
+                {
+                    Comment.Log("ForbidCloseFlanking setting is disabled, RuleAttackRoll_TargetIsFlanked_Patch will not be applied");
+                    return false;
+                }
+                else return true;
+            }
 
             [HarmonyTargetMethods]
             public static IEnumerable<MethodBase> TargetMethods()
@@ -141,22 +147,21 @@ namespace Way_of_the_shield
             { 
 #if DEBUG
         if(Settings.Debug.GetValue())
-                    Comment.Log("Entered the RuleAttackRoll constructor postfix"); 
+                    Comment.Log("Flanking TargetIsFlanked - Entered the RuleAttackRoll constructor postfix"); 
 #endif
                 if (__instance.IsFake) return;
                 UnitEntityData target = __instance.Target;
-                if (!ForbidCloseFlanking.GetValue()
-                    || (AllowCloseFlankingToEnemies.GetValue() && target.IsPlayerFaction))
+                if ((AllowCloseFlankingToEnemies.GetValue() && target.IsPlayerFaction))
                 { __instance.TargetIsFlanked = target.CombatState.IsFlanked;
 #if DEBUG
-                    if (Settings.Debug.GetValue()) Comment.Log("return from RuleAttackRoll constructor at 1"); 
+                    if (Settings.Debug.GetValue()) Comment.Log("Flanking TargetIsFlanked - return from RuleAttackRoll constructor at 1"); 
 #endif
                     return; };
                 if (target.State.Features.CannotBeFlanked) { __instance.TargetIsFlanked = false; return; };
                 if (TacticalCombatHelper.IsActive) { __instance.TargetIsFlanked = target.IsInCombat && target.CombatState.EngagedBy.Count > 1;
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log("return from RuleAttackRoll constructor at 2"); 
+                        Comment.Log("Flanking TargetIsFlanked - Flanking TargetIsFlanked - return from RuleAttackRoll constructor at 2"); 
 #endif
                     return; };
                 List<UnitEntityData> EngagedUnits = CombatController.IsInTurnBasedCombat() ? target.CombatState.EngagedBy.ToList() : target.CombatState.EngagedBy.Where(x => x.Commands.AnyCommandTargets(target)).ToList();
@@ -166,7 +171,7 @@ namespace Way_of_the_shield
                 if (!EngagedUnits.Contains(attacker) || EngagedUnits.Count < 2) { __instance.TargetIsFlanked = false;
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log("return from RuleAttackRoll constructor at 3"); 
+                        Comment.Log("Flanking TargetIsFlanked - Flanking TargetIsFlanked - return from RuleAttackRoll constructor at 3"); 
 #endif
                     return; };
                 EngagedUnits.Remove(attacker);
@@ -191,14 +196,14 @@ namespace Way_of_the_shield
 #if DEBUG
                 if (Settings.Debug.GetValue())
                     Comment.Log(
-                        $"When attacking {target.CharacterName} the angle between {attacker.CharacterName} and {flanker.CharacterName} is {biggestAngle}. " +
+                        $"Flanking TargetIsFlanked - When attacking {target.CharacterName} the angle between {attacker.CharacterName} and {flanker.CharacterName} is {biggestAngle}. " +
                         $"Improved Outflank is {AREamazingOutflankers}. Flanking is {__instance.TargetIsFlanked}"); 
 #endif
 
                 __instance.SetCustomData(FlankingUnitsKey, flankers);
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log("CustomData is " + __instance.TryGetCustomData(FlankingUnitsKey, out List<(UnitEntityData, float, bool)> team)); 
+                    Comment.Log("Flanking TargetIsFlanked - CustomData is " + __instance.TryGetCustomData(FlankingUnitsKey, out List<(UnitEntityData, float, bool)> team)); 
 #endif
                 __instance.SetCustomData(FlankedKey, (flanker, biggestAngle, AREamazingOutflankers));
 
@@ -208,6 +213,15 @@ namespace Way_of_the_shield
         [HarmonyPatch(typeof(RuleAttackRoll), nameof(RuleAttackRoll.OnTrigger))]
         public static class RuleAttackRoll_OnTrigger_Patch
         {
+            public static bool Prepare()
+            {
+                if (!ForbidCloseFlanking.GetValue())
+                {
+                    Comment.Log("ForbidCloseFlanking setting is disabled, RuleAttackRoll_OnTrigger_Patch will not be applied");
+                    return false;
+                }
+                else return true;
+            }
 
             [HarmonyTranspiler]
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
@@ -240,6 +254,16 @@ namespace Way_of_the_shield
         [HarmonyPatch(typeof(RuleCalculateAttackBonus), nameof(RuleCalculateAttackBonus.OnTrigger))]
         public static class RuleCalculateAttackBonus_OnTrigger_Patch
         {
+            public static bool Prepare()
+            {
+                if (!ForbidCloseFlanking.GetValue())
+                {
+                    Comment.Log("ForbidCloseFlanking setting is disabled, RuleCalculateAttackBonus_OnTrigger_Patch will not be applied");
+                    return false;
+                }
+                else return true;
+            }
+
             [HarmonyTranspiler]
             public static IEnumerable<CodeInstruction> Trasnpiler(IEnumerable<CodeInstruction> instructions)
             {
@@ -274,12 +298,22 @@ namespace Way_of_the_shield
             [HarmonyPatch(typeof(OutflankAttackBonus), nameof(OutflankAttackBonus.OnEventAboutToTrigger))]
             public static class OutflankAttackBonus_OnEventAboutToTrigger_patch
             {
+                public static bool Prepare()
+                {
+                    if (!ForbidCloseFlanking.GetValue())
+                    {
+                        Comment.Log("ForbidCloseFlanking setting is disabled, OutflankAttackBonus_OnEventAboutToTrigger_patch will not be applied");
+                        return false;
+                    }
+                    else return true;
+                }
+
                 [HarmonyTranspiler]
                 public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
                 {
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log("Entered Flanking -OutflankAttackBonus_OnEventAboutToTrigger_patch transpiler"); 
+                        Comment.Log("Entered Flanking - OutflankAttackBonus_OnEventAboutToTrigger_patch transpiler"); 
 #endif
                     List<CodeInstruction> _instructions = instructions.ToList();
 
@@ -331,28 +365,22 @@ namespace Way_of_the_shield
 
 
                 }
-
-                //[HarmonyPrefix]
-                //public static void Prefix(RuleCalculateAttackBonus evt)
-                //{
-                //    Comment.Log("Entered the OutflankAttackBonus.OnEventAboutToTrigger prefix. Target is flanked? {0}. Weapon is melee? {1}", new object[] { evt.TargetIsFlanked, evt.Weapon.Blueprint.IsMelee });
-                //}
-
-                //[HarmonyPostfix]
-                //public static void Postfix(OutflankAttackBonus __instance, RuleCalculateAttackBonus evt)
-                //{
-                //    Comment.Log("Entered the OutflankAttackBonus.OnEventAboutToTrigger postfix.");
-                //    if (!evt.TargetIsFlanked || !evt.Weapon.Blueprint.IsMelee)
-                //    Comment.Log("(!evt.TargetIsFlanked || !evt.Weapon.Blueprint.IsMelee) is true, exit the method.");
-                //    Comment.Log("Attempt to call IsSuitable. Result is {0}", new object[] { IsSuitableForOutflank(__instance, evt)});
-
-                //                }
             }
 
 
             [HarmonyPatch(typeof(OutflankDamageBonus), nameof(OutflankDamageBonus.OnEventAboutToTrigger))]
             public static class OutflankDamageBonus_OnEventAboutToTrigger_patch
             {
+                public static bool Prepare()
+                {
+                    if (!ForbidCloseFlanking.GetValue())
+                    {
+                        Comment.Log("ForbidCloseFlanking setting is disabled, OutflankDamageBonus_OnEventAboutToTrigger_patch will not be applied");
+                        return false;
+                    }
+                    else return true;
+                }
+
                 [HarmonyTranspiler]
                 public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
                 {
@@ -408,12 +436,22 @@ namespace Way_of_the_shield
             [HarmonyPatch(typeof(OutflankProvokeAttack), nameof(OutflankProvokeAttack.OnEventDidTrigger))]
             public static class OutflankProvokeAttack_OnEventDidTrigger_patch
             {
+                public static bool Prepare()
+                {
+                    if (!ForbidCloseFlanking.GetValue())
+                    {
+                        Comment.Log("ForbidCloseFlanking setting is disabled, OutflankProvokeAttack_OnEventDidTrigger_patch will not be applied");
+                        return false;
+                    }
+                    else return true;
+                }
+
                 [HarmonyPrefix]
                 public static bool Prefix(RuleAttackRoll evt, OutflankProvokeAttack __instance)
                 {
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log("Entered OutflankProvokeAttack"); 
+                        Comment.Log("Flanking OutflankProvokeAttack - Entered Prefix"); 
 #endif
 
                     BlueprintUnitFact outflank = __instance.OutflankFact;
@@ -421,7 +459,7 @@ namespace Way_of_the_shield
                     {
 #if DEBUG
                         if (Settings.Debug.GetValue())
-                            Comment.Log($"evt.IsFake is {evt.IsFake}, !evt.IsCriticalConfirmed is {!evt.IsCriticalConfirmed}, !evt.TargetIsFlanked is {!evt.TargetIsFlanked}, !evt.Weapon.Blueprint.IsMelee is {!evt.Weapon.Blueprint.IsMelee}, total result is {(evt.IsFake || !evt.IsCriticalConfirmed || (!evt.TargetIsFlanked && !evt.Weapon.Blueprint.IsMelee))}"); 
+                            Comment.Log($"Flanking OutflankProvokeAttack - evt.IsFake is {evt.IsFake}, !evt.IsCriticalConfirmed is {!evt.IsCriticalConfirmed}, !evt.TargetIsFlanked is {!evt.TargetIsFlanked}, !evt.Weapon.Blueprint.IsMelee is {!evt.Weapon.Blueprint.IsMelee}, total result is {(evt.IsFake || !evt.IsCriticalConfirmed || (!evt.TargetIsFlanked && !evt.Weapon.Blueprint.IsMelee))}"); 
 #endif
                         return false;
                     }
@@ -431,13 +469,13 @@ namespace Way_of_the_shield
                     {
 #if DEBUG
                         if (Settings.Debug.GetValue())
-                            Comment.Log("Check for " + unit.CharacterName + ". Angle is " + angle + ". Improved Outlflank is " + amazingOutflankers); 
+                            Comment.Log("Flanking OutflankProvokeAttack - Check for " + unit.CharacterName + ". Angle is " + angle + ". Improved Outlflank is " + amazingOutflankers); 
 #endif
                         if (angle > GetMinimalFlankingAngle(amazingOutflankers) && (__instance.Owner.State.Features.SoloTactics || unit.Descriptor.HasFact(outflank)))
                         {
 #if DEBUG
                             if (Settings.Debug.GetValue())
-                                Comment.Log("Provoked AoO"); 
+                                Comment.Log("Flanking OutflankProvokeAttack - Provoked AoO"); 
 #endif
                             Game.Instance.CombatEngagementController.ForceAttackOfOpportunity(unit, evt.Target, false);
                         }
@@ -452,13 +490,13 @@ namespace Way_of_the_shield
             {
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log($"IsSuitableForOutflank - Delegate is {outflank.GetType()}, owner is {outflank.Owner.CharacterName}"); 
+                    Comment.Log($"Flanking IsSuitableForOutflank - Delegate is {outflank.GetType()}, owner is {outflank.Owner.CharacterName}"); 
 #endif
                 if (outflank is not OutflankAttackBonus or OutflankDamageBonus)
                 {
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log("IsSuitableForOutflank - Delegate is not OutflankAttackBonus or OutflankDamageBonus. Return false."); 
+                        Comment.Log("Flanking IsSuitableForOutflank - Delegate is not OutflankAttackBonus or OutflankDamageBonus. Return false."); 
 #endif
                     return false;
                 }
@@ -468,7 +506,7 @@ namespace Way_of_the_shield
                 {
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log("IsSuitableForOutflank - No flankers!"); 
+                        Comment.Log("Flanking IsSuitableForOutflank - No flankers!"); 
 #endif
                     return false;
                 };
@@ -477,7 +515,7 @@ namespace Way_of_the_shield
                 {
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log($"IsSuitableForOutflank - Outflanker has already been set by another call to the method. Outflanker is {previousOutflanker?.CharacterName}"); 
+                        Comment.Log($"Flanking IsSuitableForOutflank - Outflanker has already been set by another call to the method. Outflanker is {previousOutflanker?.CharacterName}"); 
 #endif
                 };
 
@@ -501,7 +539,7 @@ namespace Way_of_the_shield
                             ruleAttackRoll.SetCustomData(Outflank, unit);
 #if DEBUG
                             if (Settings.Debug.GetValue())
-                                Comment.Log("Set {0} into the Outflank custom data", new object[] { unit.CharacterName }); 
+                                Comment.Log("Flanking IsSuitableForOutflank - Set {0} into the Outflank custom data", new object[] { unit.CharacterName }); 
 #endif
                         };
                         return true;
@@ -513,13 +551,13 @@ namespace Way_of_the_shield
                         ruleAttackRoll.SetCustomData(Outflank, outflank.Owner);
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log("Outflank owner has Solo Tactics. Set the owner into Outflank custom data."); 
+                        Comment.Log("Flanking IsSuitableForOutflank - Outflank owner has Solo Tactics. Set the owner into Outflank custom data."); 
 #endif
                     return true;
                 }
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log("Return false"); 
+                    Comment.Log("Flanking IsSuitableForOutflank - Return false"); 
 #endif
                 return false;
             }
@@ -528,6 +566,16 @@ namespace Way_of_the_shield
             [HarmonyPatch(typeof(AttackLogMessage), nameof(AttackLogMessage.GetData))]
             public static class AttackLogMessage_GetData_patch
             {
+                static bool Prepare()
+                {
+                    if (!ForbidCloseFlanking.GetValue())
+                    {
+                        Comment.Log("ForbidCloseFlanking setting is disabled, AttackLogMessage_GetData_patch will not be applied");
+                        return false;
+                    }
+                    else return true;
+                }
+
                 public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
                 {
 #if DEBUG
@@ -557,7 +605,7 @@ namespace Way_of_the_shield
                     if (!rule.TargetIsFlanked && target.CombatState.EngagedBy.Count > 1 && target.Descriptor.State.Features.CannotBeFlanked)
                     {
                         sb.Append(target.CharacterName);
-                        sb.Append(" " + m_canNotBeFkaned + "."); //Can not be flanked
+                        sb.Append(" " + m_canNotBeFlanked + "."); //Can not be flanked
                         sb.AppendLine();
                         sb.AppendLine();
                         return;
@@ -568,7 +616,7 @@ namespace Way_of_the_shield
                     {
 #if DEBUG
                         if (Settings.Debug.GetValue())
-                            Comment.Log($"AppendFlankingData - Outflank flag2 is {flag2}, Outflank flag3 is {flag3}"); 
+                            Comment.Log($"Flanking - AppendFlankingData - Outflank flag2 is {flag2}, Outflank flag3 is {flag3}"); 
 #endif
                         return;
                     }
@@ -577,7 +625,7 @@ namespace Way_of_the_shield
                     UnitEntityData TrueFlanker = (presentOutflank && !soloTactics) ? outflanker : flanker.unit;
 #if DEBUG
                     if (Settings.Debug.GetValue())
-                        Comment.Log("Outflank flag is {0}, True Flanker is {1}", presentOutflank, TrueFlanker.CharacterName); 
+                        Comment.Log($"Flanking - Outflank flag is {presentOutflank}, True Flanker is {TrueFlanker.CharacterName}"); 
 #endif
                     (UnitEntityData, float, bool) FlankerInfo = team.Find(f => f.Item1 == TrueFlanker);
                     if (rule.TargetIsFlanked)
@@ -599,7 +647,7 @@ namespace Way_of_the_shield
                                 sb.AppendLine();
                                 return;
                             }
-                            else Comment.Error("When {0} was attacking {1}, True FLanker was {2}, while {2} has no Solo Tactics feature!", new object[] { rule.Initiator.CharacterName, rule.Target.CharacterName, outflanker.CharacterName });
+                            else Comment.Error($"Flanking - When {rule.Initiator.CharacterName} was attacking {rule.Target.CharacterName}, True FLanker was {outflanker.CharacterName}, while not having Solo Tactics feature!");
                         }
                         sb.AppendLine();
                         sb.AppendLine();
@@ -624,7 +672,7 @@ namespace Way_of_the_shield
 
                 }
 
-                public static LocalizedString m_canNotBeFkaned = new() { Key = "Flanking_can_not_be_flanked" };
+                public static LocalizedString m_canNotBeFlanked = new() { Key = "Flanking_can_not_be_flanked" };
                 public static LocalizedString m_distracts = new() { Key = "Flanking_distracts", m_ShouldProcess = true };
                 public static LocalizedString m_masterfulFeat = new() { Key = "Flanking_With_a_masterful_feat_of_teamwork" };
                 public static LocalizedString m_fromAnotherFlank = new() { Key = "Flanking_from_another_flank", m_ShouldProcess = true };
