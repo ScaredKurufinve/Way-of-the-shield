@@ -9,6 +9,8 @@ using UnityEngine;
 using Kingmaker.TextTools;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Kingmaker.EntitySystem.Persistence;
+using System.Text;
 #if !Dynamic
 using UnityModManagerNet;
 #endif
@@ -44,6 +46,7 @@ namespace Way_of_the_shield
             if (!BeenLoaded)
             {
                 Comment = modEntry.Logger;
+                Comment.SetStackTraceSeverity(LogSeverity.Error);
                 modName = modEntry.Manifest.UniqueName;
                 modPath = modEntry.Path;
             }
@@ -63,6 +66,7 @@ namespace Way_of_the_shield
                 if (modEntry is not UnityModManager.ModEntry mod1) return;
                 if (BeenLoaded ) goto Load;
                 Comment = LogChannelFactory.GetOrCreate(mod1.Info.DisplayName);
+                Comment.SetStackTraceSeverity(LogSeverity.Error);
                 modName = mod1.Info.Id;
                 modPath = mod1.Path;
 #endif
@@ -92,10 +96,10 @@ namespace Way_of_the_shield
             //#if DEBUG
             Stopwatch timer = new();
             timer.Start();
-            harmony ??= new(Shield); 
-            harmony.UnpatchAll(Shield);
 //#endif
             Comment.Log($"Start loading {modName} mod");
+            harmony ??= new(Shield); 
+            harmony.UnpatchAll(Shield);
 #region get assemblies
             allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             UMM = CheckForMod("UnityModManager");
@@ -105,10 +109,10 @@ namespace Way_of_the_shield
                 TTTBase = CheckForMod("TabletopTweaks-Base");
                 ModMenu = CheckForMod("ModMenu");
             }
-#endregion
             Comment.Log("TTT-Core is " + TTTCore?.FullName ?? "not found.");
             Comment.Log("TTT-Base is " + TTTBase?.FullName ?? "not found.");
             Comment.Log("ModMenu is " + ModMenu?.FullName ?? "not found.");
+#endregion
             try
             {
                 if (initialized == false) Settings.Init();
@@ -116,7 +120,6 @@ namespace Way_of_the_shield
             catch(TypeLoadException ex)
             {
                 Comment.Exception(ex, "F me. The type is " + ex.TypeName);
-                Comment.Log(ex.Message);
             }
             //if (mod is UnityModManager.ModEntry modEntry)
             //{
@@ -142,9 +145,8 @@ namespace Way_of_the_shield
         
 
         public static Assembly CheckForMod(string modName)
-        {
-            return allAssemblies.Where(ass => ass.FullName.Contains(modName)).FirstOrDefault();
-        }
+            => allAssemblies.Where(ass => ass.FullName.Contains(modName)).FirstOrDefault();
+        
 
         public static bool CheckForModEnabled(string modName)
         {
@@ -172,34 +174,35 @@ namespace Way_of_the_shield
         {
             try
             {
-                Comment.Log("Will try to apply localization for the " + LocalizationManager.CurrentLocale + " locale.");
-                LocalizationPack localizationPack = LocalizationManager.LoadPack(Main.modPath + Path.DirectorySeparatorChar + "Localization" + Path.DirectorySeparatorChar + LocalizationManager.CurrentLocale + ".json", LocalizationManager.CurrentLocale);
+                Comment.Log($"Will try to apply localization for the {LocalizationManager.CurrentLocale} locale.");
+                string LocalizationFolder = Path.Combine(Main.modPath, "Localization");
+                string LocalizationFileName = $"{LocalizationManager.CurrentLocale}.json";
+                string LocalizationPath = Path.Combine(LocalizationFolder, LocalizationFileName);
+                LocalizationPack localizationPack = LocalizationManager.LoadPack(LocalizationPath, LocalizationManager.CurrentLocale);
                 LocalizationPack currentPack = LocalizationManager.CurrentPack;
                 if (localizationPack != null && currentPack != null)
                 {
                     currentPack.AddStrings(localizationPack);
-                    Comment.Log("Applied localization for the " + LocalizationManager.CurrentLocale + "locale.");
+                    Comment.Log($"Applied localization for the {LocalizationManager.CurrentLocale} locale.");
                 }
-                else Comment.Error("Failed to apply the localization. LocalizationPack is null? " + (localizationPack is null) + ". CurrentPack is null?" + (currentPack is null) + ".");
+                else
+                {
+                    StringBuilder warning = new();
+                    warning.AppendLine($"Failed to apply the localization. LocalizationPack is null? {localizationPack is null}. CurrentPack is null? {currentPack is null}.");
+                    bool flag = Directory.Exists(LocalizationFolder);
+                    warning.AppendLine($"Localization folder does {(flag ? "" : "not ")}exist at {LocalizationFolder}.");
+                    if (flag)
+                    {
+                        bool flag2 = File.Exists(LocalizationPath);
+                        warning.AppendLine($"Localization file {LocalizationFileName} does {(flag2 ? "" : "not ")}exist inside the folder.");
+                    }
+                    Comment.Warning(warning.ToString());
+                };
             }
-            catch
+            catch(Exception ex)
             {
-                Comment.Error("Failed to apply the localization");
+                Comment.Exception(ex, "Failed to apply the localization");
             };
         }
-
-        
     }
-    //[HarmonyPatch(typeof(OwlcatModification), nameof(OwlcatModification.TryLoadBundle))]
-    //public static class DumbBundleFix
-    //{
-    //    [HarmonyPrefix]
-    //    public static bool Fix(OwlcatModification __instance, string bundleName, ref AssetBundle __result)
-    //    {
-    //        if (!__instance.Settings.BundlesLayout.GuidToBundle.Values.Contains(bundleName))
-    //            __result = null;
-    //        else __result = __instance.LoadBundle(bundleName);
-    //        return false;
-    //    }
-    //}
 }

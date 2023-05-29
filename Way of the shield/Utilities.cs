@@ -34,6 +34,7 @@ using Kingmaker.TextTools;
 using Owlcat.Runtime.Core.Logging;
 using UnityEngine;
 using Kingmaker.Cheats;
+using HarmonyLib;
 
 namespace Way_of_the_shield
 {
@@ -357,7 +358,7 @@ namespace Way_of_the_shield
                 }
             }
 
-            if (index == -1) Comment.Error("Failed to find and index when transpiling");
+            if (index == -1) Comment.Error("Failed to find an index when transpiling");
 #if DEBUG
             if (Settings.Debug.GetValue())
             {
@@ -417,10 +418,9 @@ namespace Way_of_the_shield
         {
             if (String.IsNullOrEmpty(IconName)) return null;
             byte[] bytes = new byte[] { };
-            string path = modPath + Path.DirectorySeparatorChar + "Icons" + Path.DirectorySeparatorChar + IconName + ".png";
+            string path = Path.Combine(modPath, "Icons", IconName + ".png");
             try
             {
-
                 bytes = File.ReadAllBytes(path);
             }
             catch (FileNotFoundException)
@@ -453,7 +453,7 @@ namespace Way_of_the_shield
             BlueprintScriptableObject bp_base;
             if (!Guid.TryParse(GUID, out Guid guid))
             {
-                Comment.Error("ERROR! Failed to parse string {0} into a GUID while retrieving a blueprint requested with the name {1}{2}.", GUID, name, " " + (circumstances ?? ""));
+                Comment.Error($"ERROR! Failed to parse string {GUID} into a GUID while retrieving a blueprint requested with the name {name}{(circumstances.IsNullOrEmpty() ? "" : " " + circumstances)}.");
                 return false;
             }
             try
@@ -462,20 +462,20 @@ namespace Way_of_the_shield
             }
             catch
             {
-                Comment.Error("ERROR! Failed to retrieve blueprint {0} by GUID {1} {2}", new object[] { name, GUID, circumstances });
+                Comment.Error($"ERROR! Failed to retrieve blueprint {name} by GUID {GUID}{(circumstances.IsNullOrEmpty() ? "" : " " + circumstances)}");
                 return false;
             }
 
             if (bp_base is null)
             {
-                Comment.Error("ERROR! Failed to retrieve blueprint {0} by GUID {1} {2}", new object[] { name, GUID, circumstances });
+                Comment.Error($"ERROR! Failed to retrieve blueprint {name} by GUID {GUID}{(circumstances.IsNullOrEmpty() ? "" : " " + circumstances)}");
                 return false;
             }
             blueprint = bp_base as T;
             if (blueprint is not null) return true;
             else
             {
-                Comment.Error("ERROR! Failed to convert blueprint {0} of type {1} by GUID {2} requested with the name {3} into the type {4}{5}.", bp_base.name, bp_base.GetType(), GUID, name, typeof(T), " " + (circumstances ?? ""));
+                Comment.Error($"ERROR! Failed to convert blueprint {bp_base.name} of type {bp_base.GetType()} by GUID {GUID} requested with the name {name} into the type {typeof(T)}{(circumstances.IsNullOrEmpty() ? "" : " " + circumstances)}.");
                 return false;
             }
         }
