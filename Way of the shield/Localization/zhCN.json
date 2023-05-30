@@ -780,7 +780,7 @@
         },
 		{
             "Key": "WayOfTheShield_AngelfireApostleProficiencies_Shieldless", 
-            "Value": "天火使徒只擅长使用轻型盔甲。"
+            "Value": "天火使徒只擅长使用轻型盔甲，{g|Encyclopedia:Weapon_Proficiency}简易武器{/g}和其神祇的偏好武器，以及盾牌（不包括小圆盾和塔盾）。"
         },
 		{
             "Key": "WayOfTheShield_SettingsGroup_Title", 
