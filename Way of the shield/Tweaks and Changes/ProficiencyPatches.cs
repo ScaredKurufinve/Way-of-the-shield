@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using Kingmaker;
+using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Blueprints.Items.Shields;
 using Kingmaker.Blueprints.Items.Weapons;
@@ -13,7 +14,7 @@ using Kingmaker.Items.Slots;
 using Kingmaker.RuleSystem.Rules;
 using Kingmaker.UI.Common;
 using Kingmaker.UnitLogic;
-
+using Kingmaker.UnitLogic.FactLogic;
 
 namespace Way_of_the_shield.ProficiencyRework
 {
@@ -67,6 +68,8 @@ namespace Way_of_the_shield.ProficiencyRework
                 _instructions.RemoveRange(index, count);
                 return _instructions;
             }
+
+            
         }
 
 
@@ -164,6 +167,28 @@ namespace Way_of_the_shield.ProficiencyRework
             }
         }
 
+        [HarmonyPatch(typeof(BlueprintsCache), nameof(BlueprintsCache.Init))]
+        public static class BlueprintsCache_Init_Patch_For_Shields_Proficiency
+        {
+            const string _name = "WayOfTheShield_AddProficiencies_ShieldsWeaponProficiency";
+            static void Postfix()
+            {
+                string circ = "when adding weapon proficiency to the Shields Proficiency blueprint";
+                if (!RetrieveBlueprint("cb8686e7357a68c42bdd9d4e65334633", out BlueprintFeature ShieldsProficiency, "ShieldProficiency", circ) )
+                    return;
+                AddProficiencies AP = ShieldsProficiency.ComponentsArray.OfType<AddProficiencies>().FirstOrDefault(c => c.name.Contains(_name));
+                if (AP is not null) 
+                    return;
+                AP = new()
+                {
+                    name = _name,
+                    ArmorProficiencies = new ArmorProficiencyGroup[] { },
+                    WeaponProficiencies = new WeaponCategory[] { WeaponCategory.WeaponLightShield, WeaponCategory.WeaponHeavyShield },
+                };
+                ShieldsProficiency.AddComponent(AP);
+            }
+        }
+
 
         public static void AddAttackBonusPenaltyFromArmor(ItemEntityArmor armor, int penalty)
         {
@@ -250,7 +275,6 @@ namespace Way_of_the_shield.ProficiencyRework
                 return;
             if ( !unit.Proficiencies.Contains(weapon.Blueprint.Category)) 
                 __instance.AddModifier(-4, penalty, ModifierDescriptor.Penalty);
-
         }
 
 

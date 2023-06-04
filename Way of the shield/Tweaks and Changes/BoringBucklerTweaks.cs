@@ -274,7 +274,7 @@ namespace Way_of_the_shield
             #endregion
             #region modify Light Shield Proficiency blueprint
             if (!ShieldsProficiency) goto skipParry;
-            ShieldsProficiency.AddComponent(new AddProficiencies() { ArmorProficiencies = new ArmorProficiencyGroup[] { }, WeaponProficiencies = new WeaponCategory[] { WeaponCategory.WeaponLightShield, WeaponCategory.WeaponHeavyShield } });
+            //ShieldsProficiency.AddComponent(new AddProficiencies() { ArmorProficiencies = new ArmorProficiencyGroup[] { }, WeaponProficiencies = new WeaponCategory[] { WeaponCategory.WeaponLightShield, WeaponCategory.WeaponHeavyShield } });
              af = ShieldsProficiency.GetComponent<AddFacts>();
             if (af is null)
             {
