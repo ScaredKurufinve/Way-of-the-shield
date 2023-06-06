@@ -163,42 +163,28 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 Comment.Log("WARNING: Couldn't find an existing AddFactContextActions component on the FightDefensivelyBuff blueprint when inserting ShieldedDefenseVisibleBuff. This is sus, creating a new one.");
                 addFactContextActions = new();
             }
-            addFactContextActions.Deactivated ??= new();
-            addFactContextActions.Activated ??= new();
-            addFactContextActions.Activated.Actions = addFactContextActions.NewRound.Actions.AddToArray(
-                new Conditional()
+            var conditional = new Conditional()
+            {
+                name = "FightDefensivelyBuff_addFactContextActions_NewRound_CheckForShieldedDefenseEffectBuff",
+                ConditionsChecker = new()
                 {
-                    name = $"{FightDefensivelyBuff}_addFactContextActions_NewRound_CheckForShieldedDefenseEffectBuff",
-                    ConditionsChecker = new()
-                    {
-                        Conditions = new Condition[]
+                    Conditions = new Condition[]
                         {
                             new ContextConditionCasterHasFact() {m_Fact = new(){deserializedGuid = BlueprintGuid.Parse("807ca5b2501444aab22a0f08a64691e1") } }
                         }
-                    },
-                    IfTrue = new()
-                    {
-                        Actions = new GameAction[] { new ContextActionApplyBuff() { m_Buff = ShieldedDefenseEffectBuff.ToReference<BlueprintBuffReference>(), ToCaster = true, Permanent = true, } }
-                    },
-                    IfFalse = new() { }
-                });;
-            addFactContextActions.NewRound ??= new();
-            addFactContextActions.NewRound.Actions = addFactContextActions.NewRound.Actions.AddToArray(
-                new Conditional()
+                },
+                IfTrue = new()
                 {
-                    ConditionsChecker = new()
-                    {
-                        Conditions = new Condition[]
-                        {
-                            new ContextConditionCasterHasFact() {m_Fact = new(){deserializedGuid = BlueprintGuid.Parse("807ca5b2501444aab22a0f08a64691e1") } }
-                        }
-                    },
-                    IfTrue = new()
-                    {
-                        Actions = new GameAction[] { new ContextActionApplyBuff() { m_Buff = ShieldedDefenseEffectBuff.ToReference<BlueprintBuffReference>(), ToCaster = true, Permanent = true,} }
-                    }
-                });
+                    Actions = new GameAction[] { new ContextActionApplyBuff() { m_Buff = ShieldedDefenseEffectBuff.ToReference<BlueprintBuffReference>(), ToCaster = true, Permanent = true, } }
+                },
+                IfFalse = new() { Actions = new GameAction[] { } }
+            };
+            addFactContextActions.Activated ??= new() { Actions = new GameAction[] { } };
+            addFactContextActions.Activated.Actions = addFactContextActions.Activated.Actions.AddToArray(conditional);
+            addFactContextActions.NewRound ??= new() { Actions = new GameAction[] { } };
+            addFactContextActions.NewRound.Actions = addFactContextActions.NewRound.Actions.AddToArray(conditional);
                 
+            addFactContextActions.Deactivated ??= new();
             addFactContextActions.Deactivated.Actions = addFactContextActions.Deactivated.Actions.AddToArray(new ContextActionRemoveBuff() { m_Buff = ShieldedDefenseEffectBuff.ToReference<BlueprintBuffReference>() });
 
         SkipInsertion:
