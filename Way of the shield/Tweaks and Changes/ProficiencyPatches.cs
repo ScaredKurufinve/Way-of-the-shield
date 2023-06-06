@@ -173,6 +173,10 @@ namespace Way_of_the_shield.ProficiencyRework
             const string _name = "WayOfTheShield_AddProficiencies_ShieldsWeaponProficiency";
             static void Postfix()
             {
+#if DEBUG
+                if (Debug.GetValue())
+                    Comment.Log("Adding shields' weapon proficiency to the ShieldsProficiency feat");
+#endif
                 string circ = "when adding weapon proficiency to the Shields Proficiency blueprint";
                 if (!RetrieveBlueprint("cb8686e7357a68c42bdd9d4e65334633", out BlueprintFeature ShieldsProficiency, "ShieldProficiency", circ) )
                     return;
