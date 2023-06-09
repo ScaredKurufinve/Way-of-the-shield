@@ -51,7 +51,6 @@ namespace Way_of_the_shield
             public override bool CanBeUsedOn(ItemEntityWeapon weapon)
             {
                 if (weapon is null) return false;
-                if (Fact.Owner.Unit.GetSaddledUnit() is not null) return false;
                 if (weapon.Blueprint.Double) return false;
                 ItemEntityShield shield = (weapon.HoldingSlot as HandSlot)?.PairSlot?.MaybeShield;
                 if (shield is null) return false;
