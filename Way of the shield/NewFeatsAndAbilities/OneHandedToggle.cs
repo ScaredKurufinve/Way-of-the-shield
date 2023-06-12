@@ -85,7 +85,10 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
         [HarmonyPostfix]
         static void ItemEntityWeapon_HoldInTwoHands_Postfix(ItemEntityWeapon __instance, ref bool __result)
         {
-            if (__result == false || __instance.Wielder is null) return;
+            if (    __result == false 
+                ||  __instance.Wielder is null
+                || !__instance.Blueprint.IsOneHandedWhichCanBeUsedWithTwoHands) return;
+
             if (__instance.Wielder.Unit.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.ForceOneHanded) __result = false;
         }
 
