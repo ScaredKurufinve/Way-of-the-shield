@@ -66,14 +66,17 @@ namespace Way_of_the_shield
                 if (!weapon.HoldInTwoHands) return;
                 BlueprintWeaponType type = weapon.Blueprint.Type;
 
-                if (type.Category != WeaponCategory.Longbow
-                    && type.Category != WeaponCategory.HeavyCrossbow
-                    && type.Category != WeaponCategory.LightCrossbow
-                    && type.Category != WeaponCategory.HandCrossbow
-                    && type.Category != WeaponCategory.HeavyRepeatingCrossbow
-                    && type.Category != WeaponCategory.LightRepeatingCrossbow
-                    && !Owner.Ensure<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>().UnhinderingShield)
-                { evt.AddModifier(-1, Fact, ModifierDescriptor.Penalty); }
+                if (
+                     (  type.Category == WeaponCategory.Longbow
+                     || type.Category == WeaponCategory.HeavyCrossbow
+                     || type.Category == WeaponCategory.LightCrossbow
+                     || type.Category == WeaponCategory.HandCrossbow
+                     || type.Category == WeaponCategory.HeavyRepeatingCrossbow
+                     || type.Category == WeaponCategory.LightRepeatingCrossbow
+                     )
+                   && !Owner.Ensure<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>().UnhinderingShield
+                   )
+                        evt.AddModifier(-1, Fact, ModifierDescriptor.Penalty); 
             }
 
             public void OnEventDidTrigger(RuleCalculateAttackBonusWithoutTarget evt) { }
