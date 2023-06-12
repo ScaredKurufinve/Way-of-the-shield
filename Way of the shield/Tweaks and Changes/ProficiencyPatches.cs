@@ -187,7 +187,12 @@ namespace Way_of_the_shield.ProficiencyRework
                 {
                     name = _name,
                     ArmorProficiencies = new ArmorProficiencyGroup[] { },
-                    WeaponProficiencies = new WeaponCategory[] { WeaponCategory.WeaponLightShield, WeaponCategory.WeaponHeavyShield },
+                    WeaponProficiencies = new WeaponCategory[] { 
+                        WeaponCategory.WeaponLightShield, 
+                        WeaponCategory.WeaponHeavyShield, 
+                        WeaponCategory.SpikedHeavyShield,
+                        WeaponCategory.SpikedLightShield
+                    },
                 };
                 ShieldsProficiency.AddComponent(AP);
             }
