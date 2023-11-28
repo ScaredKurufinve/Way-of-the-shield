@@ -59,7 +59,7 @@
 		  <HintPath>$(Wrath)\UnityEngine.IMGUIModule.dll</HintPath>
 	  </Reference>
 	  <Reference Include="UnityModManager">
-	    <HintPath>$(Wrath)\Wrath_Data\Managed\UnityModManager\UnityModManager.dll</HintPath>
+	    <HintPath>$(Wrath)\UnityModManager\UnityModManager.dll</HintPath>
 	  </Reference>
 
 
