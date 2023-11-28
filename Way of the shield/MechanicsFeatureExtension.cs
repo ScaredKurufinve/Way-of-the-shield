@@ -51,14 +51,12 @@ namespace Way_of_the_shield
 #if DEBUG
             if (Settings.Debug.GetValue()) Comment.Log("Entered AddMechanicsFeature.Runtime.GetFeature prefix"); 
 #endif
-            if (type < UnhinderingShield || type >= UnhinderingShield + Length) return true;
-            MechanicsFeatureExtensionPart features = unit.Ensure<MechanicsFeatureExtensionPart>();
-            __result = flagArray[(int)type - 3000].GetValue(features) as CountableFlag;
+            if (type is < UnhinderingShield or >= UnhinderingShield + Length) return true;
+            __result = flagArray[(int)type - 3000].GetValue(unit.Ensure<MechanicsFeatureExtensionPart>()) as CountableFlag;
 #if DEBUG
             if (Settings.Debug.GetValue()) Comment.Log("Mechanics feature = " + (int)type); 
 #endif
-            if (__result is null) return true;
-            else return false;
+            return __result is null;
 
 
         }

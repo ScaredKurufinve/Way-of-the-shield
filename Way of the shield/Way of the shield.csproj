@@ -43,6 +43,9 @@
 		  <HintPath>$(Wrath)\Owlcat.Runtime.UI.dll</HintPath>
 	  </Reference>
 	  <Reference Include="System.Dynamic.Runtime" />
+	  <Reference Include="UnityEngine">
+	    <HintPath>$(Wrath)\Wrath_Data\Managed\UnityEngine.dll</HintPath>
+	  </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
       <HintPath>$(Wrath)\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
@@ -56,7 +59,7 @@
 		  <HintPath>$(Wrath)\UnityEngine.IMGUIModule.dll</HintPath>
 	  </Reference>
 	  <Reference Include="UnityModManager">
-	    <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\UnityModManager\UnityModManager.dll</HintPath>
+	    <HintPath>$(Wrath)\Wrath_Data\Managed\UnityModManager\UnityModManager.dll</HintPath>
 	  </Reference>
 
 
@@ -111,7 +114,7 @@
 		<PropertyGroup Condition="'$(Index1)'!= '-1'">
 			<IndexStart>$([MSBuild]::Add($(Index1), $(VerInfoText.Length))) </IndexStart>
 			<IndexLast>$(InfoJsonFileLines.IndexOf(',', $([System.Convert]::ToInt32($(IndexStart)))))</IndexLast>
-			<AssemblyVersion Condition ="'$(IndexLast)' &gt; '$([System.Convert]::ToInt32($(IndexStart)))'">$(InfoJsonFileLines.Substring($(IndexStart), $([MSBuild]::Subtract($(IndexLast), $(IndexStart)))).Trim('"'))</AssemblyVersion>
+			<AssemblyVersion Condition="'$(IndexLast)' &gt; '$([System.Convert]::ToInt32($(IndexStart)))'">$(InfoJsonFileLines.Substring($(IndexStart), $([MSBuild]::Subtract($(IndexLast), $(IndexStart)))).Trim('"'))</AssemblyVersion>
 		</PropertyGroup>
 		<Message Text="Version through properties is $(AssemblyVersion)" />
 	</Target>

@@ -203,7 +203,7 @@ namespace Way_of_the_shield.ProficiencyRework
         {
             if (IsProficient_Short(armor)) { return; };
             StatType stat = StatType.AdditionalAttackBonus;
-            armor.AddModifier(armor.Wielder.Stats.GetStat(stat), penalty);
+            armor.AddModifier(armor.Wielder.Stats.GetStat(stat), penalty, ModifierDescriptor.Armor);
         }
 
 
