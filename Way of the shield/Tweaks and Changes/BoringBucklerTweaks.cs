@@ -272,7 +272,10 @@ namespace Way_of_the_shield
             Comment.Log("Added BucklerParryActivatableFeature to the BucklerProficiency blueprint.");
             BucklerProf.AddComponent(new AddProficiencies() { ArmorProficiencies = new ArmorProficiencyGroup[] { }, WeaponProficiencies = new WeaponCategory[] { WeaponCategory.WeaponLightShield } });
             BucklerProf.m_Description = new() { m_Key = "BucklerProficiencyWithParry_Description" };
-            ;SkipBucklerProf:;
+            if (!RetrieveBlueprint("121811173a614534e8720d7550aae253", out BlueprintFeature ShieldBashFeature, "ShieldBashFeature", circ)) goto SkipBucklerProf;
+            ShieldBashFeature.Components = ShieldBashFeature.Components.Where(component => component is not PrerequisiteNotProficient noProf || !noProf.WeaponProficiencies.Contains(WeaponCategory.WeaponLightShield)).ToArray();
+            Comment.Log("Emptied weapon proficiencies on the old Shield Bash blueprint");
+            ; SkipBucklerProf:;
             #endregion
             #region modify Light Shield Proficiency blueprint
             if (!ShieldsProficiency) goto skipParry;
