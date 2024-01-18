@@ -21,7 +21,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
     [HarmonyPatch]
     public static class UnhinderingShield
     {
-        public static HashSet<(string GUID, string name)> selections = new()
+        public static List<(string GUID, string name)> selections = new()
         {
                 new ("247a4068296e8be42890143f451b4b45", "BasicFeatSelection"),
                 new ("41c8486641f7d6d4283ca9dae4147a9f", "FighterFeatSelection"),
