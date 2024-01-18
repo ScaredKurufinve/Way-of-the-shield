@@ -96,11 +96,11 @@ namespace Way_of_the_shield
             //#if DEBUG
             Stopwatch timer = new();
             timer.Start();
-//#endif
-            Comment.Log($"Start loading {modName} mod");
-            harmony ??= new(Shield); 
+            //#endif
+            Comment.Log($"Started loading the mod. Version is {Assembly.GetAssembly(typeof(Main)).GetName().Version}");
+            harmony ??= new(Shield);
             harmony.UnpatchAll(Shield);
-#region get assemblies
+            #region get assemblies
             allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             UMM = CheckForMod("UnityModManager");
             if (UMM != null)
@@ -109,9 +109,9 @@ namespace Way_of_the_shield
                 TTTBase = CheckForMod("TabletopTweaks-Base");
                 ModMenu = CheckForMod("ModMenu");
             }
-            Comment.Log("TTT-Core is " + TTTCore?.FullName ?? "not found.");
-            Comment.Log("TTT-Base is " + TTTBase?.FullName ?? "not found.");
-            Comment.Log("ModMenu is " + ModMenu?.FullName ?? "not found.");
+            Comment.Log($"TTT-Core is {TTTCore?.GetName().Version.ToString() ?? "not found."}");
+            Comment.Log($"TTT-Base is {TTTBase?.GetName().Version.ToString() ?? "not found."}");
+            Comment.Log($"ModMenu is {ModMenu?.GetName().Version.ToString() ?? "not found."}");
 #endregion
             try
             {
@@ -145,7 +145,7 @@ namespace Way_of_the_shield
         
 
         public static Assembly CheckForMod(string modName)
-            => allAssemblies.Where(ass => ass.FullName.Contains(modName)).FirstOrDefault();
+            => allAssemblies.Where(ass => ass.GetName().Name.Contains(modName)).FirstOrDefault();
         
 
         public static bool CheckForModEnabled(string modName)
@@ -162,7 +162,7 @@ namespace Way_of_the_shield
                 .GetValue(null) as List<dynamic>;
 #endif
 
-            return (modEntries is not null && modEntries.Contains(mod => mod.Info.AssemblyName.Contains("TabletopTweaks-Base") && mod.Enabled));
+            return (modEntries is not null && modEntries.Contains(mod => mod.Info.AssemblyName.Contains(modName) && mod.Enabled));
         }
 
 

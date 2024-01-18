@@ -150,9 +150,10 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 feature.AddComponent(new FeatureTagsComponent() { FeatureTags = FeatureTag.Defense });
                 feature.AddToCache();
                 #endregion
-                if (Main.TTTBase is null || !RetrieveBlueprint("ef38e0fe68f14c88a9deacc421455d14", out BlueprintFeatureSelection ShieldMastery, "ShieldMasterySelection", "to add Shield Brace")) goto skipShieldMastery;
-                selections.Add((ShieldMastery.AssetGuid.ToString(), "TTT-ShieldMasterySelection"));
-                skipShieldMastery:;
+                if (Main.CheckForModEnabled("TabletopTweaks-Base") && RetrieveBlueprint("ef38e0fe68f14c88a9deacc421455d14", out BlueprintFeatureSelection ShieldMastery, "ShieldMasterySelection", "to add Shield Brace"))
+                    selections.Add((ShieldMastery.AssetGuid.ToString(), "TTT-ShieldMasterySelection"));
+                else
+                    Comment.Log("Skipped adding Shield Brace to Shield Mastery Selection");                
                 feature.AddFeatureToSelections(selections);
             }
         }
