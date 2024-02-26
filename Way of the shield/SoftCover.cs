@@ -39,7 +39,8 @@ namespace Way_of_the_shield
                 attackerPosition = initiator.Position;
                 targetPosition = target.Position;
                 Result = new();
-                targetSize = target.OriginalSize;
+                targetIsProne = target.State.Prone.Active;
+                targetSize = targetIsProne ? target.State.Size -3 : target.State.Size;
                 Fake = fake;
             }
             public RuleSoftCover(UnitEntityData initiator, UnitEntityData target, ItemEntityWeapon weapon, bool fake = false) : this(initiator: initiator, target: target, fake: fake)
@@ -56,6 +57,7 @@ namespace Way_of_the_shield
             public ItemEntityWeapon Weapon;
             public List<(UnitEntityData obstacle, int sizeDifference, int bonus)> Result = new();
             public bool SoftCoverDenied = false;
+            readonly public bool targetIsProne;
             internal bool Fake;
 
             public override void OnTrigger(RulebookEventContext context)
@@ -63,7 +65,7 @@ namespace Way_of_the_shield
                 if (TacticalCombatHelper.IsActive) return;
 #if DEBUG
                 if (Settings.Debug.GetValue())
-                    Comment.Log("SoftCoverRule - entered OnTrigger");
+                    Comment.Log($"SoftCoverRule - entered OnTrigger. Target is prone? {targetIsProne}.");
 #endif
                 if (SoftCoverDenied)
                 {
@@ -96,6 +98,7 @@ namespace Way_of_the_shield
                             $"angle is {angle}, " +
                             $"reduced squared corpulence is {sqrCorpulenceLess}. " +
                             $"vectorofAttack.sqrMagnitude is {vectorofAttack.sqrMagnitude}." +
+                            $"distance of unit from trajectory is {VectorMath.SqrDistancePointSegment(attackerPosition, targetPosition, unitPosition)}" +
                             $"{(sqrDistanceFromUnitToAttacker > sqrcorpulencecorpulencecorpulence ? "" : "UNIT IS INSIDE THE ATTACKER")}"); 
 #endif
 
@@ -103,7 +106,8 @@ namespace Way_of_the_shield
                         && VectorMath.SqrDistancePointSegment(attackerPosition, targetPosition, unitPosition) <= sqrCorpulenceLess
                         && !(sqrDistanceFromUnitToAttacker <= sqrcorpulencecorpulencecorpulence))
                     {
-                        int sizeDifference = unit.OriginalSize - targetSize;
+                        UnitState unitState = unit.State;
+                        int sizeDifference = (unitState.Prone.Active ? ( unitState.Size > Size.Tiny? unitState.Size - 3 : Size.Fine) : unitState.Size) - (targetSize);
                         int penalty = sizeDifference switch
                         {
                             -2 => -1,
@@ -111,11 +115,14 @@ namespace Way_of_the_shield
                             > -1 => -4 * (sizeDifference + 1),
                             _ => 0
                         };
+                        Result.Add(new(unit, sizeDifference, penalty));
 #if DEBUG
                         if (Settings.Debug.GetValue())
-                            Comment.Log($"Soft Cover - Size Difference between {unit.CharacterName} (size {unit.OriginalSize}) and {Target.CharacterName} (size {targetSize}) is {sizeDifference}, penalty is {penalty}"); 
+                            Comment.Log($"Soft Cover - Size Difference between {unit.CharacterName} " +
+                                $"(size {(unitState.Prone.Active ? (unitState.Size > Size.Tiny ? unitState.Size - 3 : Size.Fine) : unitState.Size)}. Prone? {unitState.Prone.Active}) " +
+                                $"and {Target.CharacterName} (size {targetSize}) is {sizeDifference}, " +
+                                $"penalty is {penalty}"); 
 #endif
-                        Result.Add(new(unit, sizeDifference, penalty));
                     }
                 }
             }
