@@ -10,6 +10,14 @@
             "Key": "ModifierDescriptor_SoftCover",
             "Value": "Живая помеха"
         },
+    		{
+     	    "Key": "ModifierDescriptor_NonProficientArmor_name",
+   	    "Value": "Нет навыка ношения брони"
+    	},
+    		{
+   	    "Key": "ModifierDescriptor_NonProficientShield_name",
+   	    "Value": "Нет навыка обращения с щитом"
+    	},
 		{
             "Key": "BonusType_NonProficient_name",
             "Value": "Нет навыка обращения с этим видом оружия"

@@ -1,3 +1,4 @@
+
 {
 
     "strings": [
@@ -10,9 +11,13 @@
             "Key": "ModifierDescriptor_SoftCover",
             "Value": "Soft Cover"
         },
+    	{
+      	    "Key": "ModifierDescriptor_NonProficientArmor_name",
+      	    "Value": "Not proficient with worn armor"
+    	},
 		{
-            "Key": "BonusType_NonProficient_name",
-            "Value": "Not proficient with this weapon"
+            "Key": "ModifierDescriptor_NonProficientShield_name",
+            "Value": "Not proficient with worn shield"
         },
 		{
             "Key": "BonusType_Backstab_name",

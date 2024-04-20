@@ -10,6 +10,14 @@
             "Key": "ModifierDescriptor_SoftCover",
             "Value": "软掩蔽"
         },
+    	{
+    	    "Key": "ModifierDescriptor_NonProficientArmor_name",
+      	    "Value": "不擅长此盔甲"
+    	},
+    	{
+    	   "Key": "ModifierDescriptor_NonProficientShield_name",
+    	   "Value": "不擅长此盾"
+    	},
 		{
             "Key": "BonusType_NonProficient_name",
             "Value": "不擅长此武器"

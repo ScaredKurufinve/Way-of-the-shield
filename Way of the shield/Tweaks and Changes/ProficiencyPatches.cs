@@ -155,8 +155,8 @@ namespace Way_of_the_shield.ProficiencyRework
                 CodeInstruction[] instArray =
                 {
                      new CodeInstruction(OpCodes.Ldarg_0),
-                     new CodeInstruction(OpCodes.Ldloc_2),
-                     CodeInstruction.Call(typeof(ProficiencyPatches), nameof(ProficiencyPatches.AddAttackBonusPenaltyFromArmor))
+                     new CodeInstruction(OpCodes.Ldloc, 4),
+                     CodeInstruction.Call((ItemEntityArmor armor, int penalty) => AddAttackBonusPenaltyFromArmor(armor, penalty))
                 };
 
                 _instructions.InsertRange(index, instArray);
@@ -203,7 +203,8 @@ namespace Way_of_the_shield.ProficiencyRework
         {
             if (IsProficient_Short(armor)) { return; };
             StatType stat = StatType.AdditionalAttackBonus;
-            armor.AddModifier(armor.Wielder.Stats.GetStat(stat), penalty, ModifierDescriptor.Armor);
+            ModifierDescriptor descriptor = armor.Shield is not null ? ModifierDescriptorExtension.NotProficientWithShield : ModifierDescriptorExtension.NotProficientWithArmor;
+            armor.AddModifier(armor.Wielder.Stats.GetStat(stat), penalty, descriptor);
         }
 
 

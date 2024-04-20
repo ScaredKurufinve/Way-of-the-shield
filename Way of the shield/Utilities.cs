@@ -34,7 +34,6 @@ using Kingmaker.TextTools;
 using Owlcat.Runtime.Core.Logging;
 using UnityEngine;
 using Kingmaker.Cheats;
-using HarmonyLib;
 
 namespace Way_of_the_shield
 {
@@ -48,8 +47,8 @@ namespace Way_of_the_shield
         {
             static readonly (BonusType, LocalizedString, int)[] entries_start = new (BonusType, LocalizedString, int)[]
             {
-               (BonusType.None, new() { Key = "BonusType_NonProficient_name" }, 160),
-               (BonusType.None, new() { Key = "BonusType_Backstab_name" }, 161)
+               (BonusType.None, new() { Key = "BonusType_NonProficientWeapon_name" }, 160),
+               (BonusType.None, new() { Key = "BonusType_Backstab_name" }, 161),
             };
 
             public static Dictionary<int, (BonusType type, LocalizedString name)> entries = new();
@@ -132,7 +131,9 @@ namespace Way_of_the_shield
                 for (int i = original.Length - 1; i < startIndex; i++) dummies[i] = (ModifierDescriptor)(startIndex -1);
                 newDescriptors = new ModifierDescriptor[]
                 {
-                    SoftCover
+                    SoftCover,
+                    NotProficientWithArmor,
+                    NotProficientWithShield
                 };
                 remade = new();
                 remade = dummies.ToList();
@@ -146,6 +147,8 @@ namespace Way_of_the_shield
 
 
             public const ModifierDescriptor SoftCover = (ModifierDescriptor)(startIndex + 0);
+            public const ModifierDescriptor NotProficientWithArmor = (ModifierDescriptor)(startIndex + 1);
+            public const ModifierDescriptor NotProficientWithShield = (ModifierDescriptor)(startIndex + 2);
 
             internal static ModifierDescriptor[] original;
             internal static ModifierDescriptor[] dummies;
@@ -156,7 +159,9 @@ namespace Way_of_the_shield
             public static int amount;
             public static AbilityModifierEntry[] names = new AbilityModifierEntry[]
             {
-                new () {Key = SoftCover, Name = new LocalizedString() {Key = "ModifierDescriptor_SoftCover" }}
+                new () {Key = SoftCover, Name = new LocalizedString() {Key = "ModifierDescriptor_SoftCover" }},
+                new () {Key = NotProficientWithArmor, Name = new LocalizedString() {Key = "ModifierDescriptor_NonProficientArmor_name" }},
+                new () {Key = NotProficientWithShield, Name = new LocalizedString() {Key = "ModifierDescriptor_NonProficientShield_name" }},
             };
 
 
