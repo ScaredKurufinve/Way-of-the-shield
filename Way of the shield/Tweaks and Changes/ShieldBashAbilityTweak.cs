@@ -9,11 +9,11 @@ using Kingmaker.UnitLogic.Mechanics.Actions;
 using Kingmaker.UnitLogic.Mechanics.Conditions;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
-using System.Threading.Tasks;
 using Way_of_the_shield.NewComponents;
+using static Kingmaker.Blueprints.Area.FactHolder;
 
 namespace Way_of_the_shield.Tweaks_and_Changes
 {
@@ -149,6 +149,47 @@ namespace Way_of_the_shield.Tweaks_and_Changes
                 Comment.Log("ShieldBashAbilityTweak - Added the trigger causing Shield Forbiddance to to the ShieldBashBuff blueprint");
 #endif
             #endregion
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch(typeof(ActivatableAbilityCollection), nameof(ActivatableAbilityCollection.OnFactDidAttach))]
+        public static IEnumerable<CodeInstruction> ActivatableAbilityCollection_OnFactDidAttach_PatchToNotActivateOnAttach(IEnumerable<CodeInstruction> instructions)
+        {
+#if DEBUG
+            if (Debug.GetValue())
+                Comment.Log("Entered ActivatableAbilityCollection_OnFactDidAttach_PatchToNotActivateOnAttach");
+#endif
+
+            var _inst = instructions.ToList();
+
+            CodeInstruction[] toSearch = new[]
+            {
+                new CodeInstruction(OpCodes.Ldfld, typeof(BlueprintActivatableAbility).GetField(nameof(BlueprintActivatableAbility.IsOnByDefault))),
+                new CodeInstruction(OpCodes.Brfalse_S)
+            };
+
+            int index = IndexFinder(_inst, toSearch);
+            if (index == -1)
+            {
+                Comment.Error("ActivatableAbilityCollection_OnFactDidAttach_PatchToNotActivateOnAttach - failed to find IsOnByDefault");
+                return instructions;
+            }
+
+            CodeInstruction[] toInsert = new[] 
+            {
+                new CodeInstruction(OpCodes.Ldarg_1),
+                CodeInstruction.Call((ActivatableAbility fact) => CheckShieldBashForDefaultOn(fact)),
+                new CodeInstruction(_inst[index-1])
+            };
+
+            _inst.InsertRange(index, toInsert);
+            return _inst;
+        }
+
+        public static bool CheckShieldBashForDefaultOn(ActivatableAbility fact)
+        {
+            return fact.Blueprint.AssetGuidThreadSafe is not "3bb6b76ed5b38ab4f957c7f923c23b68" //ShieldBashAbility
+                || !fact.Owner.IsPlayerFaction;
         }
     }
 }
