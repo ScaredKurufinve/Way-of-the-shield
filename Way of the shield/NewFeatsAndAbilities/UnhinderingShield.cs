@@ -15,6 +15,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Reflection;
+using HarmonyLib;
+using System.Text;
+using static Kingmaker.Kingdom.KingdomStats;
+using Kingmaker.UnitLogic;
+using Owlcat.Runtime.Core.Utils;
+using Kingmaker.EntitySystem;
 
 namespace Way_of_the_shield.NewFeatsAndAbilities
 {
@@ -31,8 +37,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 new ("303fd456ddb14437946e344bad9a893b", "WarpriestFeatSelection"),
                 new ("c5158a6622d0b694a99efb1d0025d2c1", "CombatTrick"),
         };
-        public static bool ShieldFlag = false;
-        public static bool ShieldFlag2 = false;
+        static RulebookEvent.CustomDataKey AttackStatReplacementSources = new("WaytOfTheShield_AttackStatReplacementSources");
 
         [HarmonyAfter("TabletopTweaks-Base")]
         [HarmonyPatch(typeof(BlueprintsCache), nameof(BlueprintsCache.Init))]
@@ -101,10 +106,15 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             });
             #endregion
 
-            if (RetrieveBlueprint("ef38e0fe68f14c88a9deacc421455d14", out BlueprintFeatureSelection ShieldMastery, "ShieldMasterySelection", "to add Shield Brace"))
-                selections.Add((ShieldMastery.AssetGuid.ToString(), "TTT-ShieldMasterySelection"));
-            #region Add the feature to selections
-            BlueprintFeatureReference Reference = UnhinderingShield.ToReference<BlueprintFeatureReference>();
+            if (Main.TTTBase is not null && Main.CheckForModEnabled("TabletopTweaks-Base"))
+            {
+                if (RetrieveBlueprint("ef38e0fe68f14c88a9deacc421455d14", out BlueprintFeatureSelection ShieldMastery, "ShieldMasterySelection", "to add Shield Brace"))
+                    selections.Add((ShieldMastery.AssetGuid.ToString(), "TTT-ShieldMasterySelection"));
+            }
+            else
+                Comment.Log("TTT-Base is not found as enabled, will not add Shield Brace to Shield Mastery Selection");
+                #region Add the feature to selections
+                BlueprintFeatureReference Reference = UnhinderingShield.ToReference<BlueprintFeatureReference>();
             if (Reference is null)
             {
                 Comment.Warning("WARNING. Failed to create reference out of Unhindering Shield when adding to feat selection lists");
@@ -113,7 +123,6 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             string circ = "when adding Unhindering Shield";
             foreach ((string GUID, string name) in selections)
             {
-                Comment.Log("Trying to retrieve " + name + " to add Shield Brace");
                 if (!RetrieveBlueprint(GUID, out BlueprintFeatureSelection fs, name, circ)) continue;
                 fs.m_AllFeatures = fs.m_AllFeatures.AddToArray(Reference);
 #if DEBUG
@@ -132,70 +141,120 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
 #endif
             List<CodeInstruction> _instructions = instructions.ToList();
 
-            CodeInstruction[] toSearch = new CodeInstruction[]
-            {
-                new CodeInstruction(OpCodes.Callvirt, typeof(UnitPartDamageGrace).GetMethod(nameof(UnitPartDamageGrace.HasEntry))),
-                new CodeInstruction(OpCodes.Br_S),
-            };
 
-            CodeInstruction[] toSearch2 = new CodeInstruction[]
+            CodeInstruction[] toSearch = new CodeInstruction[]
             {
                 new CodeInstruction(OpCodes.Ldfld, typeof(AttackStatReplacement).GetField(nameof(AttackStatReplacement.ReplacementStat))),
                 new CodeInstruction(OpCodes.Callvirt, typeof(RuleCalculateAttackBonusWithoutTarget).GetProperty(nameof(RuleCalculateAttackBonusWithoutTarget.AttackBonusStat)).SetMethod),
             };
 
-            int index = IndexFinder(instructions, toSearch);
+            int index = IndexFinder(_instructions, toSearch, true);
             if (index == -1)
-            {
-                Comment.Warning("WARNING. Failed to find the Ensure<UnitPartDamageGrace>().HasEntry(evt.Weapon.Blueprint.Category)) in the AttackStatReplacement when transpiling for Unhindering Shield");
-                return instructions;
-            };
-
-            Label label = gen.DefineLabel();
-            _instructions[index - 1].labels.Add(label);
-
-            CodeInstruction[] toInsert = new CodeInstruction[]
-            {
-                new CodeInstruction(OpCodes.Dup),
-                new CodeInstruction(OpCodes.Brfalse_S, label),
-                new CodeInstruction(OpCodes.Ldc_I4_1),
-                new CodeInstruction(OpCodes.Stsfld, typeof(UnhinderingShield).GetField(nameof(ShieldFlag)))
-            };
-            _instructions.InsertRange(index, toInsert);
-
-
-            int index2 = IndexFinder(_instructions, toSearch);
-            if (index2 == -1)
             {
                 return instructions;
             };
             CodeInstruction[] toInsert2 = new CodeInstruction[]
             {
-                new CodeInstruction(OpCodes.Ldc_I4_1),
-                new CodeInstruction(OpCodes.Stsfld, typeof(UnhinderingShield).GetField(nameof(ShieldFlag)))
+                new CodeInstruction(OpCodes.Ldarg_1),
+                new CodeInstruction(OpCodes.Ldarg_0),
+                CodeInstruction.Call((RuleCalculateAttackBonusWithoutTarget evt, AttackStatReplacement __instance) => AddReplacementSource(evt,  __instance))
             };
-            _instructions.InsertRange(index2, toInsert2);
+            _instructions.InsertRange(index, toInsert2);
 
             return _instructions;
         }
-
-        [HarmonyPatch(typeof(AttackStatReplacement), nameof(AttackStatReplacement.OnEventAboutToTrigger))]
-        [HarmonyPostfix]
-        public static void AttackStatReplacement_OnEventAboutToTrigger_Postfix(AttackStatReplacement __instance, RuleCalculateAttackBonusWithoutTarget evt)
+        static void AddReplacementSource(RuleCalculateAttackBonusWithoutTarget evt, AttackStatReplacement __instance)
         {
+            if (!evt.TryGetCustomData(AttackStatReplacementSources, out (StatType stat, List<AttackStatReplacement> list) map))
+            {
+                map = new() { stat = __instance.ReplacementStat, list = new() { __instance} };
+                evt.SetCustomData(AttackStatReplacementSources, map);
+#if DEBUG
+                if (Debug.GetValue()) 
+                {
+                    Comment.Log($"UnhinderingShield AttackStatReplacement AddReplacementSource - new map. Stat is {__instance.ReplacementStat}, source is {__instance.OwnerBlueprint.name}");
+                }
+#endif
+                return;
+            }
+
+            if (map.stat == __instance.ReplacementStat)
+            {
+                map.list.Add(__instance);
+                Comment.Log($"UnhinderingShield AttackStatReplacement AddReplacementSource - added entry. Stat is {__instance.ReplacementStat}, source is {__instance.OwnerBlueprint.name}");
+            }
+            else
+            {
+                map.stat = __instance.ReplacementStat;
+                map.list.Clear();
+                map.list.Add(__instance); 
+                Comment.Log($"UnhinderingShield AttackStatReplacement AddReplacementSource - new map. Stat is {__instance.ReplacementStat}, source is {__instance.OwnerBlueprint.name}");
+            }
+        }
+
+        [HarmonyPatch(typeof(RuleCalculateAttackBonusWithoutTarget), nameof(RuleCalculateAttackBonusWithoutTarget.OnTrigger))]
+        [HarmonyPrefix]
+        public static void RuleCalculateAttackBonusWithoutTarget_OnTrigger_PrefixToAddPenaltyFromShieldAndWeaponFinesse(RuleCalculateAttackBonusWithoutTarget __instance)
+        {
+            const string WeaponFinesseGuid = "90e54424d682d104ab36436bd527af09";
 #if DEBUG
             if (Debug.GetValue())
-                Comment.Log($"Entered AttackStatReplacement_OnEventAboutToTrigger_Postfix for {evt.Initiator.CharacterName}. Flags are {ShieldFlag} and {ShieldFlag2}."); 
-#endif
-            if (ShieldFlag && ShieldFlag2)
             {
-
-                ItemEntityShield maybeShield = __instance.Owner?.Body.SecondaryHand.MaybeShield;
-                if (maybeShield is not null && (maybeShield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler || !__instance.Owner.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield))
+                StringBuilder sb = new($"UnhinderingShield RuleCalculateAttackBonusWithoutTarget OnTrigger - Entered for {__instance.Initiator.CharacterName}.");
+                if (__instance.TryGetCustomData(AttackStatReplacementSources, out (StatType stat, List<AttackStatReplacement> list) map2))
                 {
-                    evt.AddModifier(maybeShield.ArmorComponent.Blueprint.ArmorChecksPenalty, __instance.Fact, ModifierDescriptor.Penalty);
+                    sb.Append($"\nSources for replacement are {string.Join(", ", map2.list.Select(component => component.OwnerBlueprint.name + "#" + component.OwnerBlueprint.AssetGuidThreadSafe))}. ");
+                    ItemEntityShield maybeShield2 = __instance.Initiator?.Body.SecondaryHand.MaybeShield;
+                    if (maybeShield2 != null)
+                    {
+                        sb.Append($"\nShield is {maybeShield2.Blueprint.name}. Type is {maybeShield2.Blueprint.Type.ProficiencyGroup}. ");
+                        var contains = map2.list.Any(component => component.OwnerBlueprint.AssetGuidThreadSafe is WeaponFinesseGuid);
+                        sb.Append($"Sources contain Weapon Finesse? {contains}. ");
+                        if (contains)
+                        {
+                            sb.Append($"Initiator has Unhindering Shield? {__instance.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield.Value.ToString() ?? "False"}. ");
+                        }
+                    }
+                    else
+                    {
+                        sb.Append($" No shield in the off-hand found.");
+                    }
                 }
+                else
+                {
+                    sb.Append(" No stat replacement");
+                }
+                Comment.Log(sb.ToString());
             }
+#endif
+            if (!__instance.TryGetCustomData(AttackStatReplacementSources, out (StatType stat, List<AttackStatReplacement> list) map))
+                return;
+            var WeaponFinesseComponent = map.list.FirstOrDefault(component => component.OwnerBlueprint.AssetGuidThreadSafe is WeaponFinesseGuid);
+            if (!WeaponFinesseComponent || map.list.Count > 1)
+                return;
+            ItemEntityShield maybeShield = __instance.Initiator?.Body.SecondaryHand.MaybeShield;
+
+            if (maybeShield is not null && (maybeShield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler || !(__instance.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield ?? false)))
+            {
+#if DEBUG
+                if (Debug.GetValue())
+                    Comment.Log($"UnhinderingShield RuleCalculateAttackBonusWithoutTarget OnTrigger - about to add penalty");
+#endif
+                int penalty = Rulebook.Trigger(new RuleCalculateArmorCheckPenalty(__instance.Initiator, maybeShield.ArmorComponent)).Result;
+                //__instance.Result += penalty;
+                __instance.AddModifier(
+                    penalty,
+                    __instance.Initiator.Descriptor.Progression.Features.Enumerable.FirstOrDefault(fact => fact.Blueprint.AssetGuidThreadSafe is WeaponFinesseGuid),
+                    ModifierDescriptor.Penalty);
+#if DEBUG
+                if (Debug.GetValue())
+                    Comment.Log($"UnhinderingShield RuleCalculateAttackBonusWithoutTarget OnTrigger - added {penalty}.");
+#endif
+            }
+        }
+
+        public static void RuleCalculateAttackBonusWithoutTarget_OnTrigger_Postfix(RuleCalculateAttackBonusWithoutTarget __instance)
+        {
         }
 
         [HarmonyPatch(typeof(MonkNoArmorFeatureUnlock), nameof(MonkNoArmorFeatureUnlock.CheckEligibility))]
@@ -430,7 +489,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             static bool Prepare()
             {
                 var assembly = Main.CheckForMod("Swashbuckler");
-                Type type = null;
+                System.Type type = null;
                 assembly?.DefinedTypes.TryFind(t => t.Name.Equals("SwashbucklerPreciseStrike"), out type);
                 if (type is not null)
                     target = type.GetMethod("OnEventAboutToTrigger");
