@@ -1,12 +1,12 @@
 ﻿using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Items.Armors;
+using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Items;
+using Kingmaker.Items.Slots;
 using Kingmaker.UnitLogic.FactLogic;
 using System.Collections.Generic;
 using System.Linq;
-using static Way_of_the_shield.Main;
-using static Way_of_the_shield.Utilities;
 
 namespace Way_of_the_shield
 {
@@ -22,6 +22,7 @@ namespace Way_of_the_shield
 #endif
             if (!RetrieveBlueprint("57299a78b2256604dadf1ab9a42e2873", out BlueprintFeature BastardSwordProficiency, "BastardSwordProficiency", "when meddling with Bastard sword type handedness ")) return;
             if (!RetrieveBlueprint("203992ef5b35c864390b4e4a1e200629", out BlueprintFeature MartialWeaponProficiency, "MartialWeaponProficiency", "when meddling with Bastard sword type handedness ")) return;
+            if (!RetrieveBlueprint("d2fe2c5516b56f04da1d5ea51ae3ddfe", out BlueprintWeaponType BastardSword, "BastardSword", "when meddling with Bastard sword type handedness ")) return;
             BastardSwordProficiency.AddComponent(new WeaponCategory1HandedComponent() { category = WeaponCategory.BastardSword });
             if (BastardSwordProficiency.ComponentsArray.FindOrDefault(c => c is PrerequisiteNotProficient) is not PrerequisiteNotProficient pnp)
             {
@@ -34,6 +35,7 @@ namespace Way_of_the_shield
                 return;
             };
             prof.WeaponProficiencies = prof.WeaponProficiencies.AddToArray(WeaponCategory.BastardSword);
+            BastardSword.m_IsTwoHanded= true;
             List<BlueprintComponent> l = BastardSwordProficiency.ComponentsArray.ToList();
             l.Remove(pnp);
             BastardSwordProficiency.ComponentsArray = l.ToArray();
@@ -43,15 +45,15 @@ namespace Way_of_the_shield
 
         public class WeaponCategory1HandedComponent : CanUse2hWeaponAs1hBase
         {
-            public override bool CanBeUsedAs2h(ItemEntityWeapon weapon)
-            {
-                return true;
-            }
+            public override bool CanHoldWeaponWithGrip(ItemEntityWeapon weapon, GripType gripType)
+                => gripType != GripType.TwoHanded;
+            public override bool IsApplicableToOffHand
+                => true;
 
-            public override bool CanBeUsedOn(ItemEntityWeapon weapon)
+            public override bool CanBeUsedOn(ItemEntityWeapon weapon, HandSlot slotToInsert, ItemEntity itemBeingInserted)
             {
-                if (weapon is null || weapon.Blueprint.Category != category) return false;
-                else return true;
+                bool result = weapon?.Blueprint.Category == category;
+                return result;
             }
 
             public WeaponCategory category;

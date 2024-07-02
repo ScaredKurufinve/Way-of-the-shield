@@ -43,19 +43,49 @@ namespace Way_of_the_shield
 
             //}
 
-            public override bool CanBeUsedAs2h(ItemEntityWeapon weapon)
-            {
-                return true;
-            }
+            public override bool CanHoldWeaponWithGrip(ItemEntityWeapon weapon, GripType gripType)
+                => (gripType) switch
+                {
+                    GripType.Auto => true,
+                    GripType.OneHanded => !weapon.Blueprint.Type.IsTwoHanded,
+                    GripType.TwoHanded => weapon?.CanTakeTwoHands() ?? false,
+                    _ => false
 
-            public override bool CanBeUsedOn(ItemEntityWeapon weapon)
+                };
+            public override bool IsApplicableToOffHand
+                => false;
+
+            public override bool CanBeUsedOn(ItemEntityWeapon weapon, HandSlot slotToInsert = null, ItemEntity itemBeingInserted = null)
             {
-                if (weapon is null) return false;
                 if (weapon.Blueprint.Double) return false;
-                ItemEntityShield shield = (weapon.HoldingSlot as HandSlot)?.PairSlot?.MaybeShield;
-                if (shield is null) return false;
-                if (shield.ArmorComponent.Blueprint.ProficiencyGroup == ArmorProficiencyGroup.Buckler) return true;
-                else return false;
+                ItemEntityShield shield;
+                bool WeaponIsTHeOneThatIsInserted = weapon == itemBeingInserted;
+                if (WeaponIsTHeOneThatIsInserted)
+                {
+                    if (!slotToInsert.IsPrimaryHand)
+                    {
+                        return false;
+
+                    }
+                    else
+                    {
+                        shield = slotToInsert.PairSlot.MaybeShield;
+                    }
+                }
+                else if (slotToInsert is not null && (weapon.HoldingSlot as HandSlot)?.PairSlot == slotToInsert)
+                {
+                    shield = slotToInsert.MaybeShield;
+                }
+                else
+                {
+                    shield = (weapon.HoldingSlot as HandSlot)?.PairSlot.MaybeShield;
+                }
+                if (shield is null)
+                    return false;
+
+                bool result = shield.ArmorComponent.Blueprint.ProficiencyGroup == ArmorProficiencyGroup.Buckler;
+
+                return result;
             }
 
             public void OnEventAboutToTrigger(RuleCalculateAttackBonusWithoutTarget evt)

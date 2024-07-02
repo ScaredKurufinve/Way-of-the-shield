@@ -21,42 +21,65 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
         [TypeId("a9d4a3aad229457698fe4d93ddcc01b3")]
         public class ShieldBrace_Component : CanUse2hWeaponAs1hBase, IInitiatorRulebookHandler<RuleCalculateAttackBonusWithoutTarget>
         {
-            public override bool CanBeUsedAs2h(ItemEntityWeapon weapon)
-            {
-                return false;
-            }
+            public override bool CanHoldWeaponWithGrip(ItemEntityWeapon weapon, GripType grip)
+                => (grip) switch
+                {
+                    GripType.Auto => true,
+                    GripType.OneHanded => !weapon.Blueprint.Type.IsTwoHanded,
+                    GripType.TwoHanded => weapon.Blueprint.Type.IsTwoHanded,
+                    _ => false
+                };
 
-            public override bool CanBeUsedOn(ItemEntityWeapon weapon)
+
+            public override bool IsApplicableToOffHand 
+                => false;
+
+            public override bool CanBeUsedOn(ItemEntityWeapon weapon, HandSlot slotToInsert = null, ItemEntity itemBeingInserted = null)
             {
                 if (weapon is null) 
-                    return false; 
-
-                if (Fact.Owner.Unit.GetSaddledUnit() is not null) 
-                    return false; 
-
-                if (!weapon.Blueprint.IsTwoHanded) 
                     return false;
 
-                ItemEntityShield shield = (weapon.HoldingSlot as HandSlot)?.PairSlot?.MaybeShield;
+                if (Fact.Owner.Unit.GetSaddledUnit() is not null) 
+                    return false;
+
+                //if (!weapon.Blueprint.IsTwoHanded) 
+                //    return false;
+
+                bool WeaponIsTHeOneThatIsInserted = weapon == itemBeingInserted;
+                ItemEntityShield shield;
+                if (WeaponIsTHeOneThatIsInserted)
+                {
+                    if (!slotToInsert.IsPrimaryHand)
+                        return false;
+                    else
+                        shield = slotToInsert.PairSlot.MaybeShield;
+                }
+                else if (slotToInsert is not null && (weapon.HoldingSlot as HandSlot)?.PairSlot == slotToInsert)
+                    shield = itemBeingInserted as ItemEntityShield;
+                else
+                    shield = (weapon.HoldingSlot as HandSlot)?.PairSlot.MaybeShield;
+
                 if (shield is null) 
                     return false;
 
                 var shield_proficiency = shield.ArmorComponent.Blueprint.ProficiencyGroup;
-
-                if (shield_proficiency == ArmorProficiencyGroup.Buckler || !ProficiencyRework.ProficiencyPatches.IsProficient_Short(shield))
+                if (shield_proficiency == ArmorProficiencyGroup.Buckler)
                     return false;
+
 
                 return weapon.Blueprint.FighterGroup.Contains(WeaponFighterGroup.Spears) ||  weapon.Blueprint.FighterGroup.Contains(WeaponFighterGroup.Polearms) ;
             }
 
             public void OnEventAboutToTrigger(RuleCalculateAttackBonusWithoutTarget evt)
             {
-                if (evt.Weapon == null) { return; }
-                if (!CanBeUsedOn(evt.Weapon)) { return; }
-                var shield = (evt.Weapon?.HoldingSlot as HandSlot)?.PairSlot.MaybeShield;
-                if (shield is null) { return; };
-                int penalty = Rulebook.Trigger(new RuleCalculateArmorCheckPenalty(evt.Initiator, shield.ArmorComponent)).Result;
-                if (penalty < 0) { evt.AddModifier(penalty, Fact, ModifierDescriptor.Shield); }
+                var weapon = evt.Weapon;
+                if (weapon == null || !weapon.Blueprint.IsTwoHanded)
+                    return;
+                if (!CanBeUsedOn(weapon))
+                    return;
+                int penalty = Rulebook.Trigger(new RuleCalculateArmorCheckPenalty(evt.Initiator, (weapon.HoldingSlot as HandSlot).PairSlot.MaybeShield.ArmorComponent)).Result;
+                if (penalty < 0) 
+                    evt.AddModifier(penalty, Fact, ModifierDescriptor.Shield);
 
             }
 

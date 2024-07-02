@@ -19,6 +19,7 @@ using Kingmaker.UI.MVVM._VM.Slots;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Commands;
 using static Way_of_the_shield.Backstab.RuleCalculateAC_OnTrigger_patch;
+using System.Text;
 
 namespace Way_of_the_shield.NewComponents
 {
@@ -464,26 +465,42 @@ namespace Way_of_the_shield.NewComponents
 
         public static bool BucklerOrBash(bool HasShieldBash, RuleCalculateAttacksCount evt)
         {
-#if DEBUG
-            Comment.Log($"RuleCalculateAttacksCount transpiler - Parry flag  is {OffHandParryUnitPart.flag}, HasShieldBash is {HasShieldBash}, "
-        + $"prof group is {evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup}, "
-        + $"{(evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler ? "" : ("BucklerBash is " + evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash))}. " 
-        + $"Hold in one hand? {!(evt.Initiator.Body.PrimaryHand.Weapon?.HoldInTwoHands ?? false)}. Has Unhindering? {evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield ?? false}. "
-        + $"Result is {OffHandParryUnitPart.flag
-                || (HasShieldBash && (evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler
-                               || (evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash
-                                    && (!(evt.Initiator.Body.PrimaryHand.Weapon?.HoldInTwoHands ?? false) || evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield)
-                                   )
-                             )
-                    )}");
-#endif
-            return OffHandParryUnitPart.flag 
-                || (HasShieldBash  && (evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler 
-                                        || (evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash 
+            bool result = OffHandParryUnitPart.flag
+                || (HasShieldBash && evt.Initiator.Body.SecondaryHand.HasShield && (evt.Initiator.Body.SecondaryHand.Shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler
+                                        || (evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash
                                                 && (!(evt.Initiator.Body.PrimaryHand.Weapon?.HoldInTwoHands ?? false) || (evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield || AllowBucklerBashWhenTwoHandedWithUnhindering.GetValue()))
                                            )
                                       )
                     );
+
+#if DEBUG
+            var sb = new StringBuilder().Append($"BucklerOrBash - Parry flag  is {OffHandParryUnitPart.flag}, HasShieldBash is {HasShieldBash}. ");
+            if (evt.Initiator.Body.SecondaryHand.MaybeShield is not ItemEntityShield shield)
+            {
+                sb.Append("No shield in secondary hand.");
+            }
+            else
+            {
+                sb.Append($"Uses shield {shield.Name} (proficiency group {shield.Blueprint.Type.ProficiencyGroup}). "); 
+                if (shield.Blueprint.Type.ProficiencyGroup != ArmorProficiencyGroup.Buckler)
+                    goto Print;
+                sb.AppendLine();
+                sb.Append($"Has BucklerBash? {evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.BucklerBash}.");
+                var twoHanded = evt.Initiator.Body.PrimaryHand.Weapon?.HoldInTwoHands ?? false;
+                sb.Append($"Primary hand is hold with both hands? {twoHanded}");
+                if (twoHanded)
+                {
+                    sb.AppendLine();
+                    sb.Append($"Has Unhindering Shield? {evt.Initiator.Get<MechanicsFeatureExtension.MechanicsFeatureExtensionPart>()?.UnhinderingShield}. ");
+                    sb.Append($"Stupid setting is enabled? {AllowBucklerBashWhenTwoHandedWithUnhindering.GetValue()}");
+                }
+            }
+            sb.AppendLine();
+
+            Print:
+            Comment.Log(sb.Append($"Result is {result}").ToString());
+#endif
+            return result;
         }
         public static bool BucklerOrBash4(bool flag, HandSlot slot)
         {

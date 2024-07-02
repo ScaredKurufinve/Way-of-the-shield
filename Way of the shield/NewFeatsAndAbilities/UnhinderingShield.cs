@@ -21,6 +21,7 @@ using static Kingmaker.Kingdom.KingdomStats;
 using Kingmaker.UnitLogic;
 using Owlcat.Runtime.Core.Utils;
 using Kingmaker.EntitySystem;
+using Kingmaker.UnitLogic.ActivatableAbilities.Restrictions;
 
 namespace Way_of_the_shield.NewFeatsAndAbilities
 {
@@ -37,7 +38,7 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
                 new ("303fd456ddb14437946e344bad9a893b", "WarpriestFeatSelection"),
                 new ("c5158a6622d0b694a99efb1d0025d2c1", "CombatTrick"),
         };
-        static RulebookEvent.CustomDataKey AttackStatReplacementSources = new("WaytOfTheShield_AttackStatReplacementSources");
+        static RulebookEvent.CustomDataKey AttackStatReplacementSources = new("WayOfTheShield_AttackStatReplacementSources");
 
         [HarmonyAfter("TabletopTweaks-Base")]
         [HarmonyPatch(typeof(BlueprintsCache), nameof(BlueprintsCache.Init))]
@@ -253,10 +254,6 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
             }
         }
 
-        public static void RuleCalculateAttackBonusWithoutTarget_OnTrigger_Postfix(RuleCalculateAttackBonusWithoutTarget __instance)
-        {
-        }
-
         [HarmonyPatch(typeof(MonkNoArmorFeatureUnlock), nameof(MonkNoArmorFeatureUnlock.CheckEligibility))]
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> MonkNoArmorFeatureUnlock_CheckEligibility_Transpiler(IEnumerable<CodeInstruction> instructions)
@@ -453,6 +450,53 @@ namespace Way_of_the_shield.NewFeatsAndAbilities
 
             _instructions.InsertRange(index, toInsert);
             return _instructions;
+        }
+
+        [HarmonyPatch(typeof(ActivatableAbilityRestrictionByEquipmentSet), nameof(ActivatableAbilityRestrictionByEquipmentSet.IsAvailable))]
+        [HarmonyTranspiler]
+        public static IEnumerable<CodeInstruction> ActivatableAbilityRestrictionByEquipmentSet_IsAvailable_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+        {
+#if DEBUG
+            if (Debug.GetValue())
+                Comment.Log("Entered ActivatableAbilityRestrictionByEquipmentSet_IsAvailable_Transpiler transpiler"); 
+#endif
+
+            var __inst = instructions.ToList();
+
+            var toSeacrh = new CodeInstruction[]
+            {
+                new CodeInstruction(OpCodes.Ldfld, AccessTools.DeclaredField(typeof(HandsEquipmentSet), nameof(HandsEquipmentSet.SecondaryHand))),
+                new CodeInstruction(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(ItemSlot), nameof(HandSlot.HasItem)))
+            };
+
+            var index = IndexFinder(__inst, toSeacrh);
+
+            if (index == -1)
+            {
+                Comment.Error("Failed to find index when transpiling ");
+                return instructions; 
+            };
+
+            var labelUnhinderingCheck = generator.DefineLabel();
+            var labelContinue = generator.DefineLabel();
+
+            __inst[index + 1].labels.Add(labelContinue);
+
+            var toInsert = new CodeInstruction[]
+            {
+                new CodeInstruction(OpCodes.Dup),
+                new CodeInstruction(OpCodes.Ldnull),
+                new CodeInstruction(OpCodes.Ceq),
+                new CodeInstruction(OpCodes.Brfalse_S, labelUnhinderingCheck),
+                new CodeInstruction(OpCodes.Pop),
+                new CodeInstruction(OpCodes.Br_S, labelContinue),
+                CodeInstruction.Call(() => MagusBuckler).WithLabels(labelUnhinderingCheck),
+            };
+
+            __inst[index - 1].operand = AccessTools.PropertyGetter(typeof(HandSlot), nameof(HandSlot.MaybeItem));
+            __inst.InsertRange(index, toInsert);
+            return __inst;
+
         }
         public static bool MonkBuckler(ItemEntityShield shield)
         {

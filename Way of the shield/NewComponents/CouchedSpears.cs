@@ -19,16 +19,15 @@ namespace Way_of_the_shield.NewComponents
         [TypeId("a7d850915c644a3aa8332d4b76b61764")]
         public class CouchedSpears_Component : CanUse2hWeaponAs1hBase
         {
-            public override bool CanBeUsedAs2h(ItemEntityWeapon weapon)
-            {
-                return false;
-            }
+            public override bool CanHoldWeaponWithGrip(ItemEntityWeapon weapon, GripType gripType)
+                => gripType != GripType.TwoHanded;
 
-            public override bool CanBeUsedOn(ItemEntityWeapon weapon)
-            {
-                if (Fact.Owner.Unit.GetSaddledUnit() is null) return false;
+            public override bool IsApplicableToOffHand 
+                => false;
 
-                if (weapon is null) { return false; };
+            public override bool CanBeUsedOn(ItemEntityWeapon weapon, HandSlot slotToInsert, ItemEntity itemBeingInserted)
+            {
+                if (Fact.Owner?.Unit.GetSaddledUnit() is null) return false;
 
                 return weapon.Blueprint.FighterGroup == WeaponFighterGroupFlags.Spears;
             }
@@ -38,7 +37,7 @@ namespace Way_of_the_shield.NewComponents
         public static bool Prepare()
         {
             if (AllowTwoHandedSpears_as_OneHandedWhenMounted.GetValue()) return true;
-            else { Comment.Log("AllowTwoHandedSpears_as_OneHandedWhenMounted setting is disabled, patch AddBuckler1hToProfficiencyBlueprint won't be applied."); return false; };
+            else { Comment.Log("AllowTwoHandedSpears_as_OneHandedWhenMounted setting is disabled, patch AddCouchedSpears1hToMountedCombat won't be applied."); return false; };
         }
 
         [HarmonyPatch(typeof(BlueprintsCache), nameof(BlueprintsCache.Init))]
