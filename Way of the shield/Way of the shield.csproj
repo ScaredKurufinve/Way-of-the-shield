@@ -15,6 +15,10 @@
     <DefineConstants>$(DefineConstants)TRACE;Dynamic</DefineConstants>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Tweaks and Changes\BastardSword1h.cs~RFe51e7a.TMP" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="AssemblyPublicizer" Version="1.0.2">
@@ -43,9 +47,6 @@
 		  <HintPath>$(Wrath)\Owlcat.Runtime.UI.dll</HintPath>
 	  </Reference>
 	  <Reference Include="System.Dynamic.Runtime" />
-	  <Reference Include="UnityEngine">
-	    <HintPath>$(Wrath)\Wrath_Data\Managed\UnityEngine.dll</HintPath>
-	  </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
       <HintPath>$(Wrath)\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>

@@ -35,12 +35,14 @@ namespace Way_of_the_shield.Tweaks_and_Changes
             var toSearch = new CodeInstruction[]
             {
                 new (OpCodes.Ldloc_1),
-                new (OpCodes.Callvirt, typeof(ItemEntityWeapon).GetProperty(nameof(ItemEntityWeapon.IsShield)).GetMethod),
-                new (OpCodes.Brtrue_S)
+                new (OpCodes.Call, typeof(ItemEntityWeapon).GetProperty(nameof(ItemEntityWeapon.IsShield)).GetMethod),
+                new (OpCodes.Br_S)
             };
 
             int index = IndexFinder(_inst, toSearch, before: true);
             if (index == -1) return instructions;
+            Comment.Log($"TWFShieldTweak - instructions are: \n{string.Join(", \n", _inst[index+0], _inst[index + 1], _inst[index + 2], _inst[index + 3])} ");
+            _inst[index + toSearch.Length].MoveLabelsFrom(_inst[index]);
             _inst.RemoveRange(index, toSearch.Length);
             return _inst;
 
