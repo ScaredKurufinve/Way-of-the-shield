@@ -967,53 +967,61 @@ namespace Way_of_the_shield
         }
         #endregion
 
-        public static readonly Vector2[] results = new Vector2[2]
+        public static readonly Vector2[] results2D = new Vector2[2]
         {
-            new Vector2(0, 0),
-            new Vector2(0, 0)
+            new (),
+            new ()
         };
-        static Vector2 buffer = new(0f, 0f);
-        static public int LineCircleIntersect(Vector2 lineStart, Vector2 lineEnd, Vector2 circleCenter, float circleRadius, bool ordered = true)
+        static Vector2 buffer2D = new();
+        static public int LineCircleIntersect2D(Vector2 lineStart, Vector2 lineEnd, Vector2 circleCenter, float circleRadius, bool ordered = true)
         {
-            Array.Clear(results, 0, 2);
-
-            if (lineEnd.x - lineStart.x is > -0.005f and < 0.005f) // if the line is vertical
+            Array.Clear(results2D, 0, 2);
+            Comment.Log($"LineCircleIntersect2D - lineStart is ({lineStart.x.ToString("N8")}, {lineStart.y.ToString("N8")}), " +
+                $"lineEnd is ({lineEnd.x.ToString("N8")}, {lineEnd.y.ToString("N8")}), " +
+                $"circleCenter is ({circleCenter.x.ToString("N8")}, {circleCenter.y.ToString("N8")}), " +
+                $"radius is {circleRadius.ToString("N4")}.");
+            if (lineEnd.x - lineStart.x is > -Single.Epsilon and < Single.Epsilon) // if the line is vertical
             {
                 Comment.Log($"Shortcut X");
                 var distance_x = Mathf.Abs(circleCenter.x - lineStart.x) - circleRadius;
 
-                if (distance_x > 0.005f) // distance from the center of the circle to the vertical line is greater than the radius, hence no intersection
+                if (distance_x > Single.Epsilon) // distance from the center of the circle to the vertical line is greater than the radius, hence no intersection
                     return 0;
 
-                results[0].x = lineStart.x;
-                results[0].y = circleCenter.y;
-                if (distance_x is > -0.005f and < 0.005f) // if a vertical line meets the circle exactly at the radius end
+                results2D[0].x = lineStart.x;
+                results2D[0].y = circleCenter.y;
+                if (distance_x is > -Single.Epsilon and < Single.Epsilon) // if a vertical line meets the circle exactly at the radius end
+                {
+                    Comment.Log($"vertical line meets the circle exactly at the radius end");
                     return 1;
+                }
                 var blah = Mathf.Sqrt(circleRadius * circleRadius - (circleCenter.x - lineStart.x) * (circleCenter.x - lineStart.x));
-                results[0].y += blah;
-                results[1].x = lineStart.x;
-                results[1].y = circleCenter.y - blah;
+                results2D[0].y += blah;
+                results2D[1].x = lineStart.x;
+                results2D[1].y = circleCenter.y - blah;
                 if (ordered)
                     CheckOrder();
                 return 2;
             }
 
-            if (lineEnd.y - lineStart.y is > -0.005f and < 0.005f) // if the line is horizontal
+            if (lineEnd.y - lineStart.y is > -Single.Epsilon and < Single.Epsilon) // if the line is horizontal
             {
                 Comment.Log($"Shortcut Y");
                 var distance_y = Mathf.Abs(circleCenter.y - lineStart.y) - circleRadius;
 
-                if (distance_y > 0.005f) // distance from the center of the circle to the horizontal line is greater than the radius, hence no intersection
+                if (distance_y > Single.Epsilon) // distance from the center of the circle to the horizontal line is greater than the radius, hence no intersection
                     return 0;
 
-                results[0].x = circleCenter.x;
-                results[0].y = lineStart.y;
-                if (distance_y is > -0.005f and < 0.005f) // if a horizontal line meets the circle exactly at the radius end
+                results2D[0].x = circleCenter.x;
+                results2D[0].y = lineStart.y;
+                if (distance_y is > -Single.Epsilon and < Single.Epsilon)// if a horizontal line meets the circle exactly at the radius end
+                {
                     return 1;
+                } 
                 var blah = Mathf.Sqrt(circleRadius * circleRadius - (circleCenter.y - lineStart.y) * (circleCenter.y - lineStart.y));
-                results[0].x += blah;
-                results[1].x = circleCenter.x;
-                results[1].y = lineStart.y - blah;
+                results2D[0].x += blah;
+                results2D[1].x = circleCenter.x;
+                results2D[1].y = lineStart.y - blah;
                 if (ordered)
                     CheckOrder();
                 return 2;
@@ -1023,84 +1031,85 @@ namespace Way_of_the_shield
             lineStart -= circleCenter; 
             lineEnd -= circleCenter;
 
-            float offsetX = lineEnd.x - lineStart.x;
-            float offsetY = lineEnd.y - lineStart.y;
-            float segmentLengthSqr = offsetX * offsetX + offsetY * offsetY;
-            float determ = lineStart.x * lineEnd.y - lineStart.y * lineEnd.x;
-            float incSqr = circleRadius * circleRadius * segmentLengthSqr - determ * determ;
-            if (incSqr < -0.0f)
+            double offsetX = lineEnd.x - lineStart.x;
+            double offsetY = lineEnd.y - lineStart.y;
+            double segmentLengthSqr = offsetX * offsetX + offsetY * offsetY;
+            double determ = lineStart.x * lineEnd.y - lineStart.y * lineEnd.x;
+            double incSqr = circleRadius * circleRadius * segmentLengthSqr - determ * determ;
+            if (incSqr < -Double.Epsilon)
                 return 0;
-            var incidence = Mathf.Sqrt(incSqr);
+            var incidence = Math.Sqrt(incSqr);
             Comment.Log($"Incidence sqaured is {incidence}");
             var a = determ * offsetY;
             var b = Sign(offsetY) * offsetX * incidence;
             var c = -determ * offsetX;
             var d = Math.Abs(offsetY) * incidence;
 
-            results[0].x = ((a + b) / segmentLengthSqr) + circleCenter.x;
-            results[0].y = ((c + d) / segmentLengthSqr) + circleCenter.y;
+            results2D[0].x = Convert.ToSingle(((a + b) / segmentLengthSqr) + circleCenter.x);
+            results2D[0].y = Convert.ToSingle(((c + d) / segmentLengthSqr) + circleCenter.y);
 
-            if (incidence < 0.01f)
+            if (incidence < Single.Epsilon)
+            {
+                Comment.Log($"LineCircleIntersect2D - Incidence is less than epsilon. Return 1");
                 return 1;
+            }
             
-            results[1].x = ((a - b) / segmentLengthSqr) + circleCenter.x;            
-            results[1].y = ((c - d) / segmentLengthSqr) + circleCenter.y;
-
+            results2D[1].x = Convert.ToSingle(((a - b) / segmentLengthSqr) + circleCenter.x);            
+            results2D[1].y = Convert.ToSingle(((c - d) / segmentLengthSqr) + circleCenter.y);
+            Comment.Log($"LineCircleIntersect2D - results are " +
+                $"({results2D[0].x.ToString("N6")}, {results2D[0].y.ToString("N6")}) and" +
+                $"({results2D[1].x.ToString("N6")}, {results2D[1].y.ToString("N6")})");
             if (ordered)
                 CheckOrder();            
             return 2;
 
-            ; float Sign (float Input)
+            ; float Sign (double Input)
             {
                 if (Input < 0)
-                    return -1f;
-                else return 1f;
+                    return -1;
+                else return 1;
             }
 
             ; void CheckOrder()
             {
-                var compare = Vector2.SqrMagnitude(results[0] - lineStart) - Vector2.SqrMagnitude(results[1] - lineStart);
+                var compare = Vector2.SqrMagnitude(results2D[0] - lineStart) - Vector2.SqrMagnitude(results2D[1] - lineStart);
                 if (compare > 0.0f)
                 {
-                    buffer = results[0];
-                    results[0] = results[1];
-                    results[1] = buffer;
+                    buffer2D = results2D[0];
+                    results2D[0] = results2D[1];
+                    results2D[1] = buffer2D;
                 }
 
             }
         }
 
-        static readonly (Vector2 lineStart, Vector2 lineEnd, Vector2 circleCenter, float circleRadius)[] test = new[]
+
+        public static readonly Vector3[] results3D = new Vector3[2]
         {
-            (new Vector2(10f, 0f), new Vector2(10f, 20f), new Vector2(10f, 10f), 5f),
-            (new Vector2(7.5f, 0f), new Vector2(7.5f, 20f), new Vector2(10f, 10f), 5f),
-            (new Vector2(5f, 0f), new Vector2(5f, 20f), new Vector2(10f, 10f), 5f),
-            (new Vector2(2.5f, 0f), new Vector2(2.5f, 20f), new Vector2(10f, 10f), 5f),
-            (new Vector2(6f, 0f), new Vector2(6f, 20f), new Vector2(10f, 10f), 5f),
-            (new Vector2(0f, 0f), new Vector2(20f, 20f), new Vector2(10f, 10f), 5f),
-            (new Vector2(0f, 10f), new Vector2(20f, 10f), new Vector2(10f, 10f), 5f),
-            (new Vector2(10f, 20f), new Vector2(10f, 0f), new Vector2(10f, 10f), 5f),
-            (new Vector2(10f, 0f), new Vector2(10f, 1f), new Vector2(10f, 10f), 5f),
+            new (),
+            new ()
         };
-
-        //[HarmonyPatch(typeof(BlueprintsCache), nameof (BlueprintsCache.Init))]
-        //[HarmonyPrefix]
-        static void test2()
+        static public int LineCircleIntersect3D(Vector3 Origin, Vector3 lineEnd, Vector3 Center, float Radius, bool ordered = true)
         {
-            Comment.Log("LineCircleIntersect - begin test");
-            foreach (var t in test)
-            {
-                var i = LineCircleIntersect(t.lineStart, t.lineEnd, t.circleCenter, t.circleRadius);
-                if (i == 0)
-                    Comment.Log($"No intersect for line from ({t.lineStart}) to ({t.lineEnd})");
-                else if (i == 1)
-                    Comment.Log($"Single intersect for line from ({t.lineStart}) to ({t.lineEnd}) at ({results[0]})");
-                else
-                    Comment.Log($"Two intersects for line from ({t.lineStart}) to ({t.lineEnd}) at ({results[0]}) and at ({results[1]})");
-            }
+            var dir = (lineEnd - Origin).normalized;
+            var line = Origin - Center;
+            var dotted = Vector3.Dot(dir, line);
+            double incidenceSqr = dotted * dotted - (line.sqrMagnitude - Radius * Radius);
+            //Comment.Log($"LineCircleIntersect3D_Another - incidence squared is {incidenceSqr}");
+            if (incidenceSqr < 0)
+                return 0;
+            double incidence = Math.Sqrt(incidenceSqr);
+            var distance = -dotted - incidence;
+            results3D[0] = Origin + ((float)distance * dir);
+            //Comment.Log($"LineCircleIntersect3D_Another - " +
+            //    $"Origin at ({Origin.x.ToString("N6")}, {Origin.y.ToString("N6")}, {Origin.z.ToString("N6")}), " +
+            //    $"distance is {distance}" +
+            //    $"intersection at is ({offset.x.ToString("N6")}, {offset.y.ToString("N6")}, {offset.z.ToString("N6")})");
+            if (incidence < double.Epsilon)
+                return 1;
+            results3D[1] = Origin - ((float)distance * dir);
+            return 2;
         }
-        
-
 
 
         public enum WeaponTypesForSoftCoverDenial

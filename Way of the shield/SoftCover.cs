@@ -22,7 +22,6 @@ using Kingmaker.UnitLogic.Parts;
 using Kingmaker.Utility;
 using System.Diagnostics;
 using System.Text;
-using static Kingmaker.Visual.CharacterSystem.Dismemberment.UI.DismembermentUIController;
 
 namespace Way_of_the_shield
 {
@@ -42,13 +41,7 @@ namespace Way_of_the_shield
                 AttackerSize = Initiator.State.Size;
                 targetPosition = target.Position;
                 Result = new();
-                var cached = cachedIsSwarm.FirstOrDefault(tuple => tuple.unit == target);
-                if (cached.Equals(default))
-                {
-                    cached = new(target, target.Descriptor.Buffs.Enumerable.Any(buff => buff.Blueprint.AssetGuid == GenericSwarmBuffRef));
-                    cachedIsSwarm.Enqueue(cached);
-                }
-                TargetIsSwarm = cached.IsSwarm;
+                TargetIsSwarm = IsSwarm(target);
                 if (!TargetIsSwarm)
                 {
                     TargetIsProne = target.State.Prone.Active;
@@ -56,23 +49,19 @@ namespace Way_of_the_shield
                 }
                 else
                 {
-                    var cachedAir = cachedIsAirborne.FirstOrDefault(tuple => tuple.unit == target);
-                    if (cachedAir.Equals(default))
-                    {
-                        cachedAir = new(target, target.Progression.Features.Enumerable.Any(Feature => Feature.Blueprint.AssetGuid == AirborneRef));
-                        cachedIsAirborne.Enqueue(cachedAir);
-                    }
-                    TargetIsProne = cachedAir.IsAirborneSwarm;
-                    TargetSize = target.State.Size;
+                    TargetIsProne = IsAirborne(target);
                     SwarmCorpulence = target.View.Corpulence;
-                    SwarmTargetSize = SwarmCorpulence switch
-                    {
-                        <= 0.5f => Size.Small,
-                        <= 1.0f => Size.Medium,
-                        <= 1.5f => Size.Large,
-                        <= 2.0f => Size.Huge,
-                        _ => Size.Gargantuan
-                    };
+                    if (TargetIsProne)
+                        TargetSize = SwarmCorpulence switch
+                        {
+                            <= 0.5f => Size.Small,
+                            <= 1.0f => Size.Medium,
+                            <= 1.5f => Size.Large,
+                            <= 2.0f => Size.Huge,
+                            _ => Size.Gargantuan
+                        };
+                    else
+                        TargetSize = Size.Tiny;
                 }
                 Fake = fake;
             }
@@ -95,12 +84,6 @@ namespace Way_of_the_shield
             internal bool Fake;
             public bool TargetIsSwarm;
             public float SwarmCorpulence;
-            public Size SwarmTargetSize;
-
-            static readonly BlueprintGuid GenericSwarmBuffRef = BlueprintGuid.Parse("aaee201820f34400a2702d46a4260fbf");
-            static readonly BlueprintGuid AirborneRef = BlueprintGuid.Parse("70cffb448c132fa409e49156d013b175");
-            static readonly Queue<(UnitEntityData unit, bool IsSwarm)> cachedIsSwarm = new(20);
-            static readonly Queue<(UnitEntityData unit, bool IsAirborneSwarm)> cachedIsAirborne = new(10);
 
             public override void OnTrigger(RulebookEventContext context)
             {
@@ -127,6 +110,11 @@ namespace Way_of_the_shield
                     .Where(unit => unit != Initiator && unit != Target)
                     .ToList();
                 PeopleAround.Remove(Initiator.Get<UnitPartRider>()?.SaddledUnit ?? Initiator.Get<UnitPartSaddled>()?.Rider);
+#if DEBUG
+
+                if (Settings.Debug.GetValue())
+                    Comment.Log($"Soft Cover SoftCoverRule - units around are: {string.Join(", ", PeopleAround.Select(u => u.CharacterName))}."); 
+#endif
                 StringBuilder sb = new();
                 foreach (UnitEntityData unit in PeopleAround)
                 {
@@ -140,151 +128,171 @@ namespace Way_of_the_shield
                     float angle = Vector3.Angle(towardsUnitVector, vectorofAttack);
                     float sqrCorpulenceLess = unit.Corpulence * unit.Corpulence * 0.75f;
                     bool CheckResult = false;
+                    
+                    CheckResult = 
+                            (!TargetIsSwarm ? sqrDistanceFromUnitToAttacker < vectorofAttackSqrMagnitude : towardsUnitVector.magnitude - unit.Corpulence < vectorofAttack.magnitude) //the unit is not behind the target (or too much behind a swarm)
+                         && VectorMath.SqrDistancePointSegment(attackerPosition, targetPosition, unitPosition) <= sqrCorpulenceLess //line of attack more or less passes through the unit
+                         && sqrDistanceFromUnitToAttacker > attackersCorpulenceLess; //the unit is more or less in front of the attacker
 
-                    if (TargetIsSwarm && (towardsUnitVector.magnitude - unit.Corpulence) > vectorofAttack.magnitude) //if target is a swarm, but the unit is too far away, skip it
-                        continue;
-
-                    else if (!TargetIsSwarm || towardsUnitVector.magnitude < swarmCase_vectorofAttackSqrMagnitude - unit.Corpulence) //if the target is not swarm or the unit is not inside the swarm
+#if DEBUG
+                    if (Settings.Debug.GetValue())
                     {
-                            CheckResult = 
-                                sqrDistanceFromUnitToAttacker < vectorofAttackSqrMagnitude //the unit is not behind the target
-                             && VectorMath.SqrDistancePointSegment(attackerPosition, targetPosition, unitPosition) <= sqrCorpulenceLess //line of attack more or less passes through the unit
-                             && sqrDistanceFromUnitToAttacker > attackersCorpulenceLess; //the unit is more or less in front of the attacker
-
-
-#if DEBUG
-                        if (Settings.Debug.GetValue())
-                            Comment.Log($"Soft Cover - Unit is {unit.CharacterName}, " +
-                                $"vectorofAttackSqrMagnitude is {vectorofAttackSqrMagnitude},  " +
-                                $"sqrDistanceFromUnitToAttacker.sqrMagnitude is {sqrDistanceFromUnitToAttacker}, " +
-                                $"angle is {angle}, " +
-                                $"reduced squared corpulence is {sqrCorpulenceLess}. " +
-                                $"vectorofAttack.sqrMagnitude is {vectorofAttack.sqrMagnitude}. " +
-                                $"Distance of unit from trajectory is {VectorMath.SqrDistancePointSegment(attackerPosition, targetPosition, unitPosition)}" +
-                                $"{(sqrDistanceFromUnitToAttacker > attackersCorpulenceLess ? "" : "UNIT IS INSIDE THE ATTACKER")}. " +
-                                $"CheckResult is {CheckResult}.");
-#endif
-
-                        if (!CheckResult)
-                            continue;
-                        
-                        UnitState unitState = unit.State;
-                        Size effectiveTargetSize;
-                        if (!TargetIsSwarm || TargetIsProne)
-                            effectiveTargetSize = TargetSize;
-                        else 
-                            effectiveTargetSize = SwarmTargetSize;
-                        Size effectiveUnitSize = (unitState.Prone.Active ? (unitState.Size > Size.Tiny ? unitState.Size - 3 : Size.Fine) : unitState.Size);
-                        int sizeDifference = effectiveUnitSize - effectiveUnitSize;
-                        int penalty = sizeDifference switch
-                        {
-                            -2 => -1,
-                            -1 => -2,
-                            > -1 => -4 * (sizeDifference + 1),
-                            _ => 0
-                        };
-                        Result.Add(new(unit, sizeDifference, penalty));
-#if DEBUG
-                        if (Settings.Debug.GetValue())
-                            Comment.Log(
-                                $"Soft Cover - Size Difference between {unit.CharacterName} " +
-                                $"(effective size is {effectiveUnitSize}. Prone? {unitState.Prone.Active}) " +
-                                $"and {Target.CharacterName} (effective size {effectiveTargetSize}) is {sizeDifference}, " +
-                                $"penalty is {penalty}"); 
-#endif
+                        sb.AppendLine($"Soft Cover SoftCoverRule - Unit is {unit.CharacterName}. " +
+                            $"VectorofAttackSqrMagnitude is {vectorofAttackSqrMagnitude}, " +
+                            $"SqrDistanceFromUnitToAttacker is {sqrDistanceFromUnitToAttacker}, " +
+                            $"unit.Corpulence is {unit.Corpulence}, " +
+                            $"reduced squared corpulence is {sqrCorpulenceLess}, " +
+                            $"attackersCorpulenceLess is {attackersCorpulenceLess}. ");
+                        if (!TargetIsSwarm)
+                            sb.AppendLine($"Not behind the target? {sqrDistanceFromUnitToAttacker < vectorofAttackSqrMagnitude}.");
+                        else
+                            sb.AppendLine($"towardsUnitVector.magnitude is {towardsUnitVector.magnitude}, " +
+                                $"swarmCase_vectorofAttackSqrMagnitude is {swarmCase_vectorofAttackSqrMagnitude}, " +
+                                $"unit.Corpulence is {unit.Corpulence}, " +
+                                $"vectorofAttack.magnitude is {vectorofAttack.magnitude}. " +
+                                $"Not behind the target? {towardsUnitVector.magnitude - unit.Corpulence < vectorofAttack.magnitude}");
+                        sb.AppendLine($"SqrDistance of unit from trajectory is {VectorMath.SqrDistancePointSegment(attackerPosition, targetPosition, unitPosition)}. " +
+                            $"{(sqrDistanceFromUnitToAttacker > attackersCorpulenceLess ? "" : "UNIT IS INSIDE THE ATTACKER.")} " +
+                            $"CheckResult is {CheckResult}. ");
                     }
-                    else
-                    {
-                        bool lineOfAttackUnitIntersection = VectorMath.SqrDistancePointSegment(attackerPosition, targetPosition, unitPosition) <= sqrCorpulenceLess; //line of attack more or less passes through the unit
-#if  DEBUG
-                        if (Settings.Debug.GetValue())
-                        sb.Append($"Soft Cover -  Unit is {unit.CharacterName}. " +
-                                    $"Attacker position is ({attackerPosition}), " +
-                                    $"target position is ({targetPosition}), " +
-                                    $"unit position is ({unitPosition}). " +
-                                    $"Distance of unit from trajectory is {lineOfAttackUnitIntersection}"); 
 #endif
-                        if (!lineOfAttackUnitIntersection)
+
+                    if (!CheckResult)
+                    {
+#if DEBUG
+                        if (Settings.Debug.GetValue())
                         {
+                            sb.Append("Moving to next.");
+                            Comment.Log(sb.ToString());
+                        } 
+#endif
+                        continue;
+                    }
+                    float factor = 0;
+                    if (TargetIsSwarm)
+                    {
+#if DEBUG
+                        if (Settings.Debug.GetValue())
+                            sb.AppendLine($"Unit is in front of the swarm? {!(towardsUnitVector.magnitude + unit.Corpulence > swarmCase_vectorofAttackSqrMagnitude)}. ");
+#endif
+                        if (towardsUnitVector.magnitude + unit.Corpulence > swarmCase_vectorofAttackSqrMagnitude)
+                        {
+
+                            Utilities.LineCircleIntersect3D(attackerPosition, targetPosition, unitPosition, unit.Corpulence);
+                            var OffsetFromAttackerCenter = (Utilities.results3D[0] - (Vector3)attackerPosition).magnitude; //
+                            bool closer = OffsetFromAttackerCenter < swarmCase_vectorofAttackSqrMagnitude; //unit is not partially inside the swarm
+
 #if DEBUG
                             if (Settings.Debug.GetValue())
-                                Comment.Log(sb.ToString()); 
-#endif
-                            continue;
-                        }
-
-                        Utilities.LineCircleIntersect(attackerPosition, targetPosition, unitPosition, unit.Corpulence);
-                        var OffsetFromAttackerCenter = (Utilities.results[0] - (Vector2)attackerPosition).magnitude; //
-                        bool further = OffsetFromAttackerCenter > vectorofAttack.magnitude; //unit is behind the swarm's centers and does not block the attack line
-                        bool closer = OffsetFromAttackerCenter < swarmCase_vectorofAttackSqrMagnitude; //unit is not partially inside the swarm
-                        float FreeSwarmDistance = SwarmCorpulence - (vectorofAttack.magnitude - OffsetFromAttackerCenter);
-                                   
-#if DEBUG
-                        if (Settings.Debug.GetValue())
-                        {
-                            sb.AppendLine($"Intersection points are {Utilities.results[0]} and {Utilities.results[1]}. " +
+                            {
+                                sb.AppendLine($"Intersectioncheck: " +
+                                    $"attackerPosition is ({attackerPosition.x.ToString("N6")}, {attackerPosition.y.ToString("N6")}, {attackerPosition.z.ToString("N6")}), " +
+                                    $"targetPosition is ({targetPosition.x.ToString("N6")}, {targetPosition.y.ToString("N6")}, {targetPosition.z.ToString("N6")}), " +
+                                    $"unitPosition is ({unitPosition.x.ToString("N6")}, {unitPosition.y.ToString("N6")}, {unitPosition.z.ToString("N6")}). ");
+                                sb.AppendLine($"intersection points are {Utilities.results3D[0]} and {Utilities.results3D[1]}. " +
                                     $"OffsetFromAttackerCenter is {OffsetFromAttackerCenter}, " +
                                     $"swarmCase_vectorofAttackSqrMagnitude is {swarmCase_vectorofAttackSqrMagnitude}, " +
                                     $"vectorofAttack.magnitude is {vectorofAttack.magnitude}. " +
-                                    $"Further is {further}, Closer is {closer}.");
-                            if (!further && !closer)
-                                sb.Append($"FreeSwarmDistance is {FreeSwarmDistance}.");
-                            Comment.Log(sb.ToString());
-                        }
+                                    $"Closer is {closer}. ");
+                            }
 #endif
-                        if (further)
-                        {
-                            continue;
-                        }
-                        else if (closer) //copy-paste from line 163 and on, because extracting local methods is difficult for my brain
-                        {
-                            UnitState unitState = unit.State;
-                            Size effectiveTargetSize;
-                            if (!TargetIsSwarm || TargetIsProne)
-                                effectiveTargetSize = TargetSize;
-                            else
-                                effectiveTargetSize = SwarmTargetSize;
-                            Size effectiveUnitSize = (unitState.Prone.Active ? (unitState.Size > Size.Tiny ? unitState.Size - 3 : Size.Fine) : unitState.Size);
-                            int sizeDifference = effectiveUnitSize - effectiveUnitSize;
-                            int penalty = sizeDifference switch
+                            if (!closer)
                             {
-                                -2 => -1,
-                                -1 => -2,
-                                > -1 => -4 * (sizeDifference + 1),
-                                _ => 0
-                            };
-                            Result.Add(new(unit, sizeDifference, penalty));
+                                float FreeSwarmDistance = SwarmCorpulence - (vectorofAttack.magnitude - OffsetFromAttackerCenter);
+                                var RequiredDistance = 0.4f * (Mathf.Pow(1.5f, AttackerSize - Size.Medium));
+                                //The resulting penalty is proportional to the shortage of swarm's visible corpulence available to attack
+                                //compared to the distance required for a non-penalized attack
+                                factor = 1 - (FreeSwarmDistance / RequiredDistance);
 #if DEBUG
-                            if (Settings.Debug.GetValue())
-                                Comment.Log(
-                                    $"Soft Cover - Size Difference between {unit.CharacterName} " +
-                                    $"(effective size is {effectiveUnitSize}. Prone? {unitState.Prone.Active}) " +
-                                    $"and {Target.CharacterName} (effective size {effectiveTargetSize}) is {sizeDifference}, " +
-                                    $"penalty is {penalty}");
+                                if (Settings.Debug.GetValue())
+                                    sb.Append($"RequiredDistance is {RequiredDistance}, FreeSwarmDistance is {FreeSwarmDistance}, factor is {factor}. ");
+                                if (factor > 0)
+                                    sb.AppendLine();
+                                else
+                                {
+                                    sb.Append("Moving next");
+                                    Comment.Log(sb.ToString());
+                                    continue;
+                                }
 #endif
-                        }
-                        else
-                        {
-                            var RequiredDistance = 0.4f * (Mathf.Pow(1.5f, AttackerSize - Size.Medium));
-                            float IntendedPenalty = ;
-                            //The resulting penalty is proportional to the shortage of swarm's visible corpulence available to attack
-                            //compared to the distance required for a non-penalized attack
-                            int resultingPenalty = Convert.ToInt32(Math.Ceiling(IntendedPenalty * (1f - (FreeSwarmDistance / RequiredDistance))));
-                            Result.Add(new(unit, sizeDifference, resultingPenalty));
-#if DEBUG
-                            if (Settings.Debug.GetValue())
-                                Comment.Log(
-                                $"Soft Cover - " +
-                                    //$"Size Difference between {unit.CharacterName} " +
-                                    //$"(effective size is {effectiveUnitSize}. Prone? {unitState.Prone.Active}) " +
-                                    //$"and {Target.CharacterName} (effective size {effectiveTargetSize}) is {sizeDifference}, " +
-                                    $"RequiredDistance is {RequiredDistance}, FreeSwarmDistance is {FreeSwarmDistance}, factor is {IntendedPenalty * (1f - (FreeSwarmDistance / RequiredDistance))}. " +
-                                    $"IntendedPenalty is {IntendedPenalty}, resultingPenalty is {resultingPenalty}");
-#endif
+                            }
                         }
                     }
+                    UnitState unitState = unit.State;
+                    Size effectiveUnitSize = (unitState.Prone.Active ? (unitState.Size > Size.Tiny ? unitState.Size - 3 : Size.Fine) : unitState.Size);
+                    int sizeDifference = effectiveUnitSize - TargetSize;
+                    int penalty = sizeDifference switch
+                    {
+                        -2 => -1,
+                        -1 => -2,
+                        > -1 => -4 * (sizeDifference + 1),
+                        _ => 0
+                    };
+#if DEBUG
+                    if (Settings.Debug.GetValue())
+                    {
+                        sb.Append( $"Soft Cover SoftCoverRule - Size Difference between {unit.CharacterName} " +
+                            $"(effective size is {effectiveUnitSize}. Prone? {unitState.Prone.Active}) " +
+                            $"and {Target.CharacterName} (effective size {TargetSize}) is {sizeDifference}, " +
+                            $"penalty is {penalty}. ");
+                    }
+#endif
+                    if (factor > 0)
+                    {
+                        penalty = Convert.ToInt32(Math.Floor(penalty * factor));
+#if DEBUG
+                        if (Settings.Debug.GetValue())
+                        {
+                                sb.Append($"Final penalty after applying factor is {penalty}");
+                        }
+#endif
+                    }
+
+                    Comment.Log(sb.ToString());
+                    Result.Add(new(unit, sizeDifference, penalty));                    
                 }
             }
+        }
+
+        static readonly BlueprintGuid GenericSwarmBuffRef = BlueprintGuid.Parse("aaee201820f34400a2702d46a4260fbf");
+        static readonly BlueprintGuid AirborneRef = BlueprintGuid.Parse("70cffb448c132fa409e49156d013b175");
+        static readonly Queue<(UnitEntityData unit, bool IsSwarm)> cachedIsSwarm = new(20);
+        static readonly Queue<(UnitEntityData unit, bool IsAirborneSwarm)> cachedIsAirborne = new(10);
+
+        static bool IsSwarm(UnitEntityData Unit)
+        {
+            if (Unit == null)
+            {
+                Comment.Warning("tryin to check a null unit is a swarm");
+                return false;
+            }
+            var cached = cachedIsSwarm.FirstOrDefault(tuple => tuple.unit == Unit);
+            if (cached.Equals(default))
+            {
+                if (cachedIsSwarm.Count > 19)
+                    cachedIsSwarm.Dequeue();
+                cached = new(Unit, Unit.Descriptor.Buffs.Enumerable.Any(buff => buff.Blueprint.AssetGuid == GenericSwarmBuffRef));
+                cachedIsSwarm.Enqueue(cached);
+            }
+            return cached.IsSwarm;
+        }
+        static bool IsAirborne(UnitEntityData Unit)
+        {
+            if (Unit == null)
+            {
+                Comment.Warning("tryin to check a null unit is an airborne swarm");
+                return false;
+            }
+            var cachedAir = cachedIsAirborne.FirstOrDefault(tuple => tuple.unit == Unit);
+            if (cachedAir.Equals(default))
+            {
+                cachedAir = new(Unit, Unit.Progression.Features.Enumerable.Any(Feature => Feature.Blueprint.AssetGuid == AirborneRef));
+                if (cachedIsAirborne.Count > 9)
+                    cachedIsAirborne.Dequeue();
+                cachedIsAirborne.Enqueue(cachedAir);
+            }
+            Comment.Log($"{Unit.CharacterName} is Airborne? {cachedAir.IsAirborneSwarm}");
+            return cachedAir.IsAirborneSwarm;
         }
 
         [HarmonyPrepare]
@@ -300,8 +308,17 @@ namespace Way_of_the_shield
         {
 #if DEBUG
             if (Settings.Debug.GetValue())
-                Comment.Log($"Soft Cover - entered RuleAttackRoll_OnTrigger_Prefix for {__instance.Target.CharacterName}"); ;
+                Comment.Log($"Soft Cover - entered RuleAttackRoll_OnTrigger_Prefix. Attacker is {__instance.Initiator?.CharacterName ?? "NO ATTACKER"}, " +
+                    $"target is {__instance.Target.CharacterName}."); ;
 #endif
+            if (__instance.Initiator != null && IsSwarm(__instance.Initiator))
+            {
+#if DEBUG
+                if (Settings.Debug.GetValue())
+                    Comment.Log($"Soft Cover - Target is a swarm. Proceeding without a check."); 
+#endif
+                return;
+            }
             RuleSoftCover SoftCover = Rulebook.Trigger<RuleSoftCover>(new(__instance.Initiator, __instance.Target, __instance.Weapon));
             List<(UnitEntityData obstacle, int sizeDifference, int penalty)> obstacles = SoftCover.Result;
             if (SoftCover.TryGetCustomData(BackToBackNew.BackToBackUnitsKey, out List<UnitEntityData> Backers)) __instance.SetCustomData(BackToBackNew.BackToBackUnitsKey, Backers);
